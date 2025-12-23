@@ -14,9 +14,9 @@ import {
 } from '$lib/data/artworks.provider';
 import { getAllSeries } from '$lib/data/series.provider';
 import type { LanguageCode } from '$lib/types/layout.types';
-import type { PageLoad } from './$types';
+import type { PageServerLoad } from './$types';
 
-export const load: PageLoad = async ({ parent, url }) => {
+export const load: PageServerLoad = async ({ parent, url }) => {
 	const { locale } = await parent();
 	const localeCode = locale as LanguageCode;
 

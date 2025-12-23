@@ -6,9 +6,9 @@ import { error } from '@sveltejs/kit';
 import { getSeriesBySlug, getAllSeries } from '$lib/data/series.provider';
 import { getArtworksBySeries } from '$lib/data/artworks.provider';
 import type { LanguageCode } from '$lib/types/layout.types';
-import type { PageLoad } from './$types';
+import type { PageServerLoad } from './$types';
 
-export const load: PageLoad = async ({ params, parent }) => {
+export const load: PageServerLoad = async ({ params, parent }) => {
 	const { locale } = await parent();
 	const localeCode = locale as LanguageCode;
 	const { slug } = params;
