@@ -25,6 +25,9 @@
 	let slug = $state(data.item?.slug || '');
 	let coverImageId = $state(data.item?.cover_image_id?.toString() || '');
 	let orderIndex = $state(data.item?.order_index?.toString() || '0');
+	let isVisible = $state(data.item?.is_visible ?? true);
+	let isFeatured = $state(data.item?.is_featured ?? false);
+	let showInShop = $state(data.item?.show_in_shop ?? false);
 
 	let toastVisible = $state(false);
 	let toastMessage = $state('');
@@ -115,6 +118,25 @@
 			<input type="hidden" name="description_ru" value={description.ru} />
 			<input type="hidden" name="description_es" value={description.es} />
 			<input type="hidden" name="description_zh" value={description.zh} />
+
+			<div class="visibility-section">
+				<h3>Visibility & Shop</h3>
+				<div class="checkbox-group">
+					<label class="checkbox-label">
+						<input type="checkbox" name="is_visible" bind:checked={isVisible} />
+						<span>Visible on website</span>
+					</label>
+					<label class="checkbox-label">
+						<input type="checkbox" name="is_featured" bind:checked={isFeatured} />
+						<span>Featured series</span>
+					</label>
+					<label class="checkbox-label highlight">
+						<input type="checkbox" name="show_in_shop" bind:checked={showInShop} />
+						<span>Show as Shop Category</span>
+						<small>Display in shop filter/navigation</small>
+					</label>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -270,6 +292,58 @@
 	.btn-save:disabled {
 		opacity: 0.7;
 		cursor: not-allowed;
+	}
+
+	.visibility-section {
+		margin-top: 1.5rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid #e5e7eb;
+	}
+
+	.visibility-section h3 {
+		margin: 0 0 1rem 0;
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: #374151;
+	}
+
+	.checkbox-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.checkbox-label {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.5rem;
+		cursor: pointer;
+		font-size: 0.875rem;
+		color: #374151;
+	}
+
+	.checkbox-label input[type='checkbox'] {
+		width: auto;
+		margin-top: 0.125rem;
+	}
+
+	.checkbox-label span {
+		font-weight: 500;
+	}
+
+	.checkbox-label small {
+		display: block;
+		font-size: 0.75rem;
+		color: #6b7280;
+		font-weight: 400;
+		margin-top: 0.125rem;
+	}
+
+	.checkbox-label.highlight {
+		padding: 0.75rem;
+		background: #f0fdf4;
+		border: 1px solid #bbf7d0;
+		border-radius: 0.375rem;
 	}
 
 	@media (max-width: 768px) {

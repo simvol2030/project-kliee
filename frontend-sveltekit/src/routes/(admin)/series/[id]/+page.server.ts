@@ -26,17 +26,21 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const isNew = params.id === 'new';
 
-		// Extract form data
+		// Extract form data (using snake_case field names from form)
 		const slug = formData.get('slug') as string;
-		const nameEn = formData.get('nameEn') as string;
-		const nameRu = formData.get('nameRu') as string;
-		const nameEs = formData.get('nameEs') as string;
-		const nameZh = formData.get('nameZh') as string;
-		const descriptionEn = (formData.get('descriptionEn') as string) || null;
-		const descriptionRu = (formData.get('descriptionRu') as string) || null;
-		const descriptionEs = (formData.get('descriptionEs') as string) || null;
-		const descriptionZh = (formData.get('descriptionZh') as string) || null;
-		const orderIndex = parseInt(formData.get('order') as string) || 0;
+		const nameEn = formData.get('name_en') as string;
+		const nameRu = formData.get('name_ru') as string;
+		const nameEs = formData.get('name_es') as string;
+		const nameZh = formData.get('name_zh') as string;
+		const descriptionEn = (formData.get('description_en') as string) || null;
+		const descriptionRu = (formData.get('description_ru') as string) || null;
+		const descriptionEs = (formData.get('description_es') as string) || null;
+		const descriptionZh = (formData.get('description_zh') as string) || null;
+		const orderIndex = parseInt(formData.get('order_index') as string) || 0;
+		const coverImageId = formData.get('cover_image_id') ? parseInt(formData.get('cover_image_id') as string) : null;
+		const isVisible = formData.get('is_visible') === 'on';
+		const isFeatured = formData.get('is_featured') === 'on';
+		const showInShop = formData.get('show_in_shop') === 'on';
 
 		if (!nameEn?.trim()) {
 			return fail(400, { error: 'Name (English) is required' });
@@ -57,7 +61,11 @@ export const actions: Actions = {
 			description_ru: descriptionRu,
 			description_es: descriptionEs,
 			description_zh: descriptionZh,
-			order_index: orderIndex
+			order_index: orderIndex,
+			cover_image_id: coverImageId,
+			is_visible: isVisible,
+			is_featured: isFeatured,
+			show_in_shop: showInShop
 		};
 
 		try {
