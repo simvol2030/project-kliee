@@ -221,13 +221,13 @@
 	}
 
 	// Wishlist handler
-	function handleToggleWishlist(productId: string) {
-		const isNowInWishlist = wishlistStore.toggle(productId);
+	function handleToggleWishlist(productId: number) {
+		wishlistStore.toggle(productId);
 		// UI updates automatically via isInWishlist check
 	}
 
 	// Check if product is in wishlist
-	function isProductInWishlist(productId: string): boolean {
+	function isProductInWishlist(productId: number): boolean {
 		return wishlistStore.isInWishlist(productId);
 	}
 </script>

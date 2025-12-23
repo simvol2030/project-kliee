@@ -718,6 +718,94 @@ export async function getPublicProductBySlug(
 }
 
 /**
+ * Get products by IDs (for wishlist)
+ */
+export async function getPublicProductsByIds(
+	productIds: number[],
+	locale: LanguageCode = 'en'
+): Promise<PublicShopProduct[]> {
+	if (productIds.length === 0) {
+		return [];
+	}
+
+	const results = await Promise.all(
+		productIds.map(async (id) => {
+			const result = await db
+				.select({
+					product: shopProducts,
+					artworkSlug: artworks.slug,
+					artworkTechnique: artworks.technique,
+					artworkDimensions: artworks.dimensions,
+					artworkYear: artworks.year,
+					imageFilename: media.stored_filename,
+					imageFolder: media.folder,
+					imageAltEn: media.alt_en,
+					imageAltRu: media.alt_ru,
+					imageAltEs: media.alt_es,
+					imageAltZh: media.alt_zh,
+					imageWidth: media.width,
+					imageHeight: media.height
+				})
+				.from(shopProducts)
+				.leftJoin(artworks, eq(shopProducts.artwork_id, artworks.id))
+				.leftJoin(
+					shopProductImages,
+					and(eq(shopProductImages.product_id, shopProducts.id), eq(shopProductImages.is_primary, true))
+				)
+				.leftJoin(media, eq(shopProductImages.media_id, media.id))
+				.where(eq(shopProducts.id, id))
+				.limit(1);
+
+			if (result.length === 0) {
+				return null;
+			}
+
+			const row = result[0];
+			const product = row.product;
+			const slug = row.artworkSlug || `product-${product.id}`;
+			const isAvailable = product.is_unlimited || (product.stock_quantity ?? 0) > 0;
+
+			const altText =
+				locale === 'ru'
+					? row.imageAltRu
+					: locale === 'es'
+						? row.imageAltEs
+						: locale === 'zh'
+							? row.imageAltZh
+							: row.imageAltEn;
+
+			return {
+				id: product.id,
+				slug,
+				title: getLocalizedTitle(product, locale),
+				description: getLocalizedDescription(product, locale),
+				price_eur: product.price_eur,
+				compare_price_eur: product.compare_price_eur,
+				stock_quantity: product.stock_quantity,
+				is_unlimited: product.is_unlimited,
+				is_featured: product.is_featured,
+				is_available: isAvailable,
+				primary_image: row.imageFilename
+					? {
+							url: `/uploads/${row.imageFolder || 'products'}/${row.imageFilename}`,
+							alt: altText,
+							width: row.imageWidth,
+							height: row.imageHeight
+						}
+					: null,
+				artwork_id: product.artwork_id,
+				technique: row.artworkTechnique,
+				dimensions: row.artworkDimensions || product.dimensions_cm,
+				year: row.artworkYear
+			} as PublicShopProduct;
+		})
+	);
+
+	// Filter out null results and maintain order
+	return results.filter((p): p is PublicShopProduct => p !== null);
+}
+
+/**
  * Get product by ID (for cart)
  */
 export async function getPublicProductById(

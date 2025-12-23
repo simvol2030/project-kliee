@@ -4,9 +4,10 @@ const WISHLIST_KEY = 'kliee_wishlist';
 
 /**
  * Wishlist item stored in localStorage
+ * Uses product_id (integer from shop_products table)
  */
 export interface WishlistItem {
-	artwork_id: string;
+	product_id: number;
 	added_at: string;
 }
 
@@ -34,7 +35,18 @@ class WishlistStore {
 			if (stored) {
 				const parsed = JSON.parse(stored);
 				if (Array.isArray(parsed)) {
-					this.items = parsed;
+					// Migrate old format (artwork_id: string) to new format (product_id: number)
+					this.items = parsed
+						.map((item: { product_id?: number; artwork_id?: string; added_at: string }) => {
+							// If already has product_id (number), use it
+							if (typeof item.product_id === 'number') {
+								return { product_id: item.product_id, added_at: item.added_at };
+							}
+							// Skip old artwork_id format - those items will be lost during migration
+							// This is acceptable since wishlist is non-critical data
+							return null;
+						})
+						.filter((item): item is WishlistItem => item !== null);
 				}
 			}
 		} catch (err) {
@@ -66,10 +78,10 @@ class WishlistStore {
 	}
 
 	/**
-	 * Get artwork IDs in wishlist
+	 * Get product IDs in wishlist
 	 */
-	get artworkIds(): string[] {
-		return this.items.map((item) => item.artwork_id);
+	get productIds(): number[] {
+		return this.items.map((item) => item.product_id);
 	}
 
 	/**
@@ -80,24 +92,24 @@ class WishlistStore {
 	}
 
 	/**
-	 * Check if artwork is in wishlist
+	 * Check if product is in wishlist
 	 */
-	isInWishlist(artworkId: string): boolean {
-		return this.items.some((item) => item.artwork_id === artworkId);
+	isInWishlist(productId: number): boolean {
+		return this.items.some((item) => item.product_id === productId);
 	}
 
 	/**
-	 * Add artwork to wishlist
+	 * Add product to wishlist
 	 */
-	add(artworkId: string): boolean {
-		if (this.isInWishlist(artworkId)) {
+	add(productId: number): boolean {
+		if (this.isInWishlist(productId)) {
 			return false; // Already in wishlist
 		}
 
 		this.items = [
 			...this.items,
 			{
-				artwork_id: artworkId,
+				product_id: productId,
 				added_at: new Date().toISOString()
 			}
 		];
@@ -106,11 +118,11 @@ class WishlistStore {
 	}
 
 	/**
-	 * Remove artwork from wishlist
+	 * Remove product from wishlist
 	 */
-	remove(artworkId: string): boolean {
+	remove(productId: number): boolean {
 		const initialLength = this.items.length;
-		this.items = this.items.filter((item) => item.artwork_id !== artworkId);
+		this.items = this.items.filter((item) => item.product_id !== productId);
 
 		if (this.items.length !== initialLength) {
 			this.saveToStorage();
@@ -120,14 +132,14 @@ class WishlistStore {
 	}
 
 	/**
-	 * Toggle artwork in wishlist
+	 * Toggle product in wishlist
 	 */
-	toggle(artworkId: string): boolean {
-		if (this.isInWishlist(artworkId)) {
-			this.remove(artworkId);
+	toggle(productId: number): boolean {
+		if (this.isInWishlist(productId)) {
+			this.remove(productId);
 			return false; // Removed, not in wishlist
 		} else {
-			this.add(artworkId);
+			this.add(productId);
 			return true; // Added, now in wishlist
 		}
 	}

@@ -4,35 +4,16 @@
 	import { cartStore } from '$lib/stores/cart.svelte';
 	import { formatPrice, type LanguageCode, type CurrencyRate } from '$lib/utils/currency';
 	import { onMount } from 'svelte';
+	import type { PublicShopProduct } from '$lib/data/shop.provider';
 
 	let { data }: { data: PageData } = $props();
 
 	const lang = data.lang as LanguageCode;
 	const currencyRates: CurrencyRate[] = data.currencyRates || [];
 
-	// Product details fetched from API
-	interface WishlistProduct {
-		id: string;
-		slug: string | null;
-		title_en: string;
-		title_ru: string;
-		title_es: string;
-		title_zh: string;
-		price: number | null;
-		is_for_sale: boolean | null;
-		image: {
-			stored_filename: string;
-			folder: string | null;
-			alt_en: string | null;
-			alt_ru: string | null;
-			alt_es: string | null;
-			alt_zh: string | null;
-		} | null;
-	}
-
-	let products = $state<WishlistProduct[]>([]);
+	let products = $state<PublicShopProduct[]>([]);
 	let loading = $state(true);
-	let addingToCart = $state<string | null>(null);
+	let addingToCart = $state<number | null>(null);
 
 	// Translations
 	const t = {
@@ -99,37 +80,14 @@
 		}
 
 		try {
-			const artworkIds = wishlistStore.artworkIds;
-			const response = await fetch(`/api/shop/products?ids=${artworkIds.join(',')}`);
+			const productIds = wishlistStore.productIds;
+			const response = await fetch(`/api/shop/products?ids=${productIds.join(',')}&locale=${lang}`);
 			if (response.ok) {
 				const data = await response.json();
 				// Map products maintaining wishlist order
-				products = artworkIds
-					.map((id) => {
-						const product = data.products.find((p: WishlistProduct) => p.id === id);
-						if (!product) return null;
-						return {
-							id: product.id,
-							slug: product.slug,
-							title_en: product.title_en,
-							title_ru: product.title_ru,
-							title_es: product.title_es,
-							title_zh: product.title_zh,
-							price: product.price,
-							is_for_sale: product.is_for_sale,
-							image: product.primary_image
-								? {
-										stored_filename: product.primary_image.stored_filename,
-										folder: product.primary_image.folder,
-										alt_en: product.primary_image.alt_en,
-										alt_ru: product.primary_image.alt_ru,
-										alt_es: product.primary_image.alt_es,
-										alt_zh: product.primary_image.alt_zh
-									}
-								: null
-						};
-					})
-					.filter((p): p is WishlistProduct => p !== null);
+				products = productIds
+					.map((id) => data.products.find((p: PublicShopProduct) => p.id === id))
+					.filter((p): p is PublicShopProduct => p !== null && p !== undefined);
 			}
 		} catch (err) {
 			console.error('Failed to fetch wishlist products:', err);
@@ -152,48 +110,29 @@
 		}
 	});
 
-	// Get title by language
-	function getTitle(item: WishlistProduct): string {
-		switch (lang) {
-			case 'ru':
-				return item.title_ru;
-			case 'es':
-				return item.title_es;
-			case 'zh':
-				return item.title_zh;
-			default:
-				return item.title_en;
-		}
+	// Get image URL
+	function getImageUrl(product: PublicShopProduct): string {
+		return product.primary_image?.url || '/images/placeholder-artwork.jpg';
 	}
 
-	// Get image alt by language
-	function getAlt(item: WishlistProduct): string {
-		if (!item.image) return getTitle(item);
-		switch (lang) {
-			case 'ru':
-				return item.image.alt_ru || getTitle(item);
-			case 'es':
-				return item.image.alt_es || getTitle(item);
-			case 'zh':
-				return item.image.alt_zh || getTitle(item);
-			default:
-				return item.image.alt_en || getTitle(item);
-		}
+	// Get image alt
+	function getAlt(product: PublicShopProduct): string {
+		return product.primary_image?.alt || product.title;
 	}
 
 	// Handle remove from wishlist
-	function handleRemove(artworkId: string) {
-		wishlistStore.remove(artworkId);
+	function handleRemove(productId: number) {
+		wishlistStore.remove(productId);
 	}
 
 	// Handle add to cart
-	async function handleAddToCart(artworkId: string) {
-		if (cartStore.isInCart(artworkId)) {
+	async function handleAddToCart(productId: number) {
+		if (cartStore.isInCart(productId)) {
 			return;
 		}
 
-		addingToCart = artworkId;
-		const result = await cartStore.addItem(artworkId);
+		addingToCart = productId;
+		const result = await cartStore.addItem(productId);
 		addingToCart = null;
 
 		if (result.success) {
@@ -236,27 +175,23 @@
 		{:else}
 			<div class="wishlist-grid">
 				{#each products as product (product.id)}
-					<article class="wishlist-card" class:sold={!product.is_for_sale}>
-						<a href={`/${lang}/shop/${product.slug || product.id}`} class="card-link">
+					<article class="wishlist-card" class:sold={!product.is_available}>
+						<a href={`/${lang}/shop/${product.slug}`} class="card-link">
 							<div class="image-wrapper">
-								{#if product.image}
-									<img
-										src={`/uploads/${product.image.folder || 'products'}/${product.image.stored_filename}`}
-										alt={getAlt(product)}
-										loading="lazy"
-									/>
-								{:else}
-									<div class="placeholder-image"></div>
-								{/if}
-								{#if !product.is_for_sale}
+								<img
+									src={getImageUrl(product)}
+									alt={getAlt(product)}
+									loading="lazy"
+								/>
+								{#if !product.is_available}
 									<span class="sold-badge">{t.sold}</span>
 								{/if}
 							</div>
 							<div class="card-info">
-								<h3 class="product-title">{getTitle(product)}</h3>
+								<h3 class="product-title">{product.title}</h3>
 								<p class="product-price">
-									{#if product.is_for_sale}
-										{formatPrice(product.price || 0, lang, currencyRates)}
+									{#if product.is_available}
+										{formatPrice(product.price_eur, lang, currencyRates)}
 									{:else}
 										<span class="sold-price">{t.sold}</span>
 									{/if}
@@ -265,7 +200,7 @@
 						</a>
 
 						<div class="card-actions">
-							{#if product.is_for_sale}
+							{#if product.is_available}
 								{#if cartStore.isInCart(product.id)}
 									<span class="in-cart-badge">{t.inCart}</span>
 								{:else}
@@ -467,12 +402,6 @@
 
 	.wishlist-card:hover .image-wrapper img {
 		transform: scale(1.05);
-	}
-
-	.placeholder-image {
-		width: 100%;
-		height: 100%;
-		background: var(--color-bg-secondary, #f5f5f5);
 	}
 
 	.sold-badge {

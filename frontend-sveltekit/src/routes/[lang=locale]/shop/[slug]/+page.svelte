@@ -1,9 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import ProductGallery from '$lib/components/shop/ProductGallery.svelte';
-	import ProductCard from '$lib/components/shop/ProductCard.svelte';
 	import { formatPrice, type CurrencyRate, type LanguageCode } from '$lib/utils/currency';
 	import { page } from '$app/stores';
+	import { cartStore } from '$lib/stores/cart.svelte';
+	import { wishlistStore } from '$lib/stores/wishlist.svelte';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -21,134 +23,111 @@
 			addToCart: 'Add to Cart',
 			addToWishlist: 'Add to Wishlist',
 			removeFromWishlist: 'Remove from Wishlist',
-			sold: 'SOLD',
-			soldMessage: 'This artwork has been sold',
-			series: 'Series',
+			soldOut: 'Sold Out',
+			soldMessage: 'This artwork is no longer available',
 			technique: 'Technique',
 			dimensions: 'Dimensions',
 			year: 'Year',
 			description: 'Description',
-			relatedArtworks: 'Related Artworks',
 			backToShop: 'Back to Shop',
 			home: 'Home',
 			shop: 'Shop',
-			priceOnRequest: 'Price on request'
+			priceOnRequest: 'Price on request',
+			inCart: 'In Cart',
+			addedToCart: 'Added to cart!'
 		},
 		ru: {
 			addToCart: 'В корзину',
 			addToWishlist: 'В избранное',
 			removeFromWishlist: 'Удалить из избранного',
-			sold: 'ПРОДАНО',
-			soldMessage: 'Эта работа продана',
-			series: 'Серия',
+			soldOut: 'Продано',
+			soldMessage: 'Эта работа больше не доступна',
 			technique: 'Техника',
 			dimensions: 'Размеры',
 			year: 'Год',
 			description: 'Описание',
-			relatedArtworks: 'Похожие работы',
 			backToShop: 'Назад в магазин',
 			home: 'Главная',
 			shop: 'Магазин',
-			priceOnRequest: 'Цена по запросу'
+			priceOnRequest: 'Цена по запросу',
+			inCart: 'В корзине',
+			addedToCart: 'Добавлено в корзину!'
 		},
 		es: {
 			addToCart: 'Añadir al carrito',
 			addToWishlist: 'Añadir a favoritos',
 			removeFromWishlist: 'Quitar de favoritos',
-			sold: 'VENDIDO',
-			soldMessage: 'Esta obra ha sido vendida',
-			series: 'Serie',
+			soldOut: 'Agotado',
+			soldMessage: 'Esta obra ya no está disponible',
 			technique: 'Técnica',
 			dimensions: 'Dimensiones',
 			year: 'Año',
 			description: 'Descripción',
-			relatedArtworks: 'Obras relacionadas',
 			backToShop: 'Volver a la tienda',
 			home: 'Inicio',
 			shop: 'Tienda',
-			priceOnRequest: 'Precio a consultar'
+			priceOnRequest: 'Precio a consultar',
+			inCart: 'En el carrito',
+			addedToCart: '¡Añadido al carrito!'
 		},
 		zh: {
 			addToCart: '加入购物车',
 			addToWishlist: '加入收藏',
 			removeFromWishlist: '取消收藏',
-			sold: '已售出',
-			soldMessage: '此作品已售出',
-			series: '系列',
+			soldOut: '已售罄',
+			soldMessage: '此作品已不再可用',
 			technique: '技法',
 			dimensions: '尺寸',
 			year: '年份',
 			description: '描述',
-			relatedArtworks: '相关作品',
 			backToShop: '返回商店',
 			home: '首页',
 			shop: '商店',
-			priceOnRequest: '价格面议'
+			priceOnRequest: '价格面议',
+			inCart: '在购物车中',
+			addedToCart: '已加入购物车！'
 		}
 	};
 
 	const t = $derived(translations[data.lang] || translations.en);
-
-	// Get content by language
-	function getLangContent<T extends string>(
-		en: T | null,
-		ru: T | null,
-		es: T | null,
-		zh: T | null
-	): T | null {
-		switch (data.lang) {
-			case 'ru':
-				return ru || en;
-			case 'es':
-				return es || en;
-			case 'zh':
-				return zh || en;
-			default:
-				return en;
-		}
-	}
-
 	const product = data.product;
 
-	const title = $derived(
-		getLangContent(product.title_en, product.title_ru, product.title_es, product.title_zh) || ''
+	// Product is already localized from the API
+	const title = $derived(product.title);
+	const description = $derived(product.description);
+	const isSold = $derived(!product.is_available);
+	const formattedPrice = $derived(formatPrice(product.price_eur, data.lang, currencyRates));
+
+	// Map images for ProductGallery (expects { url, alt })
+	const galleryImages = $derived(
+		product.images.map((img) => ({
+			stored_filename: img.url, // ProductGallery uses this
+			url: img.url,
+			alt: img.alt || title
+		}))
 	);
 
-	const description = $derived(
-		getLangContent(
-			product.description_en,
-			product.description_ru,
-			product.description_es,
-			product.description_zh
-		)
-	);
+	// Initialize stores
+	onMount(() => {
+		cartStore.init();
+		wishlistStore.init();
+	});
 
-	const seriesName = $derived(
-		product.series
-			? getLangContent(
-					product.series.name_en,
-					product.series.name_ru,
-					product.series.name_es,
-					product.series.name_zh
-				)
-			: null
-	);
+	// Cart and wishlist state
+	let addingToCart = $state(false);
+	const isInCart = $derived(cartStore.isInCart(product.id));
+	const isInWishlist = $derived(wishlistStore.isInWishlist(product.id));
 
-	const formattedPrice = $derived(formatPrice(product.price, data.lang, currencyRates));
-	const isSold = $derived(product.is_for_sale === false);
+	async function handleAddToCart() {
+		if (addingToCart || isInCart) return;
 
-	// Placeholder - will be connected in Phase 4/5
-	let isInWishlist = $state(false);
-
-	function handleAddToCart() {
-		console.log('Add to cart:', product.id);
-		// TODO: Implement in Phase 4
+		addingToCart = true;
+		await cartStore.addItem(product.id);
+		addingToCart = false;
 	}
 
 	function handleToggleWishlist() {
-		isInWishlist = !isInWishlist;
-		console.log('Toggle wishlist:', product.id, isInWishlist);
-		// TODO: Implement in Phase 5
+		wishlistStore.toggle(product.id);
 	}
 
 	// Schema.org Product markup
@@ -157,12 +136,12 @@
 		'@type': 'Product',
 		name: title,
 		description: description || undefined,
-		image: product.images[0]
-			? `${$page.url.origin}/images/products/${product.images[0].stored_filename}`
+		image: product.images[0]?.url
+			? `${$page.url.origin}${product.images[0].url}`
 			: undefined,
 		offers: {
 			'@type': 'Offer',
-			price: product.price || undefined,
+			price: product.price_eur ? (product.price_eur / 100).toFixed(2) : undefined,
 			priceCurrency: 'EUR',
 			availability: isSold
 				? 'https://schema.org/SoldOut'
@@ -177,7 +156,7 @@
 	<meta property="og:title" content="{title} | K-LIÉE Shop" />
 	<meta property="og:description" content={description || `${title} by Svetlana K-LIÉE`} />
 	{#if product.images[0]}
-		<meta property="og:image" content="{$page.url.origin}/images/products/{product.images[0].stored_filename}" />
+		<meta property="og:image" content="{$page.url.origin}{product.images[0].url}" />
 	{/if}
 	<link rel="canonical" href="{$page.url.origin}/{data.lang}/shop/{product.slug}" />
 	{#each ['en', 'ru', 'es', 'zh'] as lang}
@@ -193,10 +172,6 @@
 			<a href="/{data.lang}">{t.home}</a>
 			<span class="separator">/</span>
 			<a href="/{data.lang}/shop">{t.shop}</a>
-			{#if product.series}
-				<span class="separator">/</span>
-				<a href="/{data.lang}/shop?series={product.series.id}">{seriesName}</a>
-			{/if}
 			<span class="separator">/</span>
 			<span class="current">{title}</span>
 		</nav>
@@ -204,22 +179,16 @@
 		<div class="product-layout">
 			<!-- Gallery -->
 			<div class="product-gallery-wrapper">
-				<ProductGallery images={product.images} productTitle={title} lang={data.lang} />
+				<ProductGallery images={galleryImages} productTitle={title} lang={data.lang} />
 			</div>
 
 			<!-- Product Info -->
 			<div class="product-info">
 				<h1 class="product-title">{title}</h1>
 
-				{#if product.series}
-					<a href="/{data.lang}/shop?series={product.series.id}" class="product-series">
-						{seriesName}
-					</a>
-				{/if}
-
 				<div class="product-price" class:sold={isSold}>
 					{#if isSold}
-						<span class="sold-badge">{t.sold}</span>
+						<span class="sold-badge">{t.soldOut}</span>
 					{:else}
 						<span class="price">{formattedPrice}</span>
 					{/if}
@@ -232,14 +201,31 @@
 				<!-- Action Buttons -->
 				<div class="product-actions">
 					{#if !isSold}
-						<button class="btn btn-primary btn-large" onclick={handleAddToCart}>
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-								<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-								<line x1="3" y1="6" x2="21" y2="6" />
-								<path d="M16 10a4 4 0 0 1-8 0" />
-							</svg>
-							{t.addToCart}
-						</button>
+						{#if isInCart}
+							<span class="btn btn-secondary btn-large in-cart">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+									<polyline points="20 6 9 17 4 12" />
+								</svg>
+								{t.inCart}
+							</span>
+						{:else}
+							<button
+								class="btn btn-primary btn-large"
+								onclick={handleAddToCart}
+								disabled={addingToCart}
+							>
+								{#if addingToCart}
+									<span class="spinner"></span>
+								{:else}
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+										<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+										<line x1="3" y1="6" x2="21" y2="6" />
+										<path d="M16 10a4 4 0 0 1-8 0" />
+									</svg>
+									{t.addToCart}
+								{/if}
+							</button>
+						{/if}
 					{/if}
 
 					<button
@@ -287,52 +273,6 @@
 				{/if}
 			</div>
 		</div>
-
-		<!-- Related Artworks -->
-		{#if data.related.length > 0}
-			<section class="related-section">
-				<h2>{t.relatedArtworks}</h2>
-				<div class="related-grid">
-					{#each data.related as relatedProduct (relatedProduct.id)}
-						<ProductCard
-							product={{
-								...relatedProduct,
-								title_en: relatedProduct.title_en,
-								title_ru: relatedProduct.title_ru,
-								title_es: relatedProduct.title_es,
-								title_zh: relatedProduct.title_zh,
-								description_en: null,
-								description_ru: null,
-								description_es: null,
-								description_zh: null,
-								technique: null,
-								dimensions: null,
-								year: null,
-								currency: 'EUR',
-								is_featured: null,
-								series: null,
-								primary_image: relatedProduct.primary_image
-									? {
-											id: relatedProduct.primary_image.id,
-											stored_filename: relatedProduct.primary_image.stored_filename,
-											folder: relatedProduct.primary_image.folder,
-											alt_en: relatedProduct.primary_image.alt_en,
-											alt_ru: null,
-											alt_es: null,
-											alt_zh: null,
-											width: null,
-											height: null
-										}
-									: null,
-								created_at: null
-							}}
-							lang={data.lang}
-							{currencyRates}
-						/>
-					{/each}
-				</div>
-			</section>
-		{/if}
 
 		<!-- Back to shop link -->
 		<div class="back-link">
@@ -414,16 +354,6 @@
 		line-height: 1.2;
 	}
 
-	.product-series {
-		font-size: 0.9375rem;
-		color: #667eea;
-		text-decoration: none;
-	}
-
-	.product-series:hover {
-		text-decoration: underline;
-	}
-
 	.product-price {
 		margin: 0.5rem 0;
 	}
@@ -470,17 +400,22 @@
 		cursor: pointer;
 		transition: all 0.2s;
 		text-decoration: none;
+		border: none;
 	}
 
 	.btn-primary {
 		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 		color: white;
-		border: none;
 	}
 
-	.btn-primary:hover {
+	.btn-primary:hover:not(:disabled) {
 		transform: translateY(-1px);
 		box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+	}
+
+	.btn-primary:disabled {
+		opacity: 0.7;
+		cursor: not-allowed;
 	}
 
 	.btn-secondary {
@@ -499,9 +434,29 @@
 		border-color: #dc2626;
 	}
 
+	.btn-secondary.in-cart {
+		background: #10b981;
+		color: white;
+		border-color: #10b981;
+		cursor: default;
+	}
+
 	.btn-large {
 		padding: 1rem 2rem;
 		font-size: 1rem;
+	}
+
+	.spinner {
+		width: 18px;
+		height: 18px;
+		border: 2px solid rgba(255, 255, 255, 0.3);
+		border-top-color: white;
+		border-radius: 50%;
+		animation: spin 0.8s linear infinite;
+	}
+
+	@keyframes spin {
+		to { transform: rotate(360deg); }
 	}
 
 	/* Details */
@@ -544,23 +499,6 @@
 		line-height: 1.6;
 	}
 
-	/* Related */
-	.related-section {
-		margin-bottom: 3rem;
-	}
-
-	.related-section h2 {
-		margin: 0 0 1.5rem;
-		font-size: 1.5rem;
-		font-weight: 600;
-	}
-
-	.related-grid {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 1rem;
-	}
-
 	/* Back link */
 	.back-link {
 		text-align: center;
@@ -593,10 +531,6 @@
 
 		.product-actions {
 			flex-direction: row;
-		}
-
-		.related-grid {
-			grid-template-columns: repeat(4, 1fr);
 		}
 	}
 
