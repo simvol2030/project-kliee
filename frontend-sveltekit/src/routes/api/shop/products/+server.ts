@@ -33,6 +33,7 @@ export interface ShopProduct {
 	primary_image: {
 		id: number;
 		stored_filename: string;
+		folder: string | null;
 		alt_en: string | null;
 		alt_ru: string | null;
 		alt_es: string | null;
@@ -145,6 +146,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		let imagesMap: Map<string, {
 			id: number;
 			stored_filename: string;
+			folder: string | null;
 			alt_en: string | null;
 			alt_ru: string | null;
 			alt_es: string | null;
@@ -159,6 +161,7 @@ export const GET: RequestHandler = async ({ url }) => {
 					artwork_id: artworkImages.artwork_id,
 					media_id: media.id,
 					stored_filename: media.stored_filename,
+					folder: media.folder,
 					alt_en: media.alt_en,
 					alt_ru: media.alt_ru,
 					alt_es: media.alt_es,
@@ -181,6 +184,7 @@ export const GET: RequestHandler = async ({ url }) => {
 					imagesMap.set(img.artwork_id, {
 						id: img.media_id,
 						stored_filename: img.stored_filename,
+						folder: img.folder,
 						alt_en: img.alt_en,
 						alt_ru: img.alt_ru,
 						alt_es: img.alt_es,
