@@ -7,8 +7,8 @@ import { generateSlug, makeSlugUnique } from '$lib/utils/slug';
 
 // GET single artwork
 export const GET: RequestHandler = async ({ params }) => {
-	const id = parseInt(params.id);
-	if (isNaN(id)) throw error(400, 'Invalid ID');
+	// id is TEXT in schema, no parseInt needed
+	const { id } = params;
 
 	try {
 		const [item] = await db.select().from(artworks).where(eq(artworks.id, id)).limit(1);
@@ -22,8 +22,8 @@ export const GET: RequestHandler = async ({ params }) => {
 
 // PATCH update artwork
 export const PATCH: RequestHandler = async ({ params, request }) => {
-	const id = parseInt(params.id);
-	if (isNaN(id)) throw error(400, 'Invalid ID');
+	// id is TEXT in schema, no parseInt needed
+	const { id } = params;
 
 	try {
 		const body = await request.json();
@@ -91,8 +91,8 @@ export const PATCH: RequestHandler = async ({ params, request }) => {
 
 // DELETE artwork
 export const DELETE: RequestHandler = async ({ params }) => {
-	const id = parseInt(params.id);
-	if (isNaN(id)) throw error(400, 'Invalid ID');
+	// id is TEXT in schema, no parseInt needed
+	const { id } = params;
 
 	try {
 		// Images will cascade delete

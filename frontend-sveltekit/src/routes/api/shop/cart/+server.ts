@@ -242,11 +242,11 @@ export const DELETE: RequestHandler = async (event) => {
 				.delete(cartItems)
 				.where(and(eq(cartItems.session_id, sessionId), eq(cartItems.id, parseInt(itemId))));
 		} else if (artworkId) {
-			// Remove by artwork_id
+			// Remove by artwork_id (artwork_id is text in database)
 			await db
 				.delete(cartItems)
 				.where(
-					and(eq(cartItems.session_id, sessionId), eq(cartItems.artwork_id, parseInt(artworkId)))
+					and(eq(cartItems.session_id, sessionId), eq(cartItems.artwork_id, artworkId))
 				);
 		} else {
 			throw error(400, 'id, artwork_id, or clear=true required');

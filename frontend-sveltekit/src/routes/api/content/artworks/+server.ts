@@ -18,8 +18,9 @@ export const GET: RequestHandler = async ({ url }) => {
 			.from(artworks)
 			.leftJoin(series, eq(artworks.series_id, series.id));
 
+		// series_id is TEXT in schema, no parseInt needed
 		const items = seriesId
-			? await baseQuery.where(eq(artworks.series_id, parseInt(seriesId))).orderBy(asc(artworks.order_index))
+			? await baseQuery.where(eq(artworks.series_id, seriesId)).orderBy(asc(artworks.order_index))
 			: await baseQuery.orderBy(asc(artworks.order_index));
 
 		// Get images for each artwork
@@ -92,9 +93,13 @@ export const POST: RequestHandler = async ({ request }) => {
 			.where(isNotNull(artworks.slug));
 		const uniqueSlug = makeSlugUnique(baseSlug, existingSlugs.map((r) => r.slug!));
 
+		// Generate unique ID for new artwork (id is TEXT, required)
+		const newId = `art_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
 		const [created] = await db
 			.insert(artworks)
 			.values({
+				id: newId,
 				slug: uniqueSlug,
 				series_id,
 				title_en,

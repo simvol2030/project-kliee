@@ -77,12 +77,12 @@ class CartStore {
 	/**
 	 * Remove item from cart
 	 */
-	async removeItem(artworkId: number): Promise<boolean> {
+	async removeItem(artworkId: string): Promise<boolean> {
 		try {
 			this.loading = true;
 			this.error = null;
 
-			const response = await fetch(`/api/shop/cart?artwork_id=${artworkId}`, {
+			const response = await fetch(`/api/shop/cart?artwork_id=${encodeURIComponent(artworkId)}`, {
 				method: 'DELETE'
 			});
 
@@ -153,7 +153,7 @@ class CartStore {
 	/**
 	 * Check if artwork is in cart
 	 */
-	isInCart(artworkId: number): boolean {
+	isInCart(artworkId: string): boolean {
 		return this.items.some((item) => item.artwork_id === artworkId);
 	}
 }

@@ -92,7 +92,7 @@
 	});
 
 	// Handle remove item
-	async function handleRemove(artworkId: number) {
+	async function handleRemove(artworkId: string) {
 		await cartStore.removeItem(artworkId);
 	}
 

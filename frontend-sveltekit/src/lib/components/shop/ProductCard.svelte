@@ -7,8 +7,8 @@
 		product: ShopProduct;
 		lang: LanguageCode;
 		currencyRates?: CurrencyRate[];
-		onAddToCart?: (productId: number) => void;
-		onToggleWishlist?: (productId: number) => void;
+		onAddToCart?: (productId: string) => void;
+		onToggleWishlist?: (productId: string) => void;
 		isInWishlist?: boolean;
 		loading?: boolean;
 	}
@@ -69,9 +69,9 @@
 	// Product URL
 	const productUrl = $derived(`/${lang}/shop/${product.slug || product.id}`);
 
-	// Image URL
+	// Image URL - use /uploads/ path which is served by static file handler
 	const imageUrl = $derived(
-		product.primary_image ? `/images/products/${product.primary_image.stored_filename}` : '/images/placeholder-artwork.jpg'
+		product.primary_image ? `/uploads/${product.primary_image.stored_filename}` : '/images/placeholder-artwork.jpg'
 	);
 
 	function handleAddToCart(e: Event) {

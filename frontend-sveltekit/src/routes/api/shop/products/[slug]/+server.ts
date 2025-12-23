@@ -18,7 +18,7 @@ export interface ProductImage {
 }
 
 export interface ProductDetail {
-	id: number;
+	id: string;
 	slug: string | null;
 	title_en: string;
 	title_ru: string;
@@ -36,7 +36,7 @@ export interface ProductDetail {
 	is_featured: boolean | null;
 	is_for_sale: boolean | null;
 	series: {
-		id: number;
+		id: string;
 		slug: string;
 		name_en: string;
 		name_ru: string;
@@ -48,7 +48,7 @@ export interface ProductDetail {
 }
 
 export interface RelatedProduct {
-	id: number;
+	id: string;
 	slug: string | null;
 	title_en: string;
 	title_ru: string;
@@ -148,12 +148,12 @@ export const GET: RequestHandler = async ({ params }) => {
 					.from(artworkImages)
 					.innerJoin(media, eq(artworkImages.media_id, media.id))
 					.where(
-						sql`${artworkImages.artwork_id} IN (${sql.join(relatedIds.map((id: number) => sql`${id}`), sql`, `)})`
+						sql`${artworkImages.artwork_id} IN (${sql.join(relatedIds.map((id: string) => sql`${id}`), sql`, `)})`
 					)
 					.orderBy(desc(artworkImages.is_primary), asc(artworkImages.order_index));
 
 				// Group by artwork_id and take first
-				const imagesMap = new Map<number, { id: number; stored_filename: string; alt_en: string | null }>();
+				const imagesMap = new Map<string, { id: number; stored_filename: string; alt_en: string | null }>();
 				for (const img of relatedImages) {
 					if (!imagesMap.has(img.artwork_id)) {
 						imagesMap.set(img.artwork_id, {

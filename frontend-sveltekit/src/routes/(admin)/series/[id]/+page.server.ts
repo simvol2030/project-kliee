@@ -11,12 +11,8 @@ export const load: PageServerLoad = async ({ params }) => {
 		return { item: null, isNew: true };
 	}
 
-	const numericId = parseInt(id);
-	if (isNaN(numericId)) {
-		throw error(400, 'Invalid series ID');
-	}
-
-	const [item] = await db.select().from(series).where(eq(series.id, numericId));
+	// id is TEXT in schema, no parseInt needed
+	const [item] = await db.select().from(series).where(eq(series.id, id));
 
 	if (!item) {
 		throw error(404, 'Series not found');
@@ -66,22 +62,20 @@ export const actions: Actions = {
 
 		try {
 			if (isNew) {
-				// Insert without specifying id (auto-increment)
-				const result = await db.insert(series).values(data).returning({ id: series.id });
-				const newId = result[0]?.id;
-				throw redirect(303, `/series/${newId}`);
+				// Generate unique ID for new series (id is TEXT, required)
+				const newId = `ser_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+				const result = await db.insert(series).values({ id: newId, ...data }).returning({ id: series.id });
+				const createdId = result[0]?.id;
+				throw redirect(303, `/series/${createdId}`);
 			} else {
-				const numericId = parseInt(params.id);
-				if (isNaN(numericId)) {
-					return fail(400, { error: 'Invalid series ID' });
-				}
+				// id is TEXT in schema, use params.id directly
 				await db
 					.update(series)
 					.set({
 						...data,
 						updated_at: new Date().toISOString()
 					})
-					.where(eq(series.id, numericId));
+					.where(eq(series.id, params.id));
 				return { success: true, message: 'Series saved successfully' };
 			}
 		} catch (e) {

@@ -2,39 +2,56 @@
  * Artworks Data Provider
  *
  * Abstraction layer for artwork data access.
- * Currently reads from JSON, designed for easy migration to SQLite.
+ * Reads from SQLite database via Drizzle ORM.
  *
- * @version 1.0
- * @date 2025-12-20
+ * @version 2.0
+ * @date 2025-12-23
  */
 
-import type {
-	Artwork,
-	ArtworkLocalized,
-	ArtworksData,
-	LanguageCode,
-	TranslatedString
-} from '$lib/types/content.types';
-import artworksDataRaw from '../../../../data/artworks.json';
-
-// Type assertion for imported JSON
-const artworksData = artworksDataRaw as ArtworksData;
+import { db } from '$lib/server/db/client';
+import { artworks, artworkImages, media, series } from '$lib/server/db/schema';
+import { eq, and, desc, asc, inArray } from 'drizzle-orm';
+import type { ArtworkLocalized, LanguageCode } from '$lib/types/content.types';
 
 /**
- * Localize a single artwork item
+ * Map database artwork to localized format
  */
-function localizeArtwork(artwork: Artwork, locale: LanguageCode): ArtworkLocalized {
+function mapArtworkToLocalized(
+	artwork: typeof artworks.$inferSelect,
+	locale: LanguageCode,
+	primaryImageFilename?: string | null,
+	seriesSlug?: string | null
+): ArtworkLocalized {
+	// Get title by locale
+	const title =
+		locale === 'ru'
+			? artwork.title_ru
+			: locale === 'es'
+				? artwork.title_es
+				: locale === 'zh'
+					? artwork.title_zh
+					: artwork.title_en;
+
+	// Get technique - for now use the technique field as-is
+	const technique = artwork.technique || '';
+
+	// Build images array - use primary image if available
+	const images: string[] = [];
+	if (primaryImageFilename) {
+		images.push(`/uploads/${primaryImageFilename}`);
+	}
+
 	return {
 		id: artwork.id,
-		title: artwork.title[locale as keyof TranslatedString],
-		series: artwork.series,
-		technique: artwork.technique[locale as keyof TranslatedString],
+		title,
+		series: seriesSlug || '',
+		technique,
 		year: artwork.year,
 		dimensions: artwork.dimensions,
 		price: artwork.price,
-		currency: artwork.currency,
-		images: artwork.images,
-		available: artwork.available
+		currency: artwork.currency || 'EUR',
+		images,
+		available: artwork.is_for_sale === true
 	};
 }
 
@@ -43,10 +60,26 @@ function localizeArtwork(artwork: Artwork, locale: LanguageCode): ArtworkLocaliz
  * @param locale - Language code (en, ru, es, zh)
  * @returns Array of artworks sorted by year (newest first)
  */
-export function getAllArtworks(locale: LanguageCode = 'en'): ArtworkLocalized[] {
-	return artworksData.artworks
-		.map((a) => localizeArtwork(a, locale))
-		.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+export async function getAllArtworks(locale: LanguageCode = 'en'): Promise<ArtworkLocalized[]> {
+	const result = await db
+		.select({
+			artwork: artworks,
+			seriesSlug: series.slug,
+			primaryImage: media.stored_filename
+		})
+		.from(artworks)
+		.leftJoin(series, eq(artworks.series_id, series.id))
+		.leftJoin(
+			artworkImages,
+			and(eq(artworkImages.artwork_id, artworks.id), eq(artworkImages.is_primary, true))
+		)
+		.leftJoin(media, eq(artworkImages.media_id, media.id))
+		.where(eq(artworks.is_visible, true))
+		.orderBy(desc(artworks.year), asc(artworks.order_index));
+
+	return result.map((row) =>
+		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.seriesSlug)
+	);
 }
 
 /**
@@ -55,14 +88,40 @@ export function getAllArtworks(locale: LanguageCode = 'en'): ArtworkLocalized[] 
  * @param locale - Language code
  * @returns Array of artworks in the series
  */
-export function getArtworksBySeries(
+export async function getArtworksBySeries(
 	seriesSlug: string,
 	locale: LanguageCode = 'en'
-): ArtworkLocalized[] {
-	return artworksData.artworks
-		.filter((a) => a.series === seriesSlug)
-		.map((a) => localizeArtwork(a, locale))
-		.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+): Promise<ArtworkLocalized[]> {
+	// First find the series by slug
+	const [seriesRecord] = await db
+		.select()
+		.from(series)
+		.where(eq(series.slug, seriesSlug))
+		.limit(1);
+
+	if (!seriesRecord) {
+		return [];
+	}
+
+	const result = await db
+		.select({
+			artwork: artworks,
+			seriesSlug: series.slug,
+			primaryImage: media.stored_filename
+		})
+		.from(artworks)
+		.leftJoin(series, eq(artworks.series_id, series.id))
+		.leftJoin(
+			artworkImages,
+			and(eq(artworkImages.artwork_id, artworks.id), eq(artworkImages.is_primary, true))
+		)
+		.leftJoin(media, eq(artworkImages.media_id, media.id))
+		.where(and(eq(artworks.series_id, seriesRecord.id), eq(artworks.is_visible, true)))
+		.orderBy(desc(artworks.year), asc(artworks.order_index));
+
+	return result.map((row) =>
+		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.seriesSlug)
+	);
 }
 
 /**
@@ -71,12 +130,32 @@ export function getArtworksBySeries(
  * @param locale - Language code
  * @returns Artwork or undefined if not found
  */
-export function getArtworkById(
+export async function getArtworkById(
 	id: string,
 	locale: LanguageCode = 'en'
-): ArtworkLocalized | undefined {
-	const artwork = artworksData.artworks.find((a) => a.id === id);
-	return artwork ? localizeArtwork(artwork, locale) : undefined;
+): Promise<ArtworkLocalized | undefined> {
+	const result = await db
+		.select({
+			artwork: artworks,
+			seriesSlug: series.slug,
+			primaryImage: media.stored_filename
+		})
+		.from(artworks)
+		.leftJoin(series, eq(artworks.series_id, series.id))
+		.leftJoin(
+			artworkImages,
+			and(eq(artworkImages.artwork_id, artworks.id), eq(artworkImages.is_primary, true))
+		)
+		.leftJoin(media, eq(artworkImages.media_id, media.id))
+		.where(eq(artworks.id, id))
+		.limit(1);
+
+	if (result.length === 0) {
+		return undefined;
+	}
+
+	const row = result[0];
+	return mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.seriesSlug);
 }
 
 /**
@@ -85,10 +164,29 @@ export function getArtworkById(
  * @param locale - Language code
  * @returns Array of artworks from that year
  */
-export function getArtworksByYear(year: number, locale: LanguageCode = 'en'): ArtworkLocalized[] {
-	return artworksData.artworks
-		.filter((a) => a.year === year)
-		.map((a) => localizeArtwork(a, locale));
+export async function getArtworksByYear(
+	year: number,
+	locale: LanguageCode = 'en'
+): Promise<ArtworkLocalized[]> {
+	const result = await db
+		.select({
+			artwork: artworks,
+			seriesSlug: series.slug,
+			primaryImage: media.stored_filename
+		})
+		.from(artworks)
+		.leftJoin(series, eq(artworks.series_id, series.id))
+		.leftJoin(
+			artworkImages,
+			and(eq(artworkImages.artwork_id, artworks.id), eq(artworkImages.is_primary, true))
+		)
+		.leftJoin(media, eq(artworkImages.media_id, media.id))
+		.where(and(eq(artworks.year, year), eq(artworks.is_visible, true)))
+		.orderBy(asc(artworks.order_index));
+
+	return result.map((row) =>
+		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.seriesSlug)
+	);
 }
 
 /**
@@ -96,35 +194,58 @@ export function getArtworksByYear(year: number, locale: LanguageCode = 'en'): Ar
  * @param locale - Language code
  * @returns Array of available artworks
  */
-export function getAvailableArtworks(locale: LanguageCode = 'en'): ArtworkLocalized[] {
-	return artworksData.artworks
-		.filter((a) => a.available && a.price !== null)
-		.map((a) => localizeArtwork(a, locale))
-		.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+export async function getAvailableArtworks(locale: LanguageCode = 'en'): Promise<ArtworkLocalized[]> {
+	const result = await db
+		.select({
+			artwork: artworks,
+			seriesSlug: series.slug,
+			primaryImage: media.stored_filename
+		})
+		.from(artworks)
+		.leftJoin(series, eq(artworks.series_id, series.id))
+		.leftJoin(
+			artworkImages,
+			and(eq(artworkImages.artwork_id, artworks.id), eq(artworkImages.is_primary, true))
+		)
+		.leftJoin(media, eq(artworkImages.media_id, media.id))
+		.where(and(eq(artworks.is_for_sale, true), eq(artworks.is_visible, true)))
+		.orderBy(desc(artworks.year), asc(artworks.order_index));
+
+	return result.map((row) =>
+		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.seriesSlug)
+	);
 }
 
 /**
- * Get featured artworks (first artwork from each series)
+ * Get featured artworks
  * @param locale - Language code
  * @param limit - Maximum number to return
  * @returns Array of featured artworks
  */
-export function getFeaturedArtworks(
+export async function getFeaturedArtworks(
 	locale: LanguageCode = 'en',
 	limit: number = 6
-): ArtworkLocalized[] {
-	const seriesSlugs = [...new Set(artworksData.artworks.map((a) => a.series))];
-	const featured: ArtworkLocalized[] = [];
+): Promise<ArtworkLocalized[]> {
+	const result = await db
+		.select({
+			artwork: artworks,
+			seriesSlug: series.slug,
+			primaryImage: media.stored_filename
+		})
+		.from(artworks)
+		.leftJoin(series, eq(artworks.series_id, series.id))
+		.leftJoin(
+			artworkImages,
+			and(eq(artworkImages.artwork_id, artworks.id), eq(artworkImages.is_primary, true))
+		)
+		.leftJoin(media, eq(artworkImages.media_id, media.id))
+		.where(and(eq(artworks.is_featured, true), eq(artworks.is_visible, true)))
+		.orderBy(asc(artworks.order_index))
+		.limit(limit);
 
-	for (const slug of seriesSlugs) {
-		if (featured.length >= limit) break;
-		const artwork = artworksData.artworks.find((a) => a.series === slug);
-		if (artwork) {
-			featured.push(localizeArtwork(artwork, locale));
-		}
-	}
-
-	return featured;
+	return result.map((row) =>
+		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.seriesSlug)
+	);
 }
 
 /**
@@ -133,25 +254,31 @@ export function getFeaturedArtworks(
  * @param locale - Language code
  * @returns Array of matching artworks
  */
-export function searchArtworks(query: string, locale: LanguageCode = 'en'): ArtworkLocalized[] {
+export async function searchArtworks(
+	query: string,
+	locale: LanguageCode = 'en'
+): Promise<ArtworkLocalized[]> {
+	const allArtworks = await getAllArtworks(locale);
 	const lowerQuery = query.toLowerCase();
-	return artworksData.artworks
-		.filter((a) => {
-			const title = a.title[locale as keyof TranslatedString].toLowerCase();
-			return title.includes(lowerQuery);
-		})
-		.map((a) => localizeArtwork(a, locale));
+	return allArtworks.filter((artwork) => artwork.title.toLowerCase().includes(lowerQuery));
 }
 
 /**
  * Get unique years from artworks
  * @returns Array of years sorted descending (excludes null years)
  */
-export function getArtworkYears(): number[] {
-	const years = artworksData.artworks
-		.map((a) => a.year)
+export async function getArtworkYears(): Promise<number[]> {
+	const result = await db
+		.select({ year: artworks.year })
+		.from(artworks)
+		.where(eq(artworks.is_visible, true))
+		.orderBy(desc(artworks.year));
+
+	const years = result
+		.map((r) => r.year)
 		.filter((year): year is number => year !== null);
-	return [...new Set(years)].sort((a, b) => b - a);
+
+	return [...new Set(years)];
 }
 
 /**
@@ -159,10 +286,16 @@ export function getArtworkYears(): number[] {
  * @param locale - Language code
  * @returns Array of unique techniques
  */
-export function getArtworkTechniques(locale: LanguageCode = 'en'): string[] {
-	const techniques = artworksData.artworks.map(
-		(a) => a.technique[locale as keyof TranslatedString]
-	);
+export async function getArtworkTechniques(locale: LanguageCode = 'en'): Promise<string[]> {
+	const result = await db
+		.select({ technique: artworks.technique })
+		.from(artworks)
+		.where(eq(artworks.is_visible, true));
+
+	const techniques = result
+		.map((r) => r.technique)
+		.filter((tech): tech is string => tech !== null && tech.trim() !== '');
+
 	return [...new Set(techniques)].sort();
 }
 
@@ -173,27 +306,27 @@ export function getArtworkTechniques(locale: LanguageCode = 'en'): string[] {
  * @param locale - Language code
  * @returns Paginated artworks with metadata
  */
-export function getArtworksPaginated(
+export async function getArtworksPaginated(
 	page: number = 1,
 	pageSize: number = 12,
 	locale: LanguageCode = 'en'
-): {
+): Promise<{
 	artworks: ArtworkLocalized[];
 	total: number;
 	totalPages: number;
 	currentPage: number;
 	hasNext: boolean;
 	hasPrev: boolean;
-} {
-	const allArtworks = getAllArtworks(locale);
+}> {
+	const allArtworks = await getAllArtworks(locale);
 	const total = allArtworks.length;
 	const totalPages = Math.ceil(total / pageSize);
-	const currentPage = Math.max(1, Math.min(page, totalPages));
+	const currentPage = Math.max(1, Math.min(page, totalPages || 1));
 	const start = (currentPage - 1) * pageSize;
-	const artworks = allArtworks.slice(start, start + pageSize);
+	const paginatedArtworks = allArtworks.slice(start, start + pageSize);
 
 	return {
-		artworks,
+		artworks: paginatedArtworks,
 		total,
 		totalPages,
 		currentPage,
@@ -206,10 +339,11 @@ export function getArtworksPaginated(
  * Get artworks metadata
  * @returns Artworks metadata
  */
-export function getArtworksMetadata() {
+export async function getArtworksMetadata(): Promise<{ version: string; lastUpdated: string }> {
+	// Since we're using database now, we return a version indicator
 	return {
-		version: artworksData.version,
-		lastUpdated: artworksData.lastUpdated
+		version: '2.0-db',
+		lastUpdated: new Date().toISOString()
 	};
 }
 
@@ -217,8 +351,13 @@ export function getArtworksMetadata() {
  * Get total number of artworks
  * @returns Number of artworks
  */
-export function getArtworksCount(): number {
-	return artworksData.artworks.length;
+export async function getArtworksCount(): Promise<number> {
+	const result = await db
+		.select({ id: artworks.id })
+		.from(artworks)
+		.where(eq(artworks.is_visible, true));
+
+	return result.length;
 }
 
 /**
@@ -226,6 +365,22 @@ export function getArtworksCount(): number {
  * @param seriesSlug - Series slug
  * @returns Number of artworks in series
  */
-export function getArtworksCountBySeries(seriesSlug: string): number {
-	return artworksData.artworks.filter((a) => a.series === seriesSlug).length;
+export async function getArtworksCountBySeries(seriesSlug: string): Promise<number> {
+	// First find the series by slug
+	const [seriesRecord] = await db
+		.select()
+		.from(series)
+		.where(eq(series.slug, seriesSlug))
+		.limit(1);
+
+	if (!seriesRecord) {
+		return 0;
+	}
+
+	const result = await db
+		.select({ id: artworks.id })
+		.from(artworks)
+		.where(and(eq(artworks.series_id, seriesRecord.id), eq(artworks.is_visible, true)));
+
+	return result.length;
 }

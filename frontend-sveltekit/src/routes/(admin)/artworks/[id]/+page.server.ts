@@ -17,12 +17,8 @@ export const load: PageServerLoad = async ({ params }) => {
 		};
 	}
 
-	const numericId = parseInt(id);
-	if (isNaN(numericId)) {
-		throw error(400, 'Invalid artwork ID');
-	}
-
-	const [artwork] = await db.select().from(artworks).where(eq(artworks.id, numericId));
+	// id is TEXT in schema, no parseInt needed
+	const [artwork] = await db.select().from(artworks).where(eq(artworks.id, id));
 
 	if (!artwork) {
 		throw error(404, 'Artwork not found');
@@ -61,12 +57,13 @@ export const actions: Actions = {
 		}
 
 		// Build data object with snake_case keys matching schema
+		// series_id is TEXT in schema, no parseInt needed
 		const data = {
 			title_en: titleEn,
 			title_ru: titleRu || titleEn,
 			title_es: titleEs || titleEn,
 			title_zh: titleZh || titleEn,
-			series_id: seriesIdStr ? parseInt(seriesIdStr) : null,
+			series_id: seriesIdStr || null,
 			technique: technique || null,
 			year,
 			dimensions,
@@ -77,22 +74,20 @@ export const actions: Actions = {
 
 		try {
 			if (isNew) {
-				// Insert without specifying id (auto-increment)
-				const result = await db.insert(artworks).values(data).returning({ id: artworks.id });
-				const newId = result[0]?.id;
-				throw redirect(303, `/artworks/${newId}`);
+				// Generate unique ID for new artwork (id is TEXT, required)
+				const newId = `art_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+				const result = await db.insert(artworks).values({ id: newId, ...data }).returning({ id: artworks.id });
+				const createdId = result[0]?.id;
+				throw redirect(303, `/artworks/${createdId}`);
 			} else {
-				const numericId = parseInt(params.id);
-				if (isNaN(numericId)) {
-					return fail(400, { error: 'Invalid artwork ID' });
-				}
+				// id is TEXT in schema, use params.id directly
 				await db
 					.update(artworks)
 					.set({
 						...data,
 						updated_at: new Date().toISOString()
 					})
-					.where(eq(artworks.id, numericId));
+					.where(eq(artworks.id, params.id));
 				return { success: true, message: 'Artwork saved successfully' };
 			}
 		} catch (e) {

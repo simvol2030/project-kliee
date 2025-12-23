@@ -6,8 +6,8 @@ import { eq } from 'drizzle-orm';
 
 // GET single series
 export const GET: RequestHandler = async ({ params }) => {
-	const id = parseInt(params.id);
-	if (isNaN(id)) throw error(400, 'Invalid ID');
+	// id is TEXT in schema, no parseInt needed
+	const { id } = params;
 
 	try {
 		const [item] = await db.select().from(series).where(eq(series.id, id)).limit(1);
@@ -21,8 +21,8 @@ export const GET: RequestHandler = async ({ params }) => {
 
 // PATCH update series
 export const PATCH: RequestHandler = async ({ params, request }) => {
-	const id = parseInt(params.id);
-	if (isNaN(id)) throw error(400, 'Invalid ID');
+	// id is TEXT in schema, no parseInt needed
+	const { id } = params;
 
 	try {
 		const body = await request.json();
@@ -64,8 +64,8 @@ export const PATCH: RequestHandler = async ({ params, request }) => {
 
 // DELETE series
 export const DELETE: RequestHandler = async ({ params }) => {
-	const id = parseInt(params.id);
-	if (isNaN(id)) throw error(400, 'Invalid ID');
+	// id is TEXT in schema, no parseInt needed
+	const { id } = params;
 
 	try {
 		await db.delete(series).where(eq(series.id, id));

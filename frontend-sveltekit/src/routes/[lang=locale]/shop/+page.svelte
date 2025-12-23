@@ -188,11 +188,11 @@
 	});
 
 	// Loading and feedback state
-	let addingToCart = $state<number | null>(null);
+	let addingToCart = $state<string | null>(null);
 	let cartMessage = $state<{ type: 'success' | 'error'; text: string } | null>(null);
 
 	// Cart handler
-	async function handleAddToCart(productId: number) {
+	async function handleAddToCart(productId: string) {
 		if (addingToCart) return; // Prevent double-click
 
 		addingToCart = productId;
@@ -221,13 +221,13 @@
 	}
 
 	// Wishlist handler
-	function handleToggleWishlist(productId: number) {
+	function handleToggleWishlist(productId: string) {
 		const isNowInWishlist = wishlistStore.toggle(productId);
 		// UI updates automatically via isInWishlist check
 	}
 
 	// Check if product is in wishlist
-	function isProductInWishlist(productId: number): boolean {
+	function isProductInWishlist(productId: string): boolean {
 		return wishlistStore.isInWishlist(productId);
 	}
 </script>

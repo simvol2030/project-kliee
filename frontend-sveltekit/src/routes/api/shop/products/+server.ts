@@ -31,7 +31,7 @@ export interface ShopProduct {
 		name_zh: string;
 	} | null;
 	primary_image: {
-		id: string;
+		id: number;
 		stored_filename: string;
 		alt_en: string | null;
 		alt_ru: string | null;
@@ -41,7 +41,6 @@ export interface ShopProduct {
 		height: number | null;
 	} | null;
 	created_at: string | null;
-	images: string | null;
 }
 
 export interface ProductsResponse {
@@ -144,7 +143,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		const productIds = productsRaw.map((p: { artwork: Artwork; series: Series | null }) => p.artwork.id);
 
 		let imagesMap: Map<string, {
-			id: string;
+			id: number;
 			stored_filename: string;
 			alt_en: string | null;
 			alt_ru: string | null;
@@ -223,7 +222,6 @@ export const GET: RequestHandler = async ({ url }) => {
 					}
 				: null,
 			primary_image: imagesMap.get(row.artwork.id) || null,
-			images: row.artwork.images,
 			created_at: row.artwork.created_at
 		}));
 

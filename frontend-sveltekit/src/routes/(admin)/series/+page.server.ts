@@ -22,7 +22,8 @@ export const actions: Actions = {
 		}
 
 		try {
-			await db.delete(series).where(eq(series.id, parseInt(id)));
+			// id is TEXT in schema, no parseInt needed
+			await db.delete(series).where(eq(series.id, id));
 			return { success: true, message: 'Series deleted successfully' };
 		} catch (error) {
 			console.error('Error deleting series:', error);

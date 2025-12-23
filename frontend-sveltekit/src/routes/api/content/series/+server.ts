@@ -62,9 +62,13 @@ export const POST: RequestHandler = async ({ request }) => {
 			throw error(400, 'slug and name_en are required');
 		}
 
+		// Generate unique ID for new series (id is TEXT, required)
+		const newId = `ser_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
 		const [created] = await db
 			.insert(series)
 			.values({
+				id: newId,
 				slug,
 				name_en,
 				name_ru: name_ru || name_en,
