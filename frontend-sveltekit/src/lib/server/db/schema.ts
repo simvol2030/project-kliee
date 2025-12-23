@@ -317,6 +317,7 @@ export const series = sqliteTable('series', {
 	order_index: integer('order_index').default(0),
 	is_visible: integer('is_visible', { mode: 'boolean' }).default(true),
 	is_featured: integer('is_featured', { mode: 'boolean' }).default(false),
+	show_in_shop: integer('show_in_shop', { mode: 'boolean' }).default(false),
 	seo_title_en: text('seo_title_en'),
 	seo_title_ru: text('seo_title_ru'),
 	seo_title_es: text('seo_title_es'),
@@ -380,6 +381,15 @@ export const artworks = sqliteTable('artworks', {
 	is_for_sale: integer('is_for_sale', { mode: 'boolean' }).default(true),
 	is_visible: integer('is_visible', { mode: 'boolean' }).default(true),
 	order_index: integer('order_index').default(0),
+	// SEO fields
+	seo_title_en: text('seo_title_en'),
+	seo_title_ru: text('seo_title_ru'),
+	seo_title_es: text('seo_title_es'),
+	seo_title_zh: text('seo_title_zh'),
+	seo_description_en: text('seo_description_en'),
+	seo_description_ru: text('seo_description_ru'),
+	seo_description_es: text('seo_description_es'),
+	seo_description_zh: text('seo_description_zh'),
 	created_at: text('created_at').default(sql`CURRENT_TIMESTAMP`),
 	updated_at: text('updated_at').default(sql`CURRENT_TIMESTAMP`)
 });

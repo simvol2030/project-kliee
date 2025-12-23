@@ -24,7 +24,8 @@ export const actions: Actions = {
 		}
 
 		try {
-			await db.delete(artworks).where(eq(artworks.id, parseInt(id)));
+			// id is TEXT in schema, no parseInt needed
+			await db.delete(artworks).where(eq(artworks.id, id));
 			return { success: true, message: 'Artwork deleted successfully' };
 		} catch (error) {
 			console.error('Error deleting artwork:', error);

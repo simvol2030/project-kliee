@@ -1,11 +1,12 @@
 /**
  * Contact Form API Endpoint
  *
- * Handles contact form submissions with validation and rate limiting
+ * Handles contact form submissions with validation, rate limiting, and email notifications
  */
 
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { sendContactFormEmail, sendContactAutoReply } from '$lib/server/notifications/email';
 
 // Simple in-memory rate limiting (production should use Redis)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -17,6 +18,7 @@ interface ContactFormData {
 	email: string;
 	subject: string;
 	message: string;
+	lang?: string;
 }
 
 function validateEmail(email: string): boolean {
@@ -90,10 +92,11 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
 			name: sanitizeInput(data.name),
 			email: data.email.trim().toLowerCase(),
 			subject: sanitizeInput(data.subject),
-			message: sanitizeInput(data.message)
+			message: sanitizeInput(data.message),
+			lang: data.lang || 'en'
 		};
 
-		// Log the contact request (in production, send email)
+		// Log the contact request
 		console.log('[Contact Form] New submission:', {
 			timestamp: new Date().toISOString(),
 			from: sanitizedData.email,
@@ -102,41 +105,18 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
 			messageLength: sanitizedData.message.length
 		});
 
-		// TODO: Implement actual email sending
-		// Options:
-		// 1. SendGrid: import { MailService } from '@sendgrid/mail'
-		// 2. Nodemailer: import nodemailer from 'nodemailer'
-		// 3. Resend: import { Resend } from 'resend'
-		//
-		// Example with environment variables:
-		// const SMTP_HOST = import.meta.env.SMTP_HOST;
-		// const SMTP_USER = import.meta.env.SMTP_USER;
-		// const SMTP_PASS = import.meta.env.SMTP_PASS;
-		// const RECIPIENT_EMAIL = import.meta.env.CONTACT_EMAIL || 'info@k-lie.com';
+		// Send emails in parallel
+		const [adminEmailSent, autoReplySent] = await Promise.all([
+			sendContactFormEmail(sanitizedData),
+			sendContactAutoReply(sanitizedData)
+		]);
 
-		// For now, simulate successful submission
-		// In production, uncomment and configure email sending
-
-		/*
-		const transporter = nodemailer.createTransport({
-			host: SMTP_HOST,
-			port: 587,
-			secure: false,
-			auth: { user: SMTP_USER, pass: SMTP_PASS }
-		});
-
-		await transporter.sendMail({
-			from: `"${sanitizedData.name}" <${sanitizedData.email}>`,
-			to: RECIPIENT_EMAIL,
-			subject: `[K-LIEE Contact] ${sanitizedData.subject}`,
-			text: sanitizedData.message,
-			replyTo: sanitizedData.email
-		});
-		*/
+		console.log('[Contact Form] Email status:', { adminEmailSent, autoReplySent });
 
 		return json({
 			success: true,
-			message: 'Thank you for your message. We will get back to you soon.'
+			message: 'Thank you for your message. We will get back to you soon.',
+			emailSent: adminEmailSent
 		});
 
 	} catch (error) {

@@ -30,17 +30,17 @@ export const load: PageLoad = async ({ parent, url }) => {
 
 	// Get filter options
 	const allSeries = getAllSeries(localeCode);
-	const years = getArtworkYears();
-	const techniques = getArtworkTechniques(localeCode);
+	const years = await getArtworkYears();
+	const techniques = await getArtworkTechniques(localeCode);
 
 	// Get artworks based on filters
 	let artworks = searchQuery
-		? searchArtworks(searchQuery, localeCode)
+		? await searchArtworks(searchQuery, localeCode)
 		: seriesFilter
-			? getArtworksBySeries(seriesFilter, localeCode)
+			? await getArtworksBySeries(seriesFilter, localeCode)
 			: availableOnly
-				? getAvailableArtworks(localeCode)
-				: getAllArtworks(localeCode);
+				? await getAvailableArtworks(localeCode)
+				: await getAllArtworks(localeCode);
 
 	// Apply year filter
 	if (yearFilter) {

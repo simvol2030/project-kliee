@@ -63,6 +63,10 @@
 				</a>
 
 				<p class="nav-section">Content</p>
+				<a href="/media" class:active={$page.url.pathname.startsWith('/media')} onclick={closeMobileMenu}>
+					<span class="icon">📷</span>
+					<span>Media</span>
+				</a>
 				<a href="/artworks" class:active={$page.url.pathname.startsWith('/artworks')} onclick={closeMobileMenu}>
 					<span class="icon">🖼️</span>
 					<span>Artworks</span>
@@ -75,45 +79,35 @@
 					<span class="icon">🏛️</span>
 					<span>Exhibitions</span>
 				</a>
-				<a href="/art-fairs" class:active={$page.url.pathname.startsWith('/art-fairs')} onclick={closeMobileMenu}>
-					<span class="icon">🎪</span>
-					<span>Art Fairs</span>
-				</a>
-				<a href="/education" class:active={$page.url.pathname.startsWith('/education')} onclick={closeMobileMenu}>
-					<span class="icon">🎓</span>
-					<span>Education</span>
-				</a>
-				<a href="/awards" class:active={$page.url.pathname.startsWith('/awards')} onclick={closeMobileMenu}>
-					<span class="icon">🏆</span>
-					<span>Awards</span>
-				</a>
-				<a href="/pages" class:active={$page.url.pathname.startsWith('/pages')} onclick={closeMobileMenu}>
-					<span class="icon">📄</span>
-					<span>Pages</span>
-				</a>
-				<a href="/menu" class:active={$page.url.pathname.startsWith('/menu')} onclick={closeMobileMenu}>
+
+				<p class="nav-section">Layout</p>
+				<a href="/layout/menu" class:active={$page.url.pathname.startsWith('/layout/menu')} onclick={closeMobileMenu}>
 					<span class="icon">🔗</span>
 					<span>Menu</span>
 				</a>
+				<a href="/layout/footer" class:active={$page.url.pathname.startsWith('/layout/footer')} onclick={closeMobileMenu}>
+					<span class="icon">📑</span>
+					<span>Footer</span>
+				</a>
+				<a href="/homepage" class:active={$page.url.pathname.startsWith('/homepage')} onclick={closeMobileMenu}>
+					<span class="icon">🏠</span>
+					<span>Homepage</span>
+				</a>
 
 				<p class="nav-section">Shop</p>
-				<a href="/products" class:active={$page.url.pathname.startsWith('/products')} onclick={closeMobileMenu}>
-					<span class="icon">📦</span>
-					<span>Products</span>
-				</a>
-				<a href="/orders" class:active={$page.url.pathname.startsWith('/orders')} onclick={closeMobileMenu}>
+				<a href="/shop/orders" class:active={$page.url.pathname.startsWith('/shop/orders')} onclick={closeMobileMenu}>
 					<span class="icon">🛒</span>
 					<span>Orders</span>
+				</a>
+				<a href="/shop/settings" class:active={$page.url.pathname.startsWith('/shop/settings')} onclick={closeMobileMenu}>
+					<span class="icon">💰</span>
+					<span>Shop Settings</span>
 				</a>
 
 				<p class="nav-section">System</p>
 				<a href="/users" class:active={$page.url.pathname.startsWith('/users')} onclick={closeMobileMenu}>
 					<span class="icon">👥</span>
 					<span>Users</span>
-				</a>
-				<a href="/posts" class:active={$page.url.pathname.startsWith('/posts')} onclick={closeMobileMenu}>
-					<span class="icon">📝</span>
-					<span>Posts</span>
 				</a>
 				{#if data.user?.role === 'super-admin'}
 					<a href="/settings" class:active={$page.url.pathname === '/settings'} onclick={closeMobileMenu}>

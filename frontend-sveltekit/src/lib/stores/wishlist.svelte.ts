@@ -6,7 +6,7 @@ const WISHLIST_KEY = 'kliee_wishlist';
  * Wishlist item stored in localStorage
  */
 export interface WishlistItem {
-	artwork_id: number;
+	artwork_id: string;
 	added_at: string;
 }
 
@@ -68,7 +68,7 @@ class WishlistStore {
 	/**
 	 * Get artwork IDs in wishlist
 	 */
-	get artworkIds(): number[] {
+	get artworkIds(): string[] {
 		return this.items.map((item) => item.artwork_id);
 	}
 
@@ -82,14 +82,14 @@ class WishlistStore {
 	/**
 	 * Check if artwork is in wishlist
 	 */
-	isInWishlist(artworkId: number): boolean {
+	isInWishlist(artworkId: string): boolean {
 		return this.items.some((item) => item.artwork_id === artworkId);
 	}
 
 	/**
 	 * Add artwork to wishlist
 	 */
-	add(artworkId: number): boolean {
+	add(artworkId: string): boolean {
 		if (this.isInWishlist(artworkId)) {
 			return false; // Already in wishlist
 		}
@@ -108,7 +108,7 @@ class WishlistStore {
 	/**
 	 * Remove artwork from wishlist
 	 */
-	remove(artworkId: number): boolean {
+	remove(artworkId: string): boolean {
 		const initialLength = this.items.length;
 		this.items = this.items.filter((item) => item.artwork_id !== artworkId);
 
@@ -122,7 +122,7 @@ class WishlistStore {
 	/**
 	 * Toggle artwork in wishlist
 	 */
-	toggle(artworkId: number): boolean {
+	toggle(artworkId: string): boolean {
 		if (this.isInWishlist(artworkId)) {
 			this.remove(artworkId);
 			return false; // Removed, not in wishlist

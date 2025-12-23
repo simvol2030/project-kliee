@@ -21,7 +21,7 @@ export const load: PageLoad = async ({ params, parent }) => {
 		});
 	}
 
-	const artworks = getArtworksBySeries(slug, localeCode);
+	const artworks = await getArtworksBySeries(slug, localeCode);
 	const allSeries = getAllSeries(localeCode);
 
 	// Find adjacent series for navigation

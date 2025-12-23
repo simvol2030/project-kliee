@@ -12,7 +12,7 @@
 
 	// Product details fetched from API
 	interface WishlistProduct {
-		id: number;
+		id: string;
 		slug: string | null;
 		title_en: string;
 		title_ru: string;
@@ -31,7 +31,7 @@
 
 	let products = $state<WishlistProduct[]>([]);
 	let loading = $state(true);
-	let addingToCart = $state<number | null>(null);
+	let addingToCart = $state<string | null>(null);
 
 	// Translations
 	const t = {
@@ -180,12 +180,12 @@
 	}
 
 	// Handle remove from wishlist
-	function handleRemove(artworkId: number) {
+	function handleRemove(artworkId: string) {
 		wishlistStore.remove(artworkId);
 	}
 
 	// Handle add to cart
-	async function handleAddToCart(artworkId: number) {
+	async function handleAddToCart(artworkId: string) {
 		if (cartStore.isInCart(artworkId)) {
 			return;
 		}
