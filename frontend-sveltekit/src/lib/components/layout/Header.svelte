@@ -140,26 +140,7 @@
           <CartDropdown lang={locale} {currencyRates} />
         </div>
 
-        <!-- Compact Language Switcher (mobile) -->
-        <div class="mobile-lang-switcher">
-          <LanguageSwitcher currentLang={locale} />
-        </div>
-
-        <!-- Compact Theme Toggle -->
-        <button
-          class="icon-btn theme-toggle"
-          onclick={toggleTheme}
-          aria-label="Toggle theme"
-          title="Toggle theme"
-        >
-          <div class="toggle-track" class:dark={mode.current === 'dark'}>
-            <div class="toggle-thumb">
-              <span class="toggle-icon">{mode.current === 'dark' ? '☀️' : '🌙'}</span>
-            </div>
-          </div>
-        </button>
-
-        <!-- Mobile Menu Toggle -->
+        <!-- Mobile Menu Toggle (hamburger) -->
         <button
           class="mobile-menu-toggle"
           class:active={mobileMenuOpen}
@@ -454,77 +435,6 @@
     display: none;
     align-items: center;
     gap: 12px;
-  }
-
-  .mobile-lang-switcher {
-    display: flex;
-    align-items: center;
-  }
-
-  /* Mobile Theme Toggle - Apple Minimalist Style */
-  .icon-btn.theme-toggle {
-    background: transparent;
-    border: none;
-    padding: 0;
-    width: auto;
-    height: auto;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .icon-btn.theme-toggle .toggle-track {
-    position: relative;
-    width: 44px;
-    height: 26px;
-    background: #e5e5e5;
-    border-radius: 13px;
-    transition: background 0.25s ease;
-    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.04);
-  }
-
-  :global(.dark) .icon-btn.theme-toggle .toggle-track {
-    background: #39393d;
-    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.04);
-  }
-
-  .icon-btn.theme-toggle .toggle-track.dark {
-    background: #d4af37;
-  }
-
-  .icon-btn.theme-toggle .toggle-thumb {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 22px;
-    height: 22px;
-    background: #ffffff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.25s ease;
-    box-shadow:
-      0 3px 8px rgba(0, 0, 0, 0.15),
-      0 1px 1px rgba(0, 0, 0, 0.16);
-  }
-
-  .icon-btn.theme-toggle .toggle-track.dark .toggle-thumb {
-    transform: translateX(18px);
-  }
-
-  .icon-btn.theme-toggle .toggle-icon {
-    font-size: 11px;
-    line-height: 1;
-  }
-
-  .icon-btn.theme-toggle:active .toggle-thumb {
-    width: 24px;
-  }
-
-  .icon-btn.theme-toggle:active .toggle-track.dark .toggle-thumb {
-    transform: translateX(16px);
   }
 
   /* Desktop Theme Toggle - Apple Minimalist Style */

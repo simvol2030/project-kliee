@@ -63,8 +63,12 @@
 		transform: translate(25%, -25%);
 	}
 
-	/* Dark theme */
-	:global([data-theme='dark']) .wishlist-icon {
-		color: var(--color-text, #f3f4f6);
+	/* Dark theme - mode-watcher uses .dark class on html element */
+	:global(.dark) .wishlist-icon {
+		color: #ffffff;
+	}
+
+	:global(.dark) .wishlist-icon:hover {
+		color: var(--color-accent, #d4af37);
 	}
 </style>

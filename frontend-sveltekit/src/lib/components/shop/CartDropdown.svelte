@@ -432,27 +432,76 @@
 		opacity: 0.9;
 	}
 
-	/* Dark theme */
-	:global([data-theme='dark']) .cart-trigger {
-		color: var(--color-text, #f3f4f6);
+	/* Dark theme - mode-watcher uses .dark class on html element */
+	:global(.dark) .cart-trigger {
+		color: #ffffff;
 	}
 
-	:global([data-theme='dark']) .cart-dropdown {
-		background: var(--color-card-bg, #1f2937);
+	:global(.dark) .cart-trigger:hover {
+		color: var(--color-accent, #d4af37);
+	}
+
+	:global(.dark) .cart-dropdown {
+		background: #1f2937;
 		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
 	}
 
-	:global([data-theme='dark']) .dropdown-footer {
+	:global(.dark) .dropdown-header {
+		border-color: rgba(255, 255, 255, 0.1);
+	}
+
+	:global(.dark) .dropdown-header h3 {
+		color: #ffffff;
+	}
+
+	:global(.dark) .item-count {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .empty-cart {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .cart-item {
+		border-color: rgba(255, 255, 255, 0.1);
+	}
+
+	:global(.dark) .item-link {
+		color: #ffffff;
+	}
+
+	:global(.dark) .item-title {
+		color: #ffffff;
+	}
+
+	:global(.dark) .item-price {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .remove-btn {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .more-items {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .dropdown-footer {
 		background: rgba(0, 0, 0, 0.2);
+		border-color: rgba(255, 255, 255, 0.1);
 	}
 
-	:global([data-theme='dark']) .btn-secondary {
-		background: var(--color-card-bg, #374151);
-		color: var(--color-text, #f3f4f6);
-		border-color: var(--color-border, #4b5563);
+	:global(.dark) .subtotal {
+		color: #ffffff;
 	}
 
-	:global([data-theme='dark']) .btn-secondary:hover {
+	:global(.dark) .btn-secondary {
+		background: #374151;
+		color: #f3f4f6;
+		border-color: #4b5563;
+	}
+
+	:global(.dark) .btn-secondary:hover {
 		background: rgba(255, 255, 255, 0.1);
 	}
 </style>

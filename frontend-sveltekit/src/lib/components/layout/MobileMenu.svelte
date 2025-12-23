@@ -1,7 +1,17 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
+  import { toggleMode, mode } from 'mode-watcher';
   import type { LanguageCode } from '$lib/types/layout.types';
   import { currentTranslations } from '$lib/i18n';
+
+  // Language options
+  const languages: { code: LanguageCode; name: string; flag: string }[] = [
+    { code: 'en', name: 'English', flag: '🇬🇧' },
+    { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+    { code: 'es', name: 'Español', flag: '🇪🇸' },
+    { code: 'zh', name: '中文', flag: '🇨🇳' }
+  ];
 
   // Menu item interface (from DB)
   interface DbMenuItem {
@@ -109,6 +119,22 @@
       closeMobileMenu();
     }
   }
+
+  /**
+   * Select language and navigate
+   */
+  async function selectLanguage(langCode: LanguageCode) {
+    const currentPath = $page.url.pathname.replace(/^\/(en|ru|es|zh)/, '');
+    closeMobileMenu();
+    await goto(`/${langCode}${currentPath || '/'}`);
+  }
+
+  /**
+   * Toggle theme
+   */
+  function toggleTheme() {
+    toggleMode();
+  }
 </script>
 
 <!-- Backdrop - click outside to close -->
@@ -191,6 +217,44 @@
       {/each}
     </ul>
   </nav>
+
+  <!-- Footer with Language and Theme controls -->
+  <div class="mobile-menu-footer">
+    <!-- Language Selector -->
+    <div class="footer-section">
+      <span class="footer-label">Language</span>
+      <div class="language-grid">
+        {#each languages as lang}
+          <button
+            class="lang-btn"
+            class:active={lang.code === locale}
+            onclick={() => selectLanguage(lang.code)}
+            aria-label={`Switch to ${lang.name}`}
+          >
+            <span class="lang-flag">{lang.flag}</span>
+            <span class="lang-code">{lang.code.toUpperCase()}</span>
+          </button>
+        {/each}
+      </div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="footer-section">
+      <span class="footer-label">Theme</span>
+      <button
+        class="theme-toggle-btn"
+        onclick={toggleTheme}
+        aria-label="Toggle theme"
+      >
+        <div class="toggle-track" class:dark={mode.current === 'dark'}>
+          <div class="toggle-thumb">
+            <span class="toggle-icon">{mode.current === 'dark' ? '☀️' : '🌙'}</span>
+          </div>
+        </div>
+        <span class="theme-label">{mode.current === 'dark' ? 'Dark' : 'Light'}</span>
+      </button>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -230,6 +294,8 @@
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
     transform: translateX(100%);
     transition: transform 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
   }
 
   :global(.dark) .mobile-menu-overlay {
@@ -305,6 +371,7 @@
   /* Navigation */
   .mobile-nav {
     padding: 40px 24px;
+    flex: 1;
   }
 
   .menu-list {
@@ -497,6 +564,172 @@
 
   /* Remove default button focus outline in favor of custom */
   .menu-button:focus-visible {
+    outline: 2px solid var(--accent, #d4af37);
+    outline-offset: 2px;
+  }
+
+  /* Footer with Language and Theme controls */
+  .mobile-menu-footer {
+    padding: 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    margin-top: auto;
+  }
+
+  :global(.dark) .mobile-menu-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .footer-section {
+    margin-bottom: 20px;
+  }
+
+  .footer-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .footer-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #8e8e93;
+    margin-bottom: 12px;
+  }
+
+  /* Language Grid */
+  .language-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .lang-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 8px;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  :global(.dark) .lang-btn {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .lang-btn:hover {
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  :global(.dark) .lang-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .lang-btn.active {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--accent, #d4af37);
+  }
+
+  :global(.dark) .lang-btn.active {
+    background: rgba(212, 175, 55, 0.15);
+  }
+
+  .lang-flag {
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .lang-code {
+    font-size: 11px;
+    font-weight: 600;
+    color: #000;
+    letter-spacing: 0.5px;
+  }
+
+  :global(.dark) .lang-code {
+    color: #fff;
+  }
+
+  .lang-btn.active .lang-code {
+    color: var(--accent, #d4af37);
+  }
+
+  /* Theme Toggle Button */
+  .theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .theme-toggle-btn .toggle-track {
+    position: relative;
+    width: 51px;
+    height: 31px;
+    background: #e5e5e5;
+    border-radius: 16px;
+    transition: background 0.25s ease;
+    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+  }
+
+  :global(.dark) .theme-toggle-btn .toggle-track {
+    background: #39393d;
+    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.04);
+  }
+
+  .theme-toggle-btn .toggle-track.dark {
+    background: #d4af37;
+  }
+
+  .theme-toggle-btn .toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 27px;
+    height: 27px;
+    background: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s ease;
+    box-shadow:
+      0 3px 8px rgba(0, 0, 0, 0.15),
+      0 1px 1px rgba(0, 0, 0, 0.16);
+  }
+
+  .theme-toggle-btn .toggle-track.dark .toggle-thumb {
+    transform: translateX(20px);
+  }
+
+  .theme-toggle-btn .toggle-icon {
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .theme-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #000;
+  }
+
+  :global(.dark) .theme-label {
+    color: #fff;
+  }
+
+  .theme-toggle-btn:focus {
+    outline: 2px solid var(--accent, #d4af37);
+    outline-offset: 2px;
+  }
+
+  .lang-btn:focus {
     outline: 2px solid var(--accent, #d4af37);
     outline-offset: 2px;
   }
