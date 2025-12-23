@@ -1,18 +1,11 @@
 <script lang="ts">
 	import type { LanguageCode } from '$lib/utils/currency';
 
+	// Flexible image interface that works with both old and new formats
 	interface ProductImage {
-		id: number;
-		stored_filename: string;
-		folder: string | null;
-		alt_en: string | null;
-		alt_ru: string | null;
-		alt_es: string | null;
-		alt_zh: string | null;
-		width: number | null;
-		height: number | null;
-		is_primary: boolean | null;
-		order_index: number | null;
+		url: string;
+		alt?: string | null;
+		stored_filename?: string;
 	}
 
 	interface Props {
@@ -31,20 +24,19 @@
 	const currentImage = $derived(images[currentIndex] || null);
 
 	function getImageAlt(img: ProductImage): string {
-		switch (lang) {
-			case 'ru':
-				return img.alt_ru || productTitle;
-			case 'es':
-				return img.alt_es || productTitle;
-			case 'zh':
-				return img.alt_zh || productTitle;
-			default:
-				return img.alt_en || productTitle;
-		}
+		return img.alt || productTitle;
 	}
 
 	function getImageUrl(img: ProductImage): string {
-		return `/uploads/${img.folder || 'products'}/${img.stored_filename}`;
+		// If url is provided, use it directly
+		if (img.url) {
+			return img.url;
+		}
+		// Fallback to old format with stored_filename
+		if (img.stored_filename) {
+			return `/uploads/products/${img.stored_filename}`;
+		}
+		return '/images/placeholder-artwork.jpg';
 	}
 
 	function selectImage(index: number) {
@@ -145,7 +137,7 @@
 	<!-- Thumbnails -->
 	{#if images.length > 1}
 		<div class="thumbnails">
-			{#each images as image, index (image.id)}
+			{#each images as image, index (index)}
 				<button
 					type="button"
 					class="thumbnail"

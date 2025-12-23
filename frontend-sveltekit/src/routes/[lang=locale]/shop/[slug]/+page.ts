@@ -11,6 +11,22 @@ export interface ProductPageData {
 		updated_at: string | null;
 	}>;
 	lang: LanguageCode;
+	related?: Array<{
+		id: number;
+		slug: string;
+		title_en: string;
+		title_ru: string | null;
+		title_es: string | null;
+		title_zh: string | null;
+		price: number | null;
+		is_for_sale: boolean;
+		primary_image: {
+			id: number;
+			stored_filename: string;
+			folder: string | null;
+			alt_en: string | null;
+		} | null;
+	}>;
 }
 
 export const load: PageLoad = async ({ fetch, params }) => {
