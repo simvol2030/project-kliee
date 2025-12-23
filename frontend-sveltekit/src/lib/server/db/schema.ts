@@ -562,15 +562,16 @@ export const cartSessions = sqliteTable('cart_sessions', {
 
 /**
  * Cart Items - товары в корзине
+ * Updated: now uses product_id (shop_products) instead of artwork_id
  */
 export const cartItems = sqliteTable('cart_items', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
 	session_id: text('session_id')
 		.notNull()
 		.references(() => cartSessions.session_id, { onDelete: 'cascade' }),
-	artwork_id: text('artwork_id')
+	product_id: integer('product_id')
 		.notNull()
-		.references(() => artworks.id),
+		.references(() => shopProducts.id, { onDelete: 'cascade' }),
 	price_eur_snapshot: integer('price_eur_snapshot'), // price at time of adding
 	added_at: text('added_at').default(sql`CURRENT_TIMESTAMP`)
 });

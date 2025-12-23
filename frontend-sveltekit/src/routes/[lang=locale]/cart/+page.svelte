@@ -124,8 +124,8 @@
 	});
 
 	// Handle remove item
-	async function handleRemove(artworkId: string) {
-		await cartStore.removeItem(artworkId);
+	async function handleRemove(productId: number) {
+		await cartStore.removeItem(productId);
 	}
 
 	// Handle clear cart
@@ -183,10 +183,10 @@
 						{#each cartStore.items as item (item.id)}
 							<li class="cart-item">
 								<div class="item-info">
-									<a href={`/${lang}/shop/${item.slug || item.artwork_id}`} class="item-image-link">
+									<a href={`/${lang}/shop/${item.slug}`} class="item-image-link">
 										{#if item.image}
 											<img
-												src={`/uploads/${item.image.folder || 'products'}/${item.image.stored_filename}`}
+												src={item.image.url}
 												alt={getAlt(item)}
 												class="item-image"
 												loading="lazy"
@@ -196,22 +196,22 @@
 										{/if}
 									</a>
 									<div class="item-details">
-										<a href={`/${lang}/shop/${item.slug || item.artwork_id}`} class="item-title">
+										<a href={`/${lang}/shop/${item.slug}`} class="item-title">
 											{getTitle(item)}
 										</a>
-										{#if !item.is_for_sale}
+										{#if !item.is_available}
 											<span class="sold-badge">SOLD</span>
 										{/if}
 									</div>
 								</div>
 								<div class="item-price">
-									{formatPrice(item.price || 0, lang, currencyRates)}
+									{formatPrice(item.price_eur, lang, currencyRates)}
 								</div>
 								<div class="item-action">
 									<button
 										type="button"
 										class="remove-btn"
-										onclick={() => handleRemove(item.artwork_id)}
+										onclick={() => handleRemove(item.product_id)}
 										aria-label={t.remove}
 									>
 										<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">

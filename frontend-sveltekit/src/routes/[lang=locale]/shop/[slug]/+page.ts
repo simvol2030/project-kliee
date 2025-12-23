@@ -5,7 +5,6 @@ import type { LanguageCode } from '$lib/utils/currency';
 
 export interface ProductPageData {
 	product: ProductDetailResponse['product'];
-	related: ProductDetailResponse['related'];
 	currencyRates: Array<{
 		currency: string;
 		rate: number;
@@ -20,7 +19,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
 
 	// Fetch product and currency rates in parallel
 	const [productRes, currenciesRes] = await Promise.all([
-		fetch(`/api/shop/products/${slug}`),
+		fetch(`/api/shop/products/${slug}?locale=${lang}`),
 		fetch('/api/shop/currencies')
 	]);
 
@@ -33,7 +32,6 @@ export const load: PageLoad = async ({ fetch, params }) => {
 
 	return {
 		product: productData.product,
-		related: productData.related,
 		currencyRates: currenciesData.rates || [],
 		lang
 	} satisfies ProductPageData;

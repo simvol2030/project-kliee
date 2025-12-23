@@ -1,8 +1,8 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler, RequestEvent } from './$types';
 import { db } from '$lib/server/db/client';
-import { cartSessions, cartItems, artworks, artworkImages, media } from '$lib/server/db/schema';
-import { eq, and, gt } from 'drizzle-orm';
+import { cartSessions, cartItems, shopProducts, shopProductImages, media, artworks } from '$lib/server/db/schema';
+import { eq, and } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
 
 const CART_COOKIE_NAME = 'cart_session';
@@ -53,21 +53,20 @@ async function ensureCartSession(sessionId: string): Promise<void> {
 }
 
 /**
- * Cart item with artwork details
+ * Cart item with product details
  */
 export interface CartItemWithDetails {
 	id: number;
-	artwork_id: string;
+	product_id: number;
+	slug: string;
 	title_en: string;
 	title_ru: string;
 	title_es: string;
 	title_zh: string;
-	slug: string | null;
-	price: number | null;
-	is_for_sale: boolean | null;
+	price_eur: number;
+	is_available: boolean;
 	image: {
-		stored_filename: string;
-		folder: string | null;
+		url: string;
 		alt_en: string | null;
 		alt_ru: string | null;
 		alt_es: string | null;
@@ -91,19 +90,22 @@ export const GET: RequestHandler = async (event) => {
 		const sessionId = getSessionId(event);
 		await ensureCartSession(sessionId);
 
-		// Get cart items with artwork details
+		// Get cart items with product details
 		const items = await db
 			.select({
 				id: cartItems.id,
-				artwork_id: cartItems.artwork_id,
+				product_id: cartItems.product_id,
 				added_at: cartItems.added_at,
-				title_en: artworks.title_en,
-				title_ru: artworks.title_ru,
-				title_es: artworks.title_es,
-				title_zh: artworks.title_zh,
-				slug: artworks.slug,
-				price: artworks.price,
-				is_for_sale: artworks.is_for_sale,
+				title_en: shopProducts.title_en,
+				title_ru: shopProducts.title_ru,
+				title_es: shopProducts.title_es,
+				title_zh: shopProducts.title_zh,
+				price_eur: shopProducts.price_eur,
+				stock_quantity: shopProducts.stock_quantity,
+				is_unlimited: shopProducts.is_unlimited,
+				is_visible: shopProducts.is_visible,
+				artwork_id: shopProducts.artwork_id,
+				artworkSlug: artworks.slug,
 				stored_filename: media.stored_filename,
 				folder: media.folder,
 				alt_en: media.alt_en,
@@ -112,40 +114,45 @@ export const GET: RequestHandler = async (event) => {
 				alt_zh: media.alt_zh
 			})
 			.from(cartItems)
-			.innerJoin(artworks, eq(cartItems.artwork_id, artworks.id))
+			.innerJoin(shopProducts, eq(cartItems.product_id, shopProducts.id))
+			.leftJoin(artworks, eq(shopProducts.artwork_id, artworks.id))
 			.leftJoin(
-				artworkImages,
-				and(eq(artworkImages.artwork_id, artworks.id), eq(artworkImages.is_primary, true))
+				shopProductImages,
+				and(eq(shopProductImages.product_id, shopProducts.id), eq(shopProductImages.is_primary, true))
 			)
-			.leftJoin(media, eq(artworkImages.media_id, media.id))
+			.leftJoin(media, eq(shopProductImages.media_id, media.id))
 			.where(eq(cartItems.session_id, sessionId));
 
-		const cartItemsWithDetails: CartItemWithDetails[] = items.map((item) => ({
-			id: item.id,
-			artwork_id: item.artwork_id,
-			title_en: item.title_en,
-			title_ru: item.title_ru,
-			title_es: item.title_es,
-			title_zh: item.title_zh,
-			slug: item.slug,
-			price: item.price,
-			is_for_sale: item.is_for_sale,
-			image: item.stored_filename
-				? {
-						stored_filename: item.stored_filename,
-						folder: item.folder,
-						alt_en: item.alt_en,
-						alt_ru: item.alt_ru,
-						alt_es: item.alt_es,
-						alt_zh: item.alt_zh
-					}
-				: null,
-			added_at: item.added_at
-		}));
+		const cartItemsWithDetails: CartItemWithDetails[] = items.map((item) => {
+			const isAvailable = Boolean(item.is_visible) && (Boolean(item.is_unlimited) || (item.stock_quantity ?? 0) > 0);
+			const slug = item.artworkSlug || `product-${item.product_id}`;
+
+			return {
+				id: item.id,
+				product_id: item.product_id,
+				slug,
+				title_en: item.title_en,
+				title_ru: item.title_ru,
+				title_es: item.title_es,
+				title_zh: item.title_zh,
+				price_eur: item.price_eur,
+				is_available: isAvailable,
+				image: item.stored_filename
+					? {
+							url: `/uploads/${item.folder || 'products'}/${item.stored_filename}`,
+							alt_en: item.alt_en,
+							alt_ru: item.alt_ru,
+							alt_es: item.alt_es,
+							alt_zh: item.alt_zh
+						}
+					: null,
+				added_at: item.added_at
+			};
+		});
 
 		// Calculate total
 		const totalEur = cartItemsWithDetails.reduce(
-			(sum, item) => sum + (item.price || 0),
+			(sum, item) => sum + (item.is_available ? item.price_eur : 0),
 			0
 		);
 
@@ -164,7 +171,7 @@ export const GET: RequestHandler = async (event) => {
 
 /**
  * POST /api/shop/cart
- * Add item to cart (quantity is always 1 - artworks are unique)
+ * Add item to cart
  */
 export const POST: RequestHandler = async (event) => {
 	try {
@@ -172,28 +179,34 @@ export const POST: RequestHandler = async (event) => {
 		await ensureCartSession(sessionId);
 
 		const body = await event.request.json();
-		const { artwork_id } = body;
+		const { product_id } = body;
 
-		if (!artwork_id || typeof artwork_id !== 'string') {
-			throw error(400, 'artwork_id is required');
+		if (!product_id || typeof product_id !== 'number') {
+			throw error(400, 'product_id is required and must be a number');
 		}
 
-		// Check if artwork exists and is for sale
-		const [artwork] = await db
+		// Check if product exists and is available
+		const [product] = await db
 			.select()
-			.from(artworks)
-			.where(and(eq(artworks.id, artwork_id), eq(artworks.is_for_sale, true)))
+			.from(shopProducts)
+			.where(and(eq(shopProducts.id, product_id), eq(shopProducts.is_visible, true)))
 			.limit(1);
 
-		if (!artwork) {
-			throw error(404, 'Artwork not found or not for sale');
+		if (!product) {
+			throw error(404, 'Product not found');
 		}
 
-		// Check if already in cart (artworks are unique, can't add twice)
+		// Check stock
+		const isAvailable = product.is_unlimited || (product.stock_quantity ?? 0) > 0;
+		if (!isAvailable) {
+			throw error(400, 'Product is out of stock');
+		}
+
+		// Check if already in cart (products can only be added once)
 		const [existingItem] = await db
 			.select()
 			.from(cartItems)
-			.where(and(eq(cartItems.session_id, sessionId), eq(cartItems.artwork_id, artwork_id)))
+			.where(and(eq(cartItems.session_id, sessionId), eq(cartItems.product_id, product_id)))
 			.limit(1);
 
 		if (existingItem) {
@@ -203,8 +216,8 @@ export const POST: RequestHandler = async (event) => {
 		// Add to cart with price snapshot
 		await db.insert(cartItems).values({
 			session_id: sessionId,
-			artwork_id: artwork_id,
-			price_eur_snapshot: artwork.price
+			product_id: product_id,
+			price_eur_snapshot: product.price_eur
 		});
 
 		// Return updated cart count
@@ -230,7 +243,7 @@ export const DELETE: RequestHandler = async (event) => {
 		const sessionId = getSessionId(event);
 		const url = new URL(event.request.url);
 		const itemId = url.searchParams.get('id');
-		const artworkId = url.searchParams.get('artwork_id');
+		const productId = url.searchParams.get('product_id');
 		const clearAll = url.searchParams.get('clear') === 'true';
 
 		if (clearAll) {
@@ -244,15 +257,15 @@ export const DELETE: RequestHandler = async (event) => {
 			await db
 				.delete(cartItems)
 				.where(and(eq(cartItems.session_id, sessionId), eq(cartItems.id, parseInt(itemId))));
-		} else if (artworkId) {
-			// Remove by artwork_id (artwork_id is text in database)
+		} else if (productId) {
+			// Remove by product_id
 			await db
 				.delete(cartItems)
 				.where(
-					and(eq(cartItems.session_id, sessionId), eq(cartItems.artwork_id, artworkId))
+					and(eq(cartItems.session_id, sessionId), eq(cartItems.product_id, parseInt(productId)))
 				);
 		} else {
-			throw error(400, 'id, artwork_id, or clear=true required');
+			throw error(400, 'id, product_id, or clear=true required');
 		}
 
 		// Return updated cart count

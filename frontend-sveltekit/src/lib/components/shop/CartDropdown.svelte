@@ -92,8 +92,8 @@
 	});
 
 	// Handle remove item
-	async function handleRemove(artworkId: string) {
-		await cartStore.removeItem(artworkId);
+	async function handleRemove(productId: number) {
+		await cartStore.removeItem(productId);
 	}
 
 	// Format subtotal
@@ -142,10 +142,10 @@
 				<ul class="cart-items">
 					{#each cartStore.items.slice(0, 3) as item (item.id)}
 						<li class="cart-item">
-							<a href={`/${lang}/shop/${item.slug || item.artwork_id}`} class="item-link">
+							<a href={`/${lang}/shop/${item.slug}`} class="item-link">
 								{#if item.image}
 									<img
-										src={`/uploads/${item.image.folder || 'products'}/${item.image.stored_filename}`}
+										src={item.image.url}
 										alt={getAlt(item)}
 										class="item-image"
 										loading="lazy"
@@ -155,13 +155,13 @@
 								{/if}
 								<div class="item-details">
 									<p class="item-title">{getTitle(item)}</p>
-									<p class="item-price">{formatPrice(item.price || 0, lang, currencyRates)}</p>
+									<p class="item-price">{formatPrice(item.price_eur, lang, currencyRates)}</p>
 								</div>
 							</a>
 							<button
 								type="button"
 								class="remove-btn"
-								onclick={() => handleRemove(item.artwork_id)}
+								onclick={() => handleRemove(item.product_id)}
 								aria-label={t.remove}
 							>
 								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">

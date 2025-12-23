@@ -1,23 +1,23 @@
 import type { PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db/client';
-import { cartItems, cartSessions, artworks, artworkImages, media, currencyRates } from '$lib/server/db/schema';
+import { cartItems, cartSessions, shopProducts, shopProductImages, media, currencyRates, artworks } from '$lib/server/db/schema';
 import { eq, and } from 'drizzle-orm';
 
 const CART_COOKIE_NAME = 'cart_session';
 
 interface CartItemForCheckout {
 	id: number;
-	artwork_id: string;
+	product_id: number;
+	slug: string;
 	title_en: string;
 	title_ru: string;
 	title_es: string;
 	title_zh: string;
-	slug: string | null;
-	price: number | null;
-	is_for_sale: boolean | null;
+	price_eur: number;
+	is_available: boolean;
 	image: {
-		stored_filename: string;
+		url: string;
 		alt_en: string | null;
 		alt_ru: string | null;
 		alt_es: string | null;
@@ -33,31 +33,36 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
 		throw redirect(302, `/${params.lang}/cart`);
 	}
 
-	// Get cart items with artwork details
+	// Get cart items with product details
 	const items = await db
 		.select({
 			id: cartItems.id,
-			artwork_id: cartItems.artwork_id,
-			title_en: artworks.title_en,
-			title_ru: artworks.title_ru,
-			title_es: artworks.title_es,
-			title_zh: artworks.title_zh,
-			slug: artworks.slug,
-			price: artworks.price,
-			is_for_sale: artworks.is_for_sale,
+			product_id: cartItems.product_id,
+			title_en: shopProducts.title_en,
+			title_ru: shopProducts.title_ru,
+			title_es: shopProducts.title_es,
+			title_zh: shopProducts.title_zh,
+			price_eur: shopProducts.price_eur,
+			stock_quantity: shopProducts.stock_quantity,
+			is_unlimited: shopProducts.is_unlimited,
+			is_visible: shopProducts.is_visible,
+			artwork_id: shopProducts.artwork_id,
+			artworkSlug: artworks.slug,
 			stored_filename: media.stored_filename,
+			folder: media.folder,
 			alt_en: media.alt_en,
 			alt_ru: media.alt_ru,
 			alt_es: media.alt_es,
 			alt_zh: media.alt_zh
 		})
 		.from(cartItems)
-		.innerJoin(artworks, eq(cartItems.artwork_id, artworks.id))
+		.innerJoin(shopProducts, eq(cartItems.product_id, shopProducts.id))
+		.leftJoin(artworks, eq(shopProducts.artwork_id, artworks.id))
 		.leftJoin(
-			artworkImages,
-			and(eq(artworkImages.artwork_id, artworks.id), eq(artworkImages.is_primary, true))
+			shopProductImages,
+			and(eq(shopProductImages.product_id, shopProducts.id), eq(shopProductImages.is_primary, true))
 		)
-		.leftJoin(media, eq(artworkImages.media_id, media.id))
+		.leftJoin(media, eq(shopProductImages.media_id, media.id))
 		.where(eq(cartItems.session_id, sessionId));
 
 	// If cart is empty, redirect to cart page
@@ -66,30 +71,35 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
 	}
 
 	// Format cart items
-	const cartItemsForCheckout: CartItemForCheckout[] = items.map((item) => ({
-		id: item.id,
-		artwork_id: item.artwork_id,
-		title_en: item.title_en,
-		title_ru: item.title_ru,
-		title_es: item.title_es,
-		title_zh: item.title_zh,
-		slug: item.slug,
-		price: item.price,
-		is_for_sale: item.is_for_sale,
-		image: item.stored_filename
-			? {
-					stored_filename: item.stored_filename,
-					alt_en: item.alt_en,
-					alt_ru: item.alt_ru,
-					alt_es: item.alt_es,
-					alt_zh: item.alt_zh
-				}
-			: null
-	}));
+	const cartItemsForCheckout: CartItemForCheckout[] = items.map((item) => {
+		const isAvailable = Boolean(item.is_visible) && (Boolean(item.is_unlimited) || (item.stock_quantity ?? 0) > 0);
+		const slug = item.artworkSlug || `product-${item.product_id}`;
 
-	// Calculate total
+		return {
+			id: item.id,
+			product_id: item.product_id,
+			slug,
+			title_en: item.title_en,
+			title_ru: item.title_ru,
+			title_es: item.title_es,
+			title_zh: item.title_zh,
+			price_eur: item.price_eur,
+			is_available: isAvailable,
+			image: item.stored_filename
+				? {
+						url: `/uploads/${item.folder || 'products'}/${item.stored_filename}`,
+						alt_en: item.alt_en,
+						alt_ru: item.alt_ru,
+						alt_es: item.alt_es,
+						alt_zh: item.alt_zh
+					}
+				: null
+		};
+	});
+
+	// Calculate total (only available items)
 	const totalEur = cartItemsForCheckout.reduce(
-		(sum, item) => sum + (item.price || 0),
+		(sum, item) => sum + (item.is_available ? item.price_eur : 0),
 		0
 	);
 

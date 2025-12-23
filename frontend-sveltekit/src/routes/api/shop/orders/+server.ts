@@ -7,10 +7,10 @@ import {
 	orderStatusHistory,
 	cartItems,
 	cartSessions,
-	artworks,
+	shopProducts,
 	currencyRates
 } from '$lib/server/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, inArray } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
 import { sendOrderNotifications } from '$lib/server/notifications';
 
@@ -75,7 +75,7 @@ export const POST: RequestHandler = async (event) => {
 		const cartItemsData = await db
 			.select({
 				id: cartItems.id,
-				artwork_id: cartItems.artwork_id,
+				product_id: cartItems.product_id,
 				price_eur_snapshot: cartItems.price_eur_snapshot
 			})
 			.from(cartItems)
@@ -85,15 +85,18 @@ export const POST: RequestHandler = async (event) => {
 			throw error(400, 'Cart is empty');
 		}
 
-		// Verify artworks are still available
-		const artworkIds = cartItemsData.map((item) => item.artwork_id);
-		const artworksData = await db.select().from(artworks).where(eq(artworks.is_visible, true));
+		// Verify products are still available
+		const productIds = cartItemsData.map((item) => item.product_id);
+		const productsData = await db
+			.select()
+			.from(shopProducts)
+			.where(inArray(shopProducts.id, productIds));
 
-		const availableArtworks = artworksData.filter(
-			(a) => artworkIds.includes(a.id) && a.is_for_sale
+		const availableProducts = productsData.filter(
+			(p) => p.is_visible && (p.is_unlimited || (p.stock_quantity ?? 0) > 0)
 		);
 
-		if (availableArtworks.length !== artworkIds.length) {
+		if (availableProducts.length !== productIds.length) {
 			throw error(400, 'Some items are no longer available');
 		}
 
@@ -175,34 +178,37 @@ export const POST: RequestHandler = async (event) => {
 			})
 			.returning();
 
-		// Create order items and get titles
-		const artworkMap = new Map(availableArtworks.map((a) => [a.id, a]));
+		// Create order items and update stock
+		const productMap = new Map(availableProducts.map((p) => [p.id, p]));
 
 		for (const cartItem of cartItemsData) {
-			const artwork = artworkMap.get(cartItem.artwork_id);
-			if (!artwork) continue;
+			const product = productMap.get(cartItem.product_id);
+			if (!product) continue;
 
 			const titleSnapshot =
 				lang === 'ru'
-					? artwork.title_ru
+					? product.title_ru
 					: lang === 'es'
-						? artwork.title_es
+						? product.title_es
 						: lang === 'zh'
-							? artwork.title_zh
-							: artwork.title_en;
+							? product.title_zh
+							: product.title_en;
 
 			await db.insert(orderItems).values({
 				order_id: newOrder.id,
-				artwork_id: cartItem.artwork_id,
-				price_eur: cartItem.price_eur_snapshot || artwork.price || 0,
+				artwork_id: product.artwork_id || `product-${product.id}`, // Use artwork_id or product slug
+				price_eur: cartItem.price_eur_snapshot || product.price_eur,
 				title_snapshot: titleSnapshot
 			});
 
-			// Mark artwork as sold (not for sale anymore)
-			await db
-				.update(artworks)
-				.set({ is_for_sale: false })
-				.where(eq(artworks.id, cartItem.artwork_id));
+			// Decrease stock (unless unlimited)
+			if (!product.is_unlimited && product.stock_quantity !== null) {
+				const newStock = Math.max(0, product.stock_quantity - 1);
+				await db
+					.update(shopProducts)
+					.set({ stock_quantity: newStock })
+					.where(eq(shopProducts.id, cartItem.product_id));
+			}
 		}
 
 		// Add status history entry
@@ -222,18 +228,18 @@ export const POST: RequestHandler = async (event) => {
 
 		// Collect order items for notification
 		const notificationItems = cartItemsData.map((cartItem) => {
-			const artwork = artworkMap.get(cartItem.artwork_id);
+			const product = productMap.get(cartItem.product_id);
 			const title =
 				lang === 'ru'
-					? artwork?.title_ru
+					? product?.title_ru
 					: lang === 'es'
-						? artwork?.title_es
+						? product?.title_es
 						: lang === 'zh'
-							? artwork?.title_zh
-							: artwork?.title_en;
+							? product?.title_zh
+							: product?.title_en;
 			return {
-				title: title || 'Artwork',
-				price: cartItem.price_eur_snapshot || artwork?.price || 0
+				title: title || 'Product',
+				price: cartItem.price_eur_snapshot || product?.price_eur || 0
 			};
 		});
 
