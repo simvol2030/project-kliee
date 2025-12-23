@@ -1,14 +1,14 @@
 <script lang="ts">
-	import type { ShopProduct } from '../../../routes/api/shop/products/+server';
+	import type { PublicShopProduct } from '$lib/data/shop.provider';
 	import type { CurrencyRate, LanguageCode } from '$lib/utils/currency';
 	import { formatPrice } from '$lib/utils/currency';
 
 	interface Props {
-		product: ShopProduct;
+		product: PublicShopProduct;
 		lang: LanguageCode;
 		currencyRates?: CurrencyRate[];
-		onAddToCart?: (productId: string) => void;
-		onToggleWishlist?: (productId: string) => void;
+		onAddToCart?: (productId: number) => void;
+		onToggleWishlist?: (productId: number) => void;
 		isInWishlist?: boolean;
 		loading?: boolean;
 	}
@@ -23,56 +23,28 @@
 		loading = false
 	}: Props = $props();
 
-	// Get title by language
-	const title = $derived(
-		lang === 'ru'
-			? product.title_ru
-			: lang === 'es'
-				? product.title_es
-				: lang === 'zh'
-					? product.title_zh
-					: product.title_en
-	);
+	// Title is already localized by the provider
+	const title = $derived(product.title);
 
-	// Get series name by language
-	const seriesName = $derived(
-		product.series
-			? lang === 'ru'
-				? product.series.name_ru
-				: lang === 'es'
-					? product.series.name_es
-					: lang === 'zh'
-						? product.series.name_zh
-						: product.series.name_en
-			: null
-	);
+	// Description is already localized by the provider
+	const description = $derived(product.description);
 
-	// Get image alt by language
-	const imageAlt = $derived(
-		product.primary_image
-			? lang === 'ru'
-				? product.primary_image.alt_ru || title
-				: lang === 'es'
-					? product.primary_image.alt_es || title
-					: lang === 'zh'
-						? product.primary_image.alt_zh || title
-						: product.primary_image.alt_en || title
-			: title
-	);
+	// Get image alt
+	const imageAlt = $derived(product.primary_image?.alt || title);
 
-	// Format price
-	const formattedPrice = $derived(formatPrice(product.price, lang, currencyRates));
+	// Format price (price_eur is in cents, formatPrice expects cents)
+	const formattedPrice = $derived(formatPrice(product.price_eur, lang, currencyRates));
 
-	// Is sold
-	const isSold = $derived(product.is_for_sale === false);
+	// Is sold/unavailable
+	const isSold = $derived(!product.is_available);
 
 	// Product URL
-	const productUrl = $derived(`/${lang}/shop/${product.slug || product.id}`);
+	const productUrl = $derived(`/${lang}/shop/${product.slug}`);
 
-	// Image URL - use /uploads/{folder}/ path which is served by static file handler
+	// Image URL
 	const imageUrl = $derived(
 		product.primary_image
-			? `/uploads/${product.primary_image.folder || 'products'}/${product.primary_image.stored_filename}`
+			? product.primary_image.url
 			: '/images/placeholder-artwork.jpg'
 	);
 
@@ -152,8 +124,8 @@
 			<div class="product-info">
 				<h3 class="product-title">{title}</h3>
 
-				{#if seriesName}
-					<p class="product-series">{seriesName}</p>
+				{#if product.technique}
+					<p class="product-series">{product.technique}</p>
 				{/if}
 
 				<p class="product-price" class:sold={isSold}>

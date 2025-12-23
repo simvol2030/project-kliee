@@ -188,11 +188,11 @@
 	});
 
 	// Loading and feedback state
-	let addingToCart = $state<string | null>(null);
+	let addingToCart = $state<number | null>(null);
 	let cartMessage = $state<{ type: 'success' | 'error'; text: string } | null>(null);
 
 	// Cart handler
-	async function handleAddToCart(productId: string) {
+	async function handleAddToCart(productId: number) {
 		if (addingToCart) return; // Prevent double-click
 
 		addingToCart = productId;

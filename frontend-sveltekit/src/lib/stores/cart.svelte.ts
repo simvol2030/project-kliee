@@ -3,6 +3,7 @@ import type { CartItemWithDetails, CartResponse } from '../../routes/api/shop/ca
 /**
  * Cart Store using Svelte 5 runes
  * Manages cart state and syncs with server
+ * Updated: now uses product_id (shop_products) instead of artwork_id
  */
 class CartStore {
 	items = $state<CartItemWithDetails[]>([]);
@@ -41,9 +42,9 @@ class CartStore {
 	}
 
 	/**
-	 * Add artwork to cart
+	 * Add product to cart
 	 */
-	async addItem(artworkId: string): Promise<{ success: boolean; message?: string }> {
+	async addItem(productId: number): Promise<{ success: boolean; message?: string }> {
 		try {
 			this.loading = true;
 			this.error = null;
@@ -51,13 +52,16 @@ class CartStore {
 			const response = await fetch('/api/shop/cart', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ artwork_id: artworkId })
+				body: JSON.stringify({ product_id: productId })
 			});
 
 			if (!response.ok) {
 				const errorData = await response.json().catch(() => ({}));
 				if (response.status === 409) {
 					return { success: false, message: 'already_in_cart' };
+				}
+				if (response.status === 400) {
+					return { success: false, message: 'out_of_stock' };
 				}
 				throw new Error(errorData.message || 'Failed to add item');
 			}
@@ -75,14 +79,14 @@ class CartStore {
 	}
 
 	/**
-	 * Remove item from cart
+	 * Remove item from cart by product_id
 	 */
-	async removeItem(artworkId: string): Promise<boolean> {
+	async removeItem(productId: number): Promise<boolean> {
 		try {
 			this.loading = true;
 			this.error = null;
 
-			const response = await fetch(`/api/shop/cart?artwork_id=${encodeURIComponent(artworkId)}`, {
+			const response = await fetch(`/api/shop/cart?product_id=${productId}`, {
 				method: 'DELETE'
 			});
 
@@ -151,10 +155,10 @@ class CartStore {
 	}
 
 	/**
-	 * Check if artwork is in cart
+	 * Check if product is in cart
 	 */
-	isInCart(artworkId: string): boolean {
-		return this.items.some((item) => item.artwork_id === artworkId);
+	isInCart(productId: number): boolean {
+		return this.items.some((item) => item.product_id === productId);
 	}
 }
 

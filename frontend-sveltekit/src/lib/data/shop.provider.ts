@@ -456,3 +456,340 @@ export async function getAvailableArtworksForLinking() {
 				: null
 		}));
 }
+
+// ============================================
+// PUBLIC SHOP FUNCTIONS
+// ============================================
+
+export interface PublicShopProduct {
+	id: number;
+	slug: string; // artwork slug or product id
+	title: string;
+	description: string | null;
+	price_eur: number;
+	compare_price_eur: number | null;
+	stock_quantity: number | null;
+	is_unlimited: boolean | null;
+	is_featured: boolean | null;
+	is_available: boolean;
+	primary_image: {
+		url: string;
+		alt: string | null;
+		width: number | null;
+		height: number | null;
+	} | null;
+	artwork_id: string | null;
+	// Artwork-specific fields (if linked)
+	technique: string | null;
+	dimensions: string | null;
+	year: number | null;
+}
+
+export interface PublicProductDetail extends PublicShopProduct {
+	images: Array<{
+		url: string;
+		alt: string | null;
+		width: number | null;
+		height: number | null;
+		is_primary: boolean;
+	}>;
+}
+
+/**
+ * Get visible shop products for public display (paginated)
+ */
+export async function getPublicShopProducts(
+	locale: LanguageCode = 'en',
+	options: {
+		page?: number;
+		limit?: number;
+		sort?: 'price_asc' | 'price_desc' | 'newest' | 'featured';
+		minPrice?: number;
+		maxPrice?: number;
+		ids?: number[];
+	} = {}
+): Promise<{ products: PublicShopProduct[]; total: number; hasMore: boolean }> {
+	const { page = 1, limit = 12, sort = 'featured', minPrice, maxPrice, ids } = options;
+	const offset = (page - 1) * limit;
+
+	// Build base query
+	const products = await db
+		.select({
+			product: shopProducts,
+			artworkSlug: artworks.slug,
+			artworkTechnique: artworks.technique,
+			artworkDimensions: artworks.dimensions,
+			artworkYear: artworks.year,
+			// Primary image from shop_product_images
+			imageFilename: media.stored_filename,
+			imageFolder: media.folder,
+			imageAltEn: media.alt_en,
+			imageAltRu: media.alt_ru,
+			imageAltEs: media.alt_es,
+			imageAltZh: media.alt_zh,
+			imageWidth: media.width,
+			imageHeight: media.height
+		})
+		.from(shopProducts)
+		.leftJoin(artworks, eq(shopProducts.artwork_id, artworks.id))
+		.leftJoin(
+			shopProductImages,
+			and(eq(shopProductImages.product_id, shopProducts.id), eq(shopProductImages.is_primary, true))
+		)
+		.leftJoin(media, eq(shopProductImages.media_id, media.id))
+		.where(eq(shopProducts.is_visible, true))
+		.orderBy(
+			sort === 'price_asc'
+				? asc(shopProducts.price_eur)
+				: sort === 'price_desc'
+					? desc(shopProducts.price_eur)
+					: sort === 'newest'
+						? desc(shopProducts.created_at)
+						: desc(shopProducts.is_featured)
+		)
+		.limit(limit)
+		.offset(offset);
+
+	// Get total count
+	const countResult = await db
+		.select({ id: shopProducts.id })
+		.from(shopProducts)
+		.where(eq(shopProducts.is_visible, true));
+	const total = countResult.length;
+
+	const mappedProducts = products.map((row): PublicShopProduct => {
+		const product = row.product;
+		const slug = row.artworkSlug || `product-${product.id}`;
+		const isAvailable = product.is_unlimited || (product.stock_quantity ?? 0) > 0;
+
+		// Get localized alt text
+		const altText =
+			locale === 'ru'
+				? row.imageAltRu
+				: locale === 'es'
+					? row.imageAltEs
+					: locale === 'zh'
+						? row.imageAltZh
+						: row.imageAltEn;
+
+		return {
+			id: product.id,
+			slug,
+			title: getLocalizedTitle(product, locale),
+			description: getLocalizedDescription(product, locale),
+			price_eur: product.price_eur,
+			compare_price_eur: product.compare_price_eur,
+			stock_quantity: product.stock_quantity,
+			is_unlimited: product.is_unlimited,
+			is_featured: product.is_featured,
+			is_available: isAvailable,
+			primary_image: row.imageFilename
+				? {
+						url: `/uploads/${row.imageFolder || 'products'}/${row.imageFilename}`,
+						alt: altText,
+						width: row.imageWidth,
+						height: row.imageHeight
+					}
+				: null,
+			artwork_id: product.artwork_id,
+			technique: row.artworkTechnique,
+			dimensions: row.artworkDimensions || product.dimensions_cm,
+			year: row.artworkYear
+		};
+	});
+
+	return {
+		products: mappedProducts,
+		total,
+		hasMore: offset + products.length < total
+	};
+}
+
+/**
+ * Get product by slug (for product detail page)
+ */
+export async function getPublicProductBySlug(
+	slug: string,
+	locale: LanguageCode = 'en'
+): Promise<PublicProductDetail | null> {
+	// Try to find by artwork slug first
+	const resultByArtwork = await db
+		.select({
+			product: shopProducts,
+			artworkSlug: artworks.slug,
+			artworkTechnique: artworks.technique,
+			artworkDimensions: artworks.dimensions,
+			artworkYear: artworks.year
+		})
+		.from(shopProducts)
+		.leftJoin(artworks, eq(shopProducts.artwork_id, artworks.id))
+		.where(and(eq(artworks.slug, slug), eq(shopProducts.is_visible, true)))
+		.limit(1);
+
+	// If not found by artwork slug, try by product-{id} pattern
+	let productRow = resultByArtwork[0];
+	if (!productRow && slug.startsWith('product-')) {
+		const productId = parseInt(slug.replace('product-', ''));
+		if (!isNaN(productId)) {
+			const resultById = await db
+				.select({
+					product: shopProducts,
+					artworkSlug: artworks.slug,
+					artworkTechnique: artworks.technique,
+					artworkDimensions: artworks.dimensions,
+					artworkYear: artworks.year
+				})
+				.from(shopProducts)
+				.leftJoin(artworks, eq(shopProducts.artwork_id, artworks.id))
+				.where(and(eq(shopProducts.id, productId), eq(shopProducts.is_visible, true)))
+				.limit(1);
+			productRow = resultById[0];
+		}
+	}
+
+	if (!productRow) {
+		return null;
+	}
+
+	const product = productRow.product;
+	const actualSlug = productRow.artworkSlug || `product-${product.id}`;
+
+	// Get all images for this product
+	const images = await db
+		.select({
+			filename: media.stored_filename,
+			folder: media.folder,
+			alt_en: media.alt_en,
+			alt_ru: media.alt_ru,
+			alt_es: media.alt_es,
+			alt_zh: media.alt_zh,
+			width: media.width,
+			height: media.height,
+			is_primary: shopProductImages.is_primary,
+			order_index: shopProductImages.order_index
+		})
+		.from(shopProductImages)
+		.leftJoin(media, eq(shopProductImages.media_id, media.id))
+		.where(eq(shopProductImages.product_id, product.id))
+		.orderBy(desc(shopProductImages.is_primary), asc(shopProductImages.order_index));
+
+	const isAvailable = product.is_unlimited || (product.stock_quantity ?? 0) > 0;
+
+	// Map images
+	const mappedImages = images.map((img) => {
+		const altText =
+			locale === 'ru'
+				? img.alt_ru
+				: locale === 'es'
+					? img.alt_es
+					: locale === 'zh'
+						? img.alt_zh
+						: img.alt_en;
+
+		return {
+			url: img.filename ? `/uploads/${img.folder || 'products'}/${img.filename}` : '',
+			alt: altText,
+			width: img.width,
+			height: img.height,
+			is_primary: img.is_primary ?? false
+		};
+	}).filter((img) => img.url);
+
+	const primaryImage = mappedImages.find((img) => img.is_primary) || mappedImages[0] || null;
+
+	return {
+		id: product.id,
+		slug: actualSlug,
+		title: getLocalizedTitle(product, locale),
+		description: getLocalizedDescription(product, locale),
+		price_eur: product.price_eur,
+		compare_price_eur: product.compare_price_eur,
+		stock_quantity: product.stock_quantity,
+		is_unlimited: product.is_unlimited,
+		is_featured: product.is_featured,
+		is_available: isAvailable,
+		primary_image: primaryImage,
+		artwork_id: product.artwork_id,
+		technique: productRow.artworkTechnique,
+		dimensions: productRow.artworkDimensions || product.dimensions_cm,
+		year: productRow.artworkYear,
+		images: mappedImages
+	};
+}
+
+/**
+ * Get product by ID (for cart)
+ */
+export async function getPublicProductById(
+	productId: number,
+	locale: LanguageCode = 'en'
+): Promise<PublicShopProduct | null> {
+	const result = await db
+		.select({
+			product: shopProducts,
+			artworkSlug: artworks.slug,
+			artworkTechnique: artworks.technique,
+			artworkDimensions: artworks.dimensions,
+			artworkYear: artworks.year,
+			imageFilename: media.stored_filename,
+			imageFolder: media.folder,
+			imageAltEn: media.alt_en,
+			imageAltRu: media.alt_ru,
+			imageAltEs: media.alt_es,
+			imageAltZh: media.alt_zh,
+			imageWidth: media.width,
+			imageHeight: media.height
+		})
+		.from(shopProducts)
+		.leftJoin(artworks, eq(shopProducts.artwork_id, artworks.id))
+		.leftJoin(
+			shopProductImages,
+			and(eq(shopProductImages.product_id, shopProducts.id), eq(shopProductImages.is_primary, true))
+		)
+		.leftJoin(media, eq(shopProductImages.media_id, media.id))
+		.where(eq(shopProducts.id, productId))
+		.limit(1);
+
+	if (result.length === 0) {
+		return null;
+	}
+
+	const row = result[0];
+	const product = row.product;
+	const slug = row.artworkSlug || `product-${product.id}`;
+	const isAvailable = product.is_unlimited || (product.stock_quantity ?? 0) > 0;
+
+	const altText =
+		locale === 'ru'
+			? row.imageAltRu
+			: locale === 'es'
+				? row.imageAltEs
+				: locale === 'zh'
+					? row.imageAltZh
+					: row.imageAltEn;
+
+	return {
+		id: product.id,
+		slug,
+		title: getLocalizedTitle(product, locale),
+		description: getLocalizedDescription(product, locale),
+		price_eur: product.price_eur,
+		compare_price_eur: product.compare_price_eur,
+		stock_quantity: product.stock_quantity,
+		is_unlimited: product.is_unlimited,
+		is_featured: product.is_featured,
+		is_available: isAvailable,
+		primary_image: row.imageFilename
+			? {
+					url: `/uploads/${row.imageFolder || 'products'}/${row.imageFilename}`,
+					alt: altText,
+					width: row.imageWidth,
+					height: row.imageHeight
+				}
+			: null,
+		artwork_id: product.artwork_id,
+		technique: row.artworkTechnique,
+		dimensions: row.artworkDimensions || product.dimensions_cm,
+		year: row.artworkYear
+	};
+}
