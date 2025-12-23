@@ -95,6 +95,10 @@
 				</a>
 
 				<p class="nav-section">Shop</p>
+				<a href="/shop/products" class:active={$page.url.pathname.startsWith('/shop/products')} onclick={closeMobileMenu}>
+					<span class="icon">🛍️</span>
+					<span>Products</span>
+				</a>
 				<a href="/shop/orders" class:active={$page.url.pathname.startsWith('/shop/orders')} onclick={closeMobileMenu}>
 					<span class="icon">🛒</span>
 					<span>Orders</span>
