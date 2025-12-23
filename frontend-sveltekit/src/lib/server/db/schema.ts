@@ -632,6 +632,50 @@ export const orderStatusHistory = sqliteTable('order_status_history', {
 	changed_by: integer('changed_by').references(() => admins.id)
 });
 
+/**
+ * Shop Products - товары магазина (отдельно от artworks для гибкости)
+ */
+export const shopProducts = sqliteTable('shop_products', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	artwork_id: text('artwork_id').references(() => artworks.id, { onDelete: 'set null' }),
+	sku: text('sku').unique(),
+	title_en: text('title_en').notNull(),
+	title_ru: text('title_ru').notNull(),
+	title_es: text('title_es').notNull(),
+	title_zh: text('title_zh').notNull(),
+	description_en: text('description_en'),
+	description_ru: text('description_ru'),
+	description_es: text('description_es'),
+	description_zh: text('description_zh'),
+	price_eur: integer('price_eur').notNull(),
+	compare_price_eur: integer('compare_price_eur'),
+	stock_quantity: integer('stock_quantity').default(1),
+	is_unlimited: integer('is_unlimited', { mode: 'boolean' }).default(false),
+	shipping_class: text('shipping_class', { enum: ['standard', 'fragile', 'oversized'] }).default('standard'),
+	weight_kg: text('weight_kg'),
+	dimensions_cm: text('dimensions_cm'),
+	is_visible: integer('is_visible', { mode: 'boolean' }).default(true),
+	is_featured: integer('is_featured', { mode: 'boolean' }).default(false),
+	order_index: integer('order_index').default(0),
+	created_at: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+	updated_at: text('updated_at').default(sql`CURRENT_TIMESTAMP`)
+});
+
+/**
+ * Shop Product Images - изображения товаров (если не связан с artwork)
+ */
+export const shopProductImages = sqliteTable('shop_product_images', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	product_id: integer('product_id')
+		.notNull()
+		.references(() => shopProducts.id, { onDelete: 'cascade' }),
+	media_id: integer('media_id')
+		.notNull()
+		.references(() => media.id),
+	is_primary: integer('is_primary', { mode: 'boolean' }).default(false),
+	order_index: integer('order_index').default(0)
+});
+
 // ============================================
 // TypeScript Types
 // ============================================
@@ -721,3 +765,9 @@ export type OrderItem = typeof orderItems.$inferSelect;
 export type NewOrderItem = typeof orderItems.$inferInsert;
 export type OrderStatusHistoryItem = typeof orderStatusHistory.$inferSelect;
 export type NewOrderStatusHistoryItem = typeof orderStatusHistory.$inferInsert;
+
+// Shop Products
+export type ShopProduct = typeof shopProducts.$inferSelect;
+export type NewShopProduct = typeof shopProducts.$inferInsert;
+export type ShopProductImage = typeof shopProductImages.$inferSelect;
+export type NewShopProductImage = typeof shopProductImages.$inferInsert;
