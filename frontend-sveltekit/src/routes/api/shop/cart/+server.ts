@@ -67,6 +67,7 @@ export interface CartItemWithDetails {
 	is_for_sale: boolean | null;
 	image: {
 		stored_filename: string;
+		folder: string | null;
 		alt_en: string | null;
 		alt_ru: string | null;
 		alt_es: string | null;
@@ -104,6 +105,7 @@ export const GET: RequestHandler = async (event) => {
 				price: artworks.price,
 				is_for_sale: artworks.is_for_sale,
 				stored_filename: media.stored_filename,
+				folder: media.folder,
 				alt_en: media.alt_en,
 				alt_ru: media.alt_ru,
 				alt_es: media.alt_es,
@@ -131,6 +133,7 @@ export const GET: RequestHandler = async (event) => {
 			image: item.stored_filename
 				? {
 						stored_filename: item.stored_filename,
+						folder: item.folder,
 						alt_en: item.alt_en,
 						alt_ru: item.alt_ru,
 						alt_es: item.alt_es,

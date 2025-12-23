@@ -69,9 +69,11 @@
 	// Product URL
 	const productUrl = $derived(`/${lang}/shop/${product.slug || product.id}`);
 
-	// Image URL - use /uploads/ path which is served by static file handler
+	// Image URL - use /uploads/{folder}/ path which is served by static file handler
 	const imageUrl = $derived(
-		product.primary_image ? `/uploads/${product.primary_image.stored_filename}` : '/images/placeholder-artwork.jpg'
+		product.primary_image
+			? `/uploads/${product.primary_image.folder || 'products'}/${product.primary_image.stored_filename}`
+			: '/images/placeholder-artwork.jpg'
 	);
 
 	function handleAddToCart(e: Event) {

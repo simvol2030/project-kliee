@@ -4,6 +4,7 @@
 	interface ProductImage {
 		id: number;
 		stored_filename: string;
+		folder: string | null;
 		alt_en: string | null;
 		alt_ru: string | null;
 		alt_es: string | null;
@@ -43,7 +44,7 @@
 	}
 
 	function getImageUrl(img: ProductImage): string {
-		return `/images/products/${img.stored_filename}`;
+		return `/uploads/${img.folder || 'products'}/${img.stored_filename}`;
 	}
 
 	function selectImage(index: number) {

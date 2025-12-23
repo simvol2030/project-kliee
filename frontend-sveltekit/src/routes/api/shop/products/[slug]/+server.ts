@@ -7,6 +7,7 @@ import { eq, and, desc, asc, sql, ne } from 'drizzle-orm';
 export interface ProductImage {
 	id: number;
 	stored_filename: string;
+	folder: string | null;
 	alt_en: string | null;
 	alt_ru: string | null;
 	alt_es: string | null;
@@ -59,6 +60,7 @@ export interface RelatedProduct {
 	primary_image: {
 		id: number;
 		stored_filename: string;
+		folder: string | null;
 		alt_en: string | null;
 	} | null;
 }
@@ -100,6 +102,7 @@ export const GET: RequestHandler = async ({ params }) => {
 			.select({
 				id: media.id,
 				stored_filename: media.stored_filename,
+				folder: media.folder,
 				alt_en: media.alt_en,
 				alt_ru: media.alt_ru,
 				alt_es: media.alt_es,
@@ -141,6 +144,7 @@ export const GET: RequestHandler = async ({ params }) => {
 						artwork_id: artworkImages.artwork_id,
 						media_id: media.id,
 						stored_filename: media.stored_filename,
+						folder: media.folder,
 						alt_en: media.alt_en,
 						is_primary: artworkImages.is_primary,
 						order_index: artworkImages.order_index
@@ -153,12 +157,13 @@ export const GET: RequestHandler = async ({ params }) => {
 					.orderBy(desc(artworkImages.is_primary), asc(artworkImages.order_index));
 
 				// Group by artwork_id and take first
-				const imagesMap = new Map<string, { id: number; stored_filename: string; alt_en: string | null }>();
+				const imagesMap = new Map<string, { id: number; stored_filename: string; folder: string | null; alt_en: string | null }>();
 				for (const img of relatedImages) {
 					if (!imagesMap.has(img.artwork_id)) {
 						imagesMap.set(img.artwork_id, {
 							id: img.media_id,
 							stored_filename: img.stored_filename,
+							folder: img.folder,
 							alt_en: img.alt_en
 						});
 					}

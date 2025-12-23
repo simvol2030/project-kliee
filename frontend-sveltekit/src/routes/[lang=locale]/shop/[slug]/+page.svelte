@@ -315,6 +315,7 @@
 									? {
 											id: relatedProduct.primary_image.id,
 											stored_filename: relatedProduct.primary_image.stored_filename,
+											folder: relatedProduct.primary_image.folder,
 											alt_en: relatedProduct.primary_image.alt_en,
 											alt_ru: null,
 											alt_es: null,
