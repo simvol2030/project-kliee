@@ -1,0 +1,100 @@
+  'Screenprinting on Paper', '40 x 40 cm', 2024, 1456, 'USD', 0, 1, 1, 20, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'chebu-rasha-in-gloves'),
+  (SELECT id FROM media WHERE filename = 'chebu-rasha-gloves.jpg'), 1, 0);
+
+-- Product 21: Forest Of Pink Teeth Or Yellow Jaws Of Chebu-Rasha
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('forest-pink-teeth.jpg', '/uploads/products/forest-pink-teeth.jpg', 'image/jpeg', 20480,
+  'Forest Of Pink Teeth Or Yellow Jaws Of Chebu-Rasha', 'Forest Of Pink Teeth Or Yellow Jaws Of Chebu-Rasha', 'Лес Розовых Зубов Или Желтые Челюсти Чебу-Раши', 'Bosque De Dientes Rosas O Mandíbulas Amarillas De Chebu-Rasha', '粉红色牙齿之森或切布拉莎的黄色下巴', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('forest-of-pink-teeth-or-yellow-jaws-of-chebu-rasha', 'Forest Of Pink Teeth Or Yellow Jaws Of Chebu-Rasha', 'Лес Розовых Зубов Или Желтые Челюсти Чебу-Раши', 'Bosque De Dientes Rosas O Mandíbulas Amarillas De Chebu-Rasha', '粉红色牙齿之森或切布拉莎的黄色下巴',
+  'Digital print on paper. Organic patterns and natural forms', 'Цифровая печать на бумаге. Органические узоры и природные формы', 'Impresión digital en papel. Patrones orgánicos y formas naturales', '数字印刷在纸上。有机图案和自然形态',
+  'Digital on Paper', '40 x 40 cm', 2024, 1456, 'USD', 0, 1, 1, 21, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'forest-of-pink-teeth-or-yellow-jaws-of-chebu-rasha'),
+  (SELECT id FROM media WHERE filename = 'forest-pink-teeth.jpg'), 1, 0);
+
+-- Product 22: The Bull 4
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('the-bull-4.jpg', '/uploads/products/the-bull-4.jpg', 'image/jpeg', 20480,
+  'The Bull 4', 'The Bull 4', 'Бык 4', 'El Toro 4', '公牛4', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('the-bull-4', 'The Bull 4', 'Бык 4', 'El Toro 4', '公牛4',
+  'Screenprinting on paper. Fourth in bull transformation series', 'Шелкография на бумаге. Четвертая работа серии трансформации быка', 'Serigrafía en papel. Cuarta de la serie de transformación del toro', '丝网印刷在纸上。公牛变形系列第四部',
+  'Screenprinting on Paper', '70 x 50 cm', 2024, 3089, 'USD', 1, 1, 1, 22, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'the-bull-4'),
+  (SELECT id FROM media WHERE filename = 'the-bull-4.jpg'), 1, 0);
+
+-- Product 23: The Bull 3
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('the-bull-3.jpg', '/uploads/products/the-bull-3.jpg', 'image/jpeg', 20480,
+  'The Bull 3', 'The Bull 3', 'Бык 3', 'El Toro 3', '公牛3', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('the-bull-3', 'The Bull 3', 'Бык 3', 'El Toro 3', '公牛3',
+  'Screenprinting on paper. Third in bull transformation series', 'Шелкография на бумаге. Третья работа серии трансформации быка', 'Serigrafía en papel. Tercera de la serie de transformación del toro', '丝网印刷在纸上。公牛变形系列第三部',
+  'Screenprinting on Paper', '70 x 50 cm', 2024, 3089, 'USD', 0, 1, 1, 23, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'the-bull-3'),
+  (SELECT id FROM media WHERE filename = 'the-bull-3.jpg'), 1, 0);
+
+-- Product 24: The Bull 2
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('the-bull-2.jpg', '/uploads/products/the-bull-2.jpg', 'image/jpeg', 20480,
+  'The Bull 2', 'The Bull 2', 'Бык 2', 'El Toro 2', '公牛2', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('the-bull-2', 'The Bull 2', 'Бык 2', 'El Toro 2', '公牛2',
+  'Screenprinting on paper. Second in bull transformation series', 'Шелкография на бумаге. Вторая работа серии трансформации быка', 'Serigrafía en papel. Segunda de la serie de transformación del toro', '丝网印刷在纸上。公牛变形系列第二部',
+  'Screenprinting on Paper', '70 x 50 cm', 2024, 3089, 'USD', 0, 1, 1, 24, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'the-bull-2'),
+  (SELECT id FROM media WHERE filename = 'the-bull-2.jpg'), 1, 0);
+
+-- Product 25: The Bull
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('the-bull.jpg', '/uploads/products/the-bull.jpg', 'image/jpeg', 20480,
+  'The Bull', 'The Bull', 'Бык', 'El Toro', '公牛', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('the-bull', 'The Bull', 'Бык', 'El Toro', '公牛',
+  'Screenprinting on paper. First in bull transformation series', 'Шелкография на бумаге. Первая работа серии трансформации быка', 'Serigrafía en papel. Primera de la serie de transformación del toro', '丝网印刷在纸上。公牛变形系列第一部',
+  'Screenprinting on Paper', '70 x 50 cm', 2024, 3089, 'USD', 0, 1, 1, 25, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'the-bull'),
+  (SELECT id FROM media WHERE filename = 'the-bull.jpg'), 1, 0);
+
+-- Product 26: Clubs
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('clubs.jpg', '/uploads/products/clubs.jpg', 'image/jpeg', 20480,
+  'Clubs', 'Clubs', 'Трефы', 'Tréboles', '梅花', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('clubs', 'Clubs', 'Трефы', 'Tréboles', '梅花',
+  'Paper print. Playing card suit reimagined', 'Принт на бумаге. Переосмысленная масть игральных карт', 'Impresión en papel. Palo de naipes reimaginado', '纸质印刷。重新想象的扑克牌花色',
+  'Paper', '37 x 46.5 cm', 2024, 993, 'USD', 0, 1, 1, 26, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'clubs'),
+  (SELECT id FROM media WHERE filename = 'clubs.jpg'), 1, 0);
+
+-- Product 27: Spades
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('spades.jpg', '/uploads/products/spades.jpg', 'image/jpeg', 20480,
+  'Spades', 'Spades', 'Пики', 'Picas', '黑桃', CURRENT_TIMESTAMP);

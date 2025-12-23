@@ -1,0 +1,100 @@
+
+-- Product 14: Last Supper In The Jaws Of Chebu-Rasha
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('last-supper-jaws.jpg', '/uploads/products/last-supper-jaws.jpg', 'image/jpeg', 20480,
+  'Last Supper In The Jaws Of Chebu-Rasha', 'Last Supper In The Jaws Of Chebu-Rasha', 'Тайная Вечеря В Пасти Чебу-Раши', 'La Última Cena En Las Fauces De Chebu-Rasha', '切布拉莎下巴中的最后晚餐', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('last-supper-in-the-jaws-of-chebu-rasha', 'Last Supper In The Jaws Of Chebu-Rasha', 'Тайная Вечеря В Пасти Чебу-Раши', 'La Última Cena En Las Fauces De Chebu-Rasha', '切布拉莎下巴中的最后晚餐',
+  'Digital print on paper. Biblical reference reimagined', 'Цифровая печать на бумаге. Библейская отсылка переосмыслена', 'Impresión digital en papel. Referencia bíblica reimaginada', '数字印刷在纸上。重新想象的圣经典故',
+  'Digital on Paper', '40 x 40 cm', 2024, 1456, 'USD', 0, 1, 1, 14, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'last-supper-in-the-jaws-of-chebu-rasha'),
+  (SELECT id FROM media WHERE filename = 'last-supper-jaws.jpg'), 1, 0);
+
+-- Product 15: Fire Breathing Chebu-Rasha
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('fire-breathing-chebu-rasha.jpg', '/uploads/products/fire-breathing-chebu-rasha.jpg', 'image/jpeg', 20480,
+  'Fire Breathing Chebu-Rasha', 'Fire Breathing Chebu-Rasha', 'Огнедышащая Чебу-Раша', 'Chebu-Rasha Escupiendo Fuego', '喷火的切布拉莎', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('fire-breathing-chebu-rasha', 'Fire Breathing Chebu-Rasha', 'Огнедышащая Чебу-Раша', 'Chebu-Rasha Escupiendo Fuego', '喷火的切布拉莎',
+  'Digital print on paper. Dynamic expression of inner fire and transformation', 'Цифровая печать на бумаге. Динамическое выражение внутреннего огня и трансформации', 'Impresión digital en papel. Expresión dinámica de fuego interior y transformación', '数字印刷在纸上。内在火焰和转变的动态表达',
+  'Digital on Paper', '60 x 40 cm', 2024, 1456, 'USD', 0, 1, 1, 15, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'fire-breathing-chebu-rasha'),
+  (SELECT id FROM media WHERE filename = 'fire-breathing-chebu-rasha.jpg'), 1, 0);
+
+-- Product 16: Omniscient Or Eye
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('omniscient-eye.jpg', '/uploads/products/omniscient-eye.jpg', 'image/jpeg', 20480,
+  'Omniscient Or Eye', 'Omniscient Or Eye', 'Всевидящее Или Глаз', 'Omnisciente O Ojo', '全知或眼睛', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('omniscient-or-eye', 'Omniscient Or Eye', 'Всевидящее Или Глаз', 'Omnisciente O Ojo', '全知或眼睛',
+  'Digital print on paper. All-seeing eye symbolism', 'Цифровая печать на бумаге. Символика всевидящего ока', 'Impresión digital en papel. Simbolismo del ojo que todo lo ve', '数字印刷在纸上。全视之眼的象征',
+  'Digital on Paper', '40 x 40 cm', 2024, 1456, 'USD', 0, 1, 1, 16, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'omniscient-or-eye'),
+  (SELECT id FROM media WHERE filename = 'omniscient-eye.jpg'), 1, 0);
+
+-- Product 17: Cherry
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('cherry.jpg', '/uploads/products/cherry.jpg', 'image/jpeg', 20480,
+  'Cherry', 'Cherry', 'Вишня', 'Cereza', '樱桃', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('cherry', 'Cherry', 'Вишня', 'Cereza', '樱桃',
+  'Digital print on paper. Botanical study with surreal elements', 'Цифровая печать на бумаге. Ботанический этюд с сюрреалистическими элементами', 'Impresión digital en papel. Estudio botánico con elementos surrealistas', '数字印刷在纸上。带有超现实元素的植物研究',
+  'Digital on Paper', '60 x 46.9 cm', 2024, 2453, 'USD', 0, 1, 1, 17, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'cherry'),
+  (SELECT id FROM media WHERE filename = 'cherry.jpg'), 1, 0);
+
+-- Product 18: Cube Legs
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('cube-legs.jpg', '/uploads/products/cube-legs.jpg', 'image/jpeg', 20480,
+  'Cube Legs', 'Cube Legs', 'Куб Ноги', 'Cubo Piernas', '立方体腿', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('cube-legs', 'Cube Legs', 'Куб Ноги', 'Cubo Piernas', '立方体腿',
+  'Digital print on paper. Geometric deconstruction of human form', 'Цифровая печать на бумаге. Геометрическая деконструкция человеческой формы', 'Impresión digital en papel. Deconstrucción geométrica de la forma humana', '数字印刷在纸上。人体形态的几何解构',
+  'Digital on Paper', '40 x 40 cm', 2024, 1456, 'USD', 0, 1, 1, 18, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'cube-legs'),
+  (SELECT id FROM media WHERE filename = 'cube-legs.jpg'), 1, 0);
+
+-- Product 19: Yellow And Red Teeth Of Chebu-Rasha
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('yellow-red-teeth.jpg', '/uploads/products/yellow-red-teeth.jpg', 'image/jpeg', 20480,
+  'Yellow And Red Teeth Of Chebu-Rasha', 'Yellow And Red Teeth Of Chebu-Rasha', 'Желтые И Красные Зубы Чебу-Раши', 'Dientes Amarillos Y Rojos De Chebu-Rasha', '切布拉莎的黄色和红色牙齿', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('yellow-and-red-teeth-of-chebu-rasha', 'Yellow And Red Teeth Of Chebu-Rasha', 'Желтые И Красные Зубы Чебу-Раши', 'Dientes Amarillos Y Rojos De Chebu-Rasha', '切布拉莎的黄色和红色牙齿',
+  'Screenprinting on paper. Bold color contrasts', 'Шелкография на бумаге. Смелые цветовые контрасты', 'Serigrafía en papel. Contrastes de colores audaces', '丝网印刷在纸上。大胆的色彩对比',
+  'Screenprinting on Paper', '40 x 40 cm', 2024, 1456, 'USD', 0, 1, 1, 19, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'yellow-and-red-teeth-of-chebu-rasha'),
+  (SELECT id FROM media WHERE filename = 'yellow-red-teeth.jpg'), 1, 0);
+
+-- Product 20: Chebu-Rasha In Gloves
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('chebu-rasha-gloves.jpg', '/uploads/products/chebu-rasha-gloves.jpg', 'image/jpeg', 20480,
+  'Chebu-Rasha In Gloves', 'Chebu-Rasha In Gloves', 'Чебу-Раша В Перчатках', 'Chebu-Rasha Con Guantes', '戴手套的切布拉莎', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('chebu-rasha-in-gloves', 'Chebu-Rasha In Gloves', 'Чебу-Раша В Перчатках', 'Chebu-Rasha Con Guantes', '戴手套的切布拉莎',
+  'Screenprinting on paper. Character study with accessories', 'Шелкография на бумаге. Характерное исследование с аксессуарами', 'Serigrafía en papel. Estudio de personaje con accesorios', '丝网印刷在纸上。带配饰的角色研究',

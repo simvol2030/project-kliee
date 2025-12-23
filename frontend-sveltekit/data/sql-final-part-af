@@ -1,0 +1,83 @@
+  'Свет Мой, Зеркальце, Скажи, Кто На Свете Всех Милее',
+  'Espejito, Espejito, ¿Quién Es La Más Bella?',
+  '魔镜魔镜告诉我，谁是世上最美的人',
+  'Bronze sculpture. Fairy tale vanity explored',
+  'Бронзовая скульптура. Исследование сказочного тщеславия',
+  'Escultura de bronce. Vanidad de cuento de hadas explorada',
+  '青铜雕塑。探索童话虚荣',
+  'Bronze',
+  '23 x 15 x 24.9 cm',
+  2024,
+  11428,
+  'USD',
+  0,
+  1,
+  1,
+  35,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 36: Woman As A Table, Woman On A Bear Hide
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'woman-as-a-table-woman-on-a-bear-hide',
+  'Woman As A Table, Woman On A Bear Hide',
+  'Женщина Как Стол, Женщина На Медвежьей Шкуре',
+  'Mujer Como Mesa, Mujer Sobre Piel De Oso',
+  '女人作为桌子，熊皮上的女人',
+  'Bronze sculpture. Object and subject merged',
+  'Бронзовая скульптура. Слияние объекта и субъекта',
+  'Escultura de bronce. Objeto y sujeto fusionados',
+  '青铜雕塑。物体与主体的融合',
+  'Bronze',
+  '24 x 13.4 x 37.5 cm',
+  2024,
+  11458,
+  'USD',
+  0,
+  1,
+  1,
+  36,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 37: The Reader Or The Princess And The Pea
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'the-reader-or-the-princess-and-the-pea',
+  'The Reader Or The Princess And The Pea',
+  'Читательница Или Принцесса На Горошине',
+  'La Lectora O La Princesa Y El Guisante',
+  '读者或豌豆公主',
+  'Digital photograph. Literary fairy tale reference',
+  'Цифровая фотография. Отсылка к литературной сказке',
+  'Fotografía digital. Referencia a cuento de hadas literario',
+  '数字摄影。文学童话引用',
+  'Digital on Other',
+  '70 x 50 cm',
+  2024,
+  1548,
+  'USD',
+  0,
+  1,
+  1,
+  37,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+COMMIT;
+
+SELECT 'Imported ' || COUNT(*) || ' artworks' as result FROM artworks;
+SELECT 'Featured artworks: ' || COUNT(*) as result FROM artworks WHERE is_featured = 1;
+SELECT 'Available for sale: ' || COUNT(*) as result FROM artworks WHERE available = 1;

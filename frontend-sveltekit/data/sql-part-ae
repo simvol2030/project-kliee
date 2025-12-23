@@ -1,0 +1,100 @@
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('spades', 'Spades', 'Пики', 'Picas', '黑桃',
+  'Screenprinting on paper. Playing card suit reimagined', 'Шелкография на бумаге. Переосмысленная масть игральных карт', 'Serigrafía en papel. Palo de naipes reimaginado', '丝网印刷在纸上。重新想象的扑克牌花色',
+  'Screenprinting on Paper', '37 x 46.5 cm', 2024, 994, 'USD', 0, 1, 1, 27, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'spades'),
+  (SELECT id FROM media WHERE filename = 'spades.jpg'), 1, 0);
+
+-- Product 28: Malevich, Black Hand
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('malevich-black-hand.jpg', '/uploads/products/malevich-black-hand.jpg', 'image/jpeg', 20480,
+  'Malevich, Black Hand', 'Malevich, Black Hand', 'Малевич, Черная Рука', 'Malevich, Mano Negra', '马列维奇，黑手', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('malevich-black-hand', 'Malevich, Black Hand', 'Малевич, Черная Рука', 'Malevich, Mano Negra', '马列维奇，黑手',
+  'Paper print. Homage to suprematism founder', 'Принт на бумаге. Дань основателю супрематизма', 'Impresión en papel. Homenaje al fundador del suprematismo', '纸质印刷。向至上主义创始人致敬',
+  'Paper', '55 x 44 cm', 2024, 829, 'USD', 0, 1, 1, 28, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'malevich-black-hand'),
+  (SELECT id FROM media WHERE filename = 'malevich-black-hand.jpg'), 1, 0);
+
+-- Product 29: Hand With Cherry
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('hand-cherry.jpg', '/uploads/products/hand-cherry.jpg', 'image/jpeg', 20480,
+  'Hand With Cherry', 'Hand With Cherry', 'Рука С Вишней', 'Mano Con Cereza', '拿着樱桃的手', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('hand-with-cherry', 'Hand With Cherry', 'Рука С Вишней', 'Mano Con Cereza', '拿着樱桃的手',
+  'Paper print. Delicate gesture with fruit', 'Принт на бумаге. Нежный жест с фруктом', 'Impresión en papel. Gesto delicado con fruta', '纸质印刷。拿着水果的细腻手势',
+  'Paper', '50 x 50 cm', 2024, 836, 'USD', 0, 1, 1, 29, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'hand-with-cherry'),
+  (SELECT id FROM media WHERE filename = 'hand-cherry.jpg'), 1, 0);
+
+-- Product 30: Squatting Lady, Princess Frog
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('squatting-lady.jpg', '/uploads/products/squatting-lady.jpg', 'image/jpeg', 20480,
+  'Squatting Lady, Princess Frog', 'Squatting Lady, Princess Frog', 'Сидящая На Корточках Леди, Царевна Лягушка', 'Dama En Cuclillas, Princesa Rana', '蹲着的女士，青蛙公主', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('squatting-lady-princess-frog', 'Squatting Lady, Princess Frog', 'Сидящая На Корточках Леди, Царевна Лягушка', 'Dama En Cuclillas, Princesa Rana', '蹲着的女士，青蛙公主',
+  'Paper print. Fairy tale reference', 'Принт на бумаге. Отсылка к сказке', 'Impresión en papel. Referencia a cuento de hadas', '纸质印刷。童话故事引用',
+  'Paper', '50 x 50 cm', 2024, 836, 'USD', 0, 1, 1, 30, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'squatting-lady-princess-frog'),
+  (SELECT id FROM media WHERE filename = 'squatting-lady.jpg'), 1, 0);
+
+-- Product 31: White Head On Black
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('white-head-black.jpg', '/uploads/products/white-head-black.jpg', 'image/jpeg', 20480,
+  'White Head On Black', 'White Head On Black', 'Белая Голова На Черном', 'Cabeza Blanca Sobre Negro', '黑底白头', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('white-head-on-black', 'White Head On Black', 'Белая Голова На Черном', 'Cabeza Blanca Sobre Negro', '黑底白头',
+  'Screenprinting on paper. High contrast portrait', 'Шелкография на бумаге. Высококонтрастный портрет', 'Serigrafía en papel. Retrato de alto contraste', '丝网印刷在纸上。高对比度肖像',
+  'Screenprinting on Paper', '30 x 40 cm', 2024, 620, 'USD', 0, 1, 1, 31, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'white-head-on-black'),
+  (SELECT id FROM media WHERE filename = 'white-head-black.jpg'), 1, 0);
+
+-- Product 32: Red Head On Blue
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('red-head-blue.jpg', '/uploads/products/red-head-blue.jpg', 'image/jpeg', 20480,
+  'Red Head On Blue', 'Red Head On Blue', 'Красная Голова На Синем', 'Cabeza Roja Sobre Azul', '蓝底红头', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('red-head-on-blue', 'Red Head On Blue', 'Красная Голова На Синем', 'Cabeza Roja Sobre Azul', '蓝底红头',
+  'Screenprinting on paper. Complementary color portrait', 'Шелкография на бумаге. Портрет в дополняющих цветах', 'Serigrafía en papel. Retrato de colores complementarios', '丝网印刷在纸上。互补色肖像',
+  'Screenprinting on Paper', '30 x 40 cm', 2024, 620, 'USD', 0, 1, 1, 32, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'red-head-on-blue'),
+  (SELECT id FROM media WHERE filename = 'red-head-blue.jpg'), 1, 0);
+
+-- Product 33: Woman Faunus Or Woman On Hooves
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('woman-faunus.jpg', '/uploads/products/woman-faunus.jpg', 'image/jpeg', 20480,
+  'Woman Faunus Or Woman On Hooves', 'Woman Faunus Or Woman On Hooves', 'Женщина Фавн Или Женщина На Копытах', 'Mujer Fauno O Mujer Sobre Pezuñas', '女性半神或站在蹄子上的女人', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('woman-faunus-or-woman-on-hooves', 'Woman Faunus Or Woman On Hooves', 'Женщина Фавн Или Женщина На Копытах', 'Mujer Fauno O Mujer Sobre Pezuñas', '女性半神或站在蹄子上的女人',
+  'Bronze sculpture. Mythological transformation', 'Бронзовая скульптура. Мифологическая трансформация', 'Escultura de bronce. Transformación mitológica', '青铜雕塑。神话般的变形',
+  'Bronze', '13 x 34 x 12 cm', 2024, 11408, 'USD', 0, 1, 1, 33, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'woman-faunus-or-woman-on-hooves'),
+  (SELECT id FROM media WHERE filename = 'woman-faunus.jpg'), 1, 0);

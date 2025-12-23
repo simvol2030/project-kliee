@@ -1,0 +1,51 @@
+# Server-specific files (not for Git)
+___old/
+__arkh_/
+backups/
+logs/
+static-images/
+tmp-deploy-*/
+*.log
+*.backup
+
+# NEVER track these (anywhere in repo)
+node_modules/
+_old_projects_/
+_old-static-site/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.JPG
+*.JPEG
+*.PNG
+
+# Frontend local files
+frontend-sveltekit/.claude/
+frontend-sveltekit/.mcp.json
+frontend-sveltekit/data/db/
+frontend-sveltekit/data/logs/
+frontend-sveltekit/data/media/
+
+# Static images (served from external directory on production)
+frontend-sveltekit/static/uploads/
+frontend-sveltekit/static/images/
+frontend-sveltekit/_old-static-site/
+frontend-sveltekit/_old_projects_/
+frontend-sveltekit/backend-expressjs/
+frontend-sveltekit/backend-hono/
+frontend-sveltekit/frontend-remix/
+frontend-sveltekit/frontend-sveltekit/
+frontend-sveltekit/prisma/
+frontend-sveltekit/node_modules/
+frontend-sveltekit/build/
+frontend-sveltekit/.svelte-kit/
+
+# Old backups
+*.old/
+*.backup/
+
+# Environment
+.env
+.env.local

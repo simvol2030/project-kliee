@@ -1,0 +1,100 @@
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('the-gold-of-white-breasts-multiple-breasts-lotus-artemis', 'The Gold Of White Breasts, Multiple Breasts, Lotus, Artemis', 'Золото Белых Грудей, Множественные Груди, Лотос, Артемида', 'El Oro De Los Senos Blancos, Múltiples Senos, Loto, Artemisa', '白色乳房的黄金，多个乳房，莲花，阿耳忒弥斯',
+  'Digital print on paper. Mythological feminine symbolism', 'Цифровая печать на бумаге. Мифологическая женская символика', 'Impresión digital en papel. Simbolismo femenino mitológico', '数字印刷在纸上。神话女性象征',
+  'Digital on Paper', '40 x 40 cm', 2024, 1456, 'USD', 0, 1, 1, 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'the-gold-of-white-breasts-multiple-breasts-lotus-artemis'),
+  (SELECT id FROM media WHERE filename = 'gold-white-breasts.jpg'), 1, 0);
+
+-- Product 8: Chebu-Rasha, Breasts, Teeth
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('chebu-rasha-breasts-teeth.jpg', '/uploads/products/chebu-rasha-breasts-teeth.jpg', 'image/jpeg', 20480,
+  'Chebu-Rasha, Breasts, Teeth', 'Chebu-Rasha, Breasts, Teeth', 'Чебу-Раша, Груди, Зубы', 'Chebu-Rasha, Senos, Dientes', '切布拉莎，乳房，牙齿', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('chebu-rasha-breasts-teeth', 'Chebu-Rasha, Breasts, Teeth', 'Чебу-Раша, Груди, Зубы', 'Chebu-Rasha, Senos, Dientes', '切布拉莎，乳房，牙齿',
+  'Digital print on paper. Surreal body transformation', 'Цифровая печать на бумаге. Сюрреалистическая трансформация тела', 'Impresión digital en papel. Transformación corporal surrealista', '数字印刷在纸上。超现实身体变形',
+  'Digital on Paper', '40 x 40 cm', 2024, 1456, 'USD', 1, 1, 1, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'chebu-rasha-breasts-teeth'),
+  (SELECT id FROM media WHERE filename = 'chebu-rasha-breasts-teeth.jpg'), 1, 0);
+
+-- Product 9: Golden Cube Or Cube Of My Nervous System
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('golden-cube-nervous-system.jpg', '/uploads/products/golden-cube-nervous-system.jpg', 'image/jpeg', 20480,
+  'Golden Cube Or Cube Of My Nervous System', 'Golden Cube Or Cube Of My Nervous System', 'Золотой Куб Или Куб Моей Нервной Системы', 'Cubo Dorado O Cubo De Mi Sistema Nervioso', '金色立方体或我的神经系统立方体', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('golden-cube-or-cube-of-my-nervous-system', 'Golden Cube Or Cube Of My Nervous System', 'Золотой Куб Или Куб Моей Нервной Системы', 'Cubo Dorado O Cubo De Mi Sistema Nervioso', '金色立方体或我的神经系统立方体',
+  'Digital print on paper. Geometric exploration of consciousness', 'Цифровая печать на бумаге. Геометрическое исследование сознания', 'Impresión digital en papel. Exploración geométrica de la conciencia', '数字印刷在纸上。意识的几何探索',
+  'Digital on Paper', '40 x 40 cm', 2024, 1456, 'USD', 0, 1, 1, 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'golden-cube-or-cube-of-my-nervous-system'),
+  (SELECT id FROM media WHERE filename = 'golden-cube-nervous-system.jpg'), 1, 0);
+
+-- Product 10: Yellow Cube Or Feet, Hands, Faces Taking Flight
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('yellow-cube-feet-hands.jpg', '/uploads/products/yellow-cube-feet-hands.jpg', 'image/jpeg', 20480,
+  'Yellow Cube Or Feet, Hands, Faces Taking Flight', 'Yellow Cube Or Feet, Hands, Faces Taking Flight', 'Желтый Куб Или Ноги, Руки, Лица Взлетающие', 'Cubo Amarillo O Pies, Manos, Caras Volando', '黄色立方体或脚、手、脸起飞', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('yellow-cube-or-feet-hands-faces-taking-flight', 'Yellow Cube Or Feet, Hands, Faces Taking Flight', 'Желтый Куб Или Ноги, Руки, Лица Взлетающие', 'Cubo Amarillo O Pies, Manos, Caras Volando', '黄色立方体或脚、手、脸起飞',
+  'Digital print on paper. Bodies in motion and transformation', 'Цифровая печать на бумаге. Тела в движении и трансформации', 'Impresión digital en papel. Cuerpos en movimiento y transformación', '数字印刷在纸上。运动和转变中的身体',
+  'Digital on Paper', '40 x 40 cm', 2024, 1456, 'USD', 0, 1, 1, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'yellow-cube-or-feet-hands-faces-taking-flight'),
+  (SELECT id FROM media WHERE filename = 'yellow-cube-feet-hands.jpg'), 1, 0);
+
+-- Product 11: Chebu-Rasha In Blue
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('chebu-rasha-blue.jpg', '/uploads/products/chebu-rasha-blue.jpg', 'image/jpeg', 20480,
+  'Chebu-Rasha In Blue', 'Chebu-Rasha In Blue', 'Чебу-Раша В Синем', 'Chebu-Rasha En Azul', '蓝色的切布拉莎', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('chebu-rasha-in-blue', 'Chebu-Rasha In Blue', 'Чебу-Раша В Синем', 'Chebu-Rasha En Azul', '蓝色的切布拉莎',
+  'Digital print on paper. Blue period exploration', 'Цифровая печать на бумаге. Исследование голубого периода', 'Impresión digital en papel. Exploración del período azul', '数字印刷在纸上。蓝色时期探索',
+  'Digital on Paper', '40 x 40 cm', 2024, 1456, 'USD', 0, 1, 1, 11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'chebu-rasha-in-blue'),
+  (SELECT id FROM media WHERE filename = 'chebu-rasha-blue.jpg'), 1, 0);
+
+-- Product 12: Pink Bubbles Of Chebu-Rasha Or We Have Long Ears
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('pink-bubbles-long-ears.jpg', '/uploads/products/pink-bubbles-long-ears.jpg', 'image/jpeg', 20480,
+  'Pink Bubbles Of Chebu-Rasha Or We Have Long Ears', 'Pink Bubbles Of Chebu-Rasha Or We Have Long Ears', 'Розовые Пузыри Чебу-Раши Или У Нас Длинные Уши', 'Burbujas Rosas De Chebu-Rasha O Tenemos Orejas Largas', '切布拉莎的粉红泡泡或我们有长耳朵', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('pink-bubbles-of-chebu-rasha-or-we-have-long-ears', 'Pink Bubbles Of Chebu-Rasha Or We Have Long Ears', 'Розовые Пузыри Чебу-Раши Или У Нас Длинные Уши', 'Burbujas Rosas De Chebu-Rasha O Tenemos Orejas Largas', '切布拉莎的粉红泡泡或我们有长耳朵',
+  'Digital print on paper. Playful exploration of identity and listening', 'Цифровая печать на бумаге. Игровое исследование идентичности и слушания', 'Impresión digital en papel. Exploración juguetona de identidad y escucha', '数字印刷在纸上。关于身份和倾听的有趣探索',
+  'Digital on Paper', '40 x 50 cm', 2024, 1456, 'USD', 1, 1, 1, 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'pink-bubbles-of-chebu-rasha-or-we-have-long-ears'),
+  (SELECT id FROM media WHERE filename = 'pink-bubbles-long-ears.jpg'), 1, 0);
+
+-- Product 13: Octopus Head
+INSERT INTO media (filename, file_path, file_type, file_size, title, alt_text_en, alt_text_ru, alt_text_es, alt_text_zh, created_at)
+VALUES ('octopus-head.jpg', '/uploads/products/octopus-head.jpg', 'image/jpeg', 20480,
+  'Octopus Head', 'Octopus Head', 'Голова Осьминога', 'Cabeza De Pulpo', '章鱼头', CURRENT_TIMESTAMP);
+
+INSERT INTO artworks (slug, title_en, title_ru, title_es, title_zh, description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, is_featured, is_for_sale, is_visible, order_index, created_at, updated_at)
+VALUES ('octopus-head', 'Octopus Head', 'Голова Осьминога', 'Cabeza De Pulpo', '章鱼头',
+  'Digital print on paper. Marine creature metamorphosis', 'Цифровая печать на бумаге. Метаморфоза морского существа', 'Impresión digital en papel. Metamorfosis de criatura marina', '数字印刷在纸上。海洋生物变形',
+  'Digital on Paper', '40 x 40 cm', 2024, 1456, 'USD', 0, 1, 1, 13, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO artwork_images (artwork_id, media_id, is_primary, order_index)
+VALUES ((SELECT id FROM artworks WHERE slug = 'octopus-head'),
+  (SELECT id FROM media WHERE filename = 'octopus-head.jpg'), 1, 0);

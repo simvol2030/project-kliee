@@ -1,0 +1,66 @@
+# Docker ignore file for Hono backend
+# Optimizes build context by excluding unnecessary files
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output (will be generated in container)
+dist/
+build/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Testing
+coverage/
+*.lcov
+.nyc_output
+
+# Logs
+logs/
+*.log
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Documentation
+README.md
+*.md
+docs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Database (will be mounted as volume)
+*.db
+*.db-shm
+*.db-wal
+data/

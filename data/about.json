@@ -1,0 +1,220 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-12-20",
+  "artist": {
+    "name": "Svetlana K-Liée",
+    "image": "/images/about/ELT_5672.jpg",
+    "birthYear": null,
+    "nationality": "Russian-British",
+    "basedIn": "England"
+  },
+  "biography": {
+    "en": "Svetlana K-Liée, a Russian-born artist, has been residing in England since 2006. She is proficient in various techniques, including bronze, ceramics, etching, paper in graphic art, printmaking, collage and even photography. K-Liée's artwork has achieved international recognition, with sales and exhibitions in renowned venues such as the Hermitage and Saatchi Galleries. She continues to grace the world with her art, with most recent exhibitions being in China and the USA.",
+    "ru": "Светлана К-Лье, художница русского происхождения, проживает в Англии с 2006 года. Она владеет различными техниками, включая бронзу, керамику, офорт, бумагу в графическом искусстве, гравюру, коллаж и даже фотографию. Работы К-Лье получили международное признание, с продажами и выставками в таких известных местах, как Эрмитаж и галереи Саатчи. Она продолжает украшать мир своим искусством, с последними выставками в Китае и США.",
+    "es": "Svetlana K-Liée, artista de origen ruso, reside en Inglaterra desde 2006. Es experta en diversas técnicas, incluyendo bronce, cerámica, aguafuerte, papel en arte gráfico, grabado, collage e incluso fotografía. La obra de K-Liée ha logrado reconocimiento internacional, con ventas y exposiciones en lugares de renombre como el Hermitage y las Galerías Saatchi. Continúa enriqueciendo el mundo con su arte, con exposiciones recientes en China y Estados Unidos.",
+    "zh": "斯韦特兰娜·K-Liée是一位俄罗斯出生的艺术家，自2006年以来一直居住在英国。她精通各种技术，包括青铜、陶瓷、蚀刻、纸质图形艺术、版画、拼贴画甚至摄影。K-Liée的作品获得了国际认可，在冬宫和萨奇画廊等著名场所进行销售和展览。她继续用艺术装点世界，最近的展览在中国和美国举行。"
+  },
+  "education": [
+    {
+      "year": "2000",
+      "degree": {
+        "en": "MA Interior and Spatial Design",
+        "ru": "Магистр интерьерного и пространственного дизайна",
+        "es": "Máster en Diseño de Interiores y Espacial",
+        "zh": "室内与空间设计硕士"
+      },
+      "institution": {
+        "en": "National Design Institute, Moscow, Russia",
+        "ru": "Национальный институт дизайна, Москва, Россия",
+        "es": "Instituto Nacional de Diseño, Moscú, Rusia",
+        "zh": "俄罗斯莫斯科国家设计学院"
+      }
+    },
+    {
+      "year": "2001-2005",
+      "degree": {
+        "en": "Additional studies",
+        "ru": "Дополнительное образование",
+        "es": "Estudios adicionales",
+        "zh": "额外学习"
+      },
+      "institution": {
+        "en": "Ignati Ig. Nivinski Etching Art Studio and Babushkinski Sculpture Factory, Moscow, Russia",
+        "ru": "Офортная студия Игнатия Нивинского и Бабушкинская скульптурная фабрика, Москва, Россия",
+        "es": "Estudio de Aguafuerte Ignati Ig. Nivinski y Fábrica de Esculturas Babushkinski, Moscú, Rusia",
+        "zh": "伊格纳季·尼温斯基蚀刻艺术工作室和巴布什金斯基雕塑厂，俄罗斯莫斯科"
+      }
+    },
+    {
+      "year": "2007",
+      "degree": {
+        "en": "MA Drawing",
+        "ru": "Магистр рисунка",
+        "es": "Máster en Dibujo",
+        "zh": "绘画硕士"
+      },
+      "institution": {
+        "en": "Camberwell College of Arts, London, England",
+        "ru": "Кэмберуэлл колледж искусств, Лондон, Англия",
+        "es": "Camberwell College of Arts, Londres, Inglaterra",
+        "zh": "伦敦坎伯韦尔艺术学院，英国"
+      }
+    }
+  ],
+  "awards": [
+    {
+      "year": "2004",
+      "title": {
+        "en": "Best Woman Sculpture of Russia",
+        "ru": "Лучшая женщина-скульптор России",
+        "es": "Mejor Escultura de Mujer de Rusia",
+        "zh": "俄罗斯最佳女性雕塑家"
+      },
+      "organization": {
+        "en": "Russian Union of Woman Artists, Russia",
+        "ru": "Союз художниц России",
+        "es": "Unión Rusa de Mujeres Artistas, Rusia",
+        "zh": "俄罗斯女艺术家联盟"
+      }
+    },
+    {
+      "year": "2005",
+      "title": {
+        "en": "Best Young Sculpture of Russia",
+        "ru": "Лучший молодой скульптор России",
+        "es": "Mejor Escultor Joven de Rusia",
+        "zh": "俄罗斯最佳青年雕塑家"
+      },
+      "organization": {
+        "en": "Moscow Union of Artists, Russia",
+        "ru": "Московский союз художников, Россия",
+        "es": "Unión de Artistas de Moscú, Rusia",
+        "zh": "莫斯科艺术家联盟，俄罗斯"
+      }
+    },
+    {
+      "year": "2007",
+      "title": {
+        "en": "Selected for the Eufuria award",
+        "ru": "Отобрана для награды Eufuria",
+        "es": "Seleccionada para el premio Eufuria",
+        "zh": "入选Eufuria奖"
+      },
+      "organization": {
+        "en": "Selfridges, England",
+        "ru": "Selfridges, Англия",
+        "es": "Selfridges, Inglaterra",
+        "zh": "塞尔福里奇百货，英国"
+      }
+    },
+    {
+      "year": "2009",
+      "title": {
+        "en": "Royal Academy of Arts Summer Exhibition, shortlisted with etching 'Tongue'",
+        "ru": "Летняя выставка Королевской академии художеств, в шорт-листе с офортом 'Язык'",
+        "es": "Exposición de Verano de la Royal Academy of Arts, preseleccionada con el aguafuerte 'Lengua'",
+        "zh": "皇家艺术学院夏季展览，蚀刻作品'舌头'入围"
+      },
+      "organization": {
+        "en": "Royal Academy of Arts, London",
+        "ru": "Королевская академия художеств, Лондон",
+        "es": "Royal Academy of Arts, Londres",
+        "zh": "伦敦皇家艺术学院"
+      }
+    },
+    {
+      "year": "2011",
+      "title": {
+        "en": "Shortlisted for the Threadneedle Prize",
+        "ru": "В шорт-листе премии Threadneedle",
+        "es": "Preseleccionada para el Premio Threadneedle",
+        "zh": "入围Threadneedle奖"
+      },
+      "organization": {
+        "en": "London",
+        "ru": "Лондон",
+        "es": "Londres",
+        "zh": "伦敦"
+      }
+    }
+  ],
+  "residencies": [
+    {
+      "year": "2006",
+      "location": {
+        "en": "La Cité Internationale des Arts, Paris",
+        "ru": "Международный городок искусств, Париж",
+        "es": "La Cité Internationale des Arts, París",
+        "zh": "巴黎国际艺术城"
+      }
+    },
+    {
+      "year": "2008",
+      "location": {
+        "en": "La Cité Internationale des Arts, Paris",
+        "ru": "Международный городок искусств, Париж",
+        "es": "La Cité Internationale des Arts, París",
+        "zh": "巴黎国际艺术城"
+      }
+    },
+    {
+      "year": "2010",
+      "location": {
+        "en": "La Cité Internationale des Arts, Paris",
+        "ru": "Международный городок искусств, Париж",
+        "es": "La Cité Internationale des Arts, París",
+        "zh": "巴黎国际艺术城"
+      }
+    },
+    {
+      "year": "2011",
+      "location": {
+        "en": "La Cité Internationale des Arts, Paris",
+        "ru": "Международный городок искусств, Париж",
+        "es": "La Cité Internationale des Arts, París",
+        "zh": "巴黎国际艺术城"
+      }
+    },
+    {
+      "year": "2012",
+      "location": {
+        "en": "La Cité Internationale des Arts, Paris",
+        "ru": "Международный городок искусств, Париж",
+        "es": "La Cité Internationale des Arts, París",
+        "zh": "巴黎国际艺术城"
+      }
+    },
+    {
+      "year": "2023",
+      "location": {
+        "en": "Taoxichuan Art Center, Jingdezhen, China",
+        "ru": "Арт-центр Таосичуань, Цзиндэчжэнь, Китай",
+        "es": "Centro de Arte Taoxichuan, Jingdezhen, China",
+        "zh": "景德镇陶溪川艺术中心，中国"
+      }
+    },
+    {
+      "year": "2024",
+      "location": {
+        "en": "Taoxichuan Art Center, Jingdezhen, China",
+        "ru": "Арт-центр Таосичуань, Цзиндэчжэнь, Китай",
+        "es": "Centro de Arte Taoxichuan, Jingdezhen, China",
+        "zh": "景德镇陶溪川艺术中心，中国"
+      }
+    }
+  ],
+  "seo": {
+    "title": {
+      "en": "About Svetlana K-Liée | Contemporary Artist",
+      "ru": "О художнике Светлане К-Лье | Современный художник",
+      "es": "Sobre Svetlana K-Liée | Artista Contemporánea",
+      "zh": "关于斯韦特兰娜·K-Liée | 当代艺术家"
+    },
+    "description": {
+      "en": "Discover the biography, education, awards and residencies of Svetlana K-Liée, a Russian-born contemporary artist working in bronze, ceramics, printmaking and photography.",
+      "ru": "Узнайте биографию, образование, награды и резиденции Светланы К-Лье, современного художника русского происхождения, работающего в бронзе, керамике, гравюре и фотографии.",
+      "es": "Descubre la biografía, educación, premios y residencias de Svetlana K-Liée, artista contemporánea de origen ruso que trabaja en bronce, cerámica, grabado y fotografía.",
+      "zh": "了解斯韦特兰娜·K-Liée的传记、教育背景、奖项和驻留经历，她是一位俄罗斯出生的当代艺术家，从事青铜、陶瓷、版画和摄影创作。"
+    }
+  }
+}

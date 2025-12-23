@@ -1,0 +1,200 @@
+  2024,
+  1456,
+  'USD',
+  0,
+  1,
+  1,
+  14,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 15: Fire Breathing Chebu-Rasha
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'fire-breathing-chebu-rasha',
+  'Fire Breathing Chebu-Rasha',
+  'Огнедышащая Чебу-Раша',
+  'Chebu-Rasha Escupiendo Fuego',
+  '喷火的切布拉莎',
+  'Digital print on paper. Dynamic expression of inner fire and transformation',
+  'Цифровая печать на бумаге. Динамическое выражение внутреннего огня и трансформации',
+  'Impresión digital en papel. Expresión dinámica de fuego interior y transformación',
+  '数字印刷在纸上。内在火焰和转变的动态表达',
+  'Digital on Paper',
+  '60 x 40 cm',
+  2024,
+  1456,
+  'USD',
+  0,
+  1,
+  1,
+  15,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 16: Omniscient Or Eye
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'omniscient-or-eye',
+  'Omniscient Or Eye',
+  'Всевидящее Или Глаз',
+  'Omnisciente O Ojo',
+  '全知或眼睛',
+  'Digital print on paper. All-seeing eye symbolism',
+  'Цифровая печать на бумаге. Символика всевидящего ока',
+  'Impresión digital en papel. Simbolismo del ojo que todo lo ve',
+  '数字印刷在纸上。全视之眼的象征',
+  'Digital on Paper',
+  '40 x 40 cm',
+  2024,
+  1456,
+  'USD',
+  0,
+  1,
+  1,
+  16,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 17: Cherry
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'cherry',
+  'Cherry',
+  'Вишня',
+  'Cereza',
+  '樱桃',
+  'Digital print on paper. Botanical study with surreal elements',
+  'Цифровая печать на бумаге. Ботанический этюд с сюрреалистическими элементами',
+  'Impresión digital en papel. Estudio botánico con elementos surrealistas',
+  '数字印刷在纸上。带有超现实元素的植物研究',
+  'Digital on Paper',
+  '60 x 46.9 cm',
+  2024,
+  2453,
+  'USD',
+  0,
+  1,
+  1,
+  17,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 18: Cube Legs
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'cube-legs',
+  'Cube Legs',
+  'Куб Ноги',
+  'Cubo Piernas',
+  '立方体腿',
+  'Digital print on paper. Geometric deconstruction of human form',
+  'Цифровая печать на бумаге. Геометрическая деконструкция человеческой формы',
+  'Impresión digital en papel. Deconstrucción geométrica de la forma humana',
+  '数字印刷在纸上。人体形态的几何解构',
+  'Digital on Paper',
+  '40 x 40 cm',
+  2024,
+  1456,
+  'USD',
+  0,
+  1,
+  1,
+  18,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 19: Yellow And Red Teeth Of Chebu-Rasha
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'yellow-and-red-teeth-of-chebu-rasha',
+  'Yellow And Red Teeth Of Chebu-Rasha',
+  'Желтые И Красные Зубы Чебу-Раши',
+  'Dientes Amarillos Y Rojos De Chebu-Rasha',
+  '切布拉莎的黄色和红色牙齿',
+  'Screenprinting on paper. Bold color contrasts',
+  'Шелкография на бумаге. Смелые цветовые контрасты',
+  'Serigrafía en papel. Contrastes de colores audaces',
+  '丝网印刷在纸上。大胆的色彩对比',
+  'Screenprinting on Paper',
+  '40 x 40 cm',
+  2024,
+  1456,
+  'USD',
+  0,
+  1,
+  1,
+  19,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 20: Chebu-Rasha In Gloves
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'chebu-rasha-in-gloves',
+  'Chebu-Rasha In Gloves',
+  'Чебу-Раша В Перчатках',
+  'Chebu-Rasha Con Guantes',
+  '戴手套的切布拉莎',
+  'Screenprinting on paper. Character study with accessories',
+  'Шелкография на бумаге. Характерное исследование с аксессуарами',
+  'Serigrafía en papel. Estudio de personaje con accesorios',
+  '丝网印刷在纸上。带配饰的角色研究',
+  'Screenprinting on Paper',
+  '40 x 40 cm',
+  2024,
+  1456,
+  'USD',
+  0,
+  1,
+  1,
+  20,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 21: Forest Of Pink Teeth Or Yellow Jaws Of Chebu-Rasha
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'forest-of-pink-teeth-or-yellow-jaws-of-chebu-rasha',
+  'Forest Of Pink Teeth Or Yellow Jaws Of Chebu-Rasha',
+  'Лес Розовых Зубов Или Желтые Челюсти Чебу-Раши',
+  'Bosque De Dientes Rosas O Mandíbulas Amarillas De Chebu-Rasha',
+  '粉红色牙齿之森或切布拉莎的黄色下巴',
+  'Digital print on paper. Organic patterns and natural forms',
+  'Цифровая печать на бумаге. Органические узоры и природные формы',
+  'Impresión digital en papel. Patrones orgánicos y formas naturales',

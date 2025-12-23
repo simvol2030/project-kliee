@@ -1,0 +1,674 @@
+products:
+  # Printmaking - Digital on Paper Series
+  - title_en: "Chebu-Rasha Throwing Up Eyes"
+    title_ru: "Чебу-Раша Выбрасывающая Глаза"
+    title_es: "Chebu-Rasha Lanzando Ojos"
+    title_zh: "切布拉莎抛眼睛"
+    description_en: "Digital print on paper. Surreal exploration of vision and perception"
+    description_ru: "Цифровая печать на бумаге. Сюрреалистическое исследование зрения и восприятия"
+    description_es: "Impresión digital en papel. Exploración surrealista de visión y percepción"
+    description_zh: "数字印刷在纸上。关于视觉和感知的超现实探索"
+    price: 1466
+    medium: "Digital on Paper"
+    dimensions: "50 x 50 cm"
+    year: 2024
+    is_available: true
+    is_featured: true
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Chebu-Rasha-throwing-up-eyes/115891/11537433/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537433/10599685-HQJBQDFT-6.jpg"
+    image_filename: "chebu-rasha-throwing-up-eyes.jpg"
+
+  - title_en: "Chebu-Rasha Cloud Sitting Atop A Tall Hill"
+    title_ru: "Чебу-Раша Облако Сидящее На Высоком Холме"
+    title_es: "Chebu-Rasha Nube Sentada En Una Colina Alta"
+    title_zh: "切布拉莎云坐在高山上"
+    description_en: "Digital print on paper. Dreamlike composition of cloud forms"
+    description_ru: "Цифровая печать на бумаге. Сказочная композиция облачных форм"
+    description_es: "Impresión digital en papel. Composición onírica de formas de nubes"
+    description_zh: "数字印刷在纸上。梦幻般的云朵形态组合"
+    price: 1466
+    medium: "Digital on Paper"
+    dimensions: "50 x 50 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Chebu-Rasha-Cloud-sitting-atop-a-Tall-Hill/115891/11537421/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537421/10599673-MTYMMHQC-6.jpg"
+    image_filename: "chebu-rasha-cloud-sitting.jpg"
+
+  - title_en: "Chebu-Rasha, Teletubbies"
+    title_ru: "Чебу-Раша, Телепузики"
+    title_es: "Chebu-Rasha, Teletubbies"
+    title_zh: "切布拉莎，天线宝宝"
+    description_en: "Digital print on paper. Part of the surreal Chebu-Rasha series"
+    description_ru: "Цифровая печать на бумаге. Часть сюрреалистической серии Чебу-Раша"
+    description_es: "Impresión digital en papel. Parte de la serie surrealista Chebu-Rasha"
+    description_zh: "数字印刷在纸上。超现实切布拉莎系列的一部分"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: true
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Chebu-Rasha-Teletubbies/115891/11537401/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537401/10599653-PNMOKFTE-6.jpg"
+    image_filename: "chebu-rasha-teletubbies.jpg"
+
+  - title_en: "Storm Cloud, Brains, Red Thunder"
+    title_ru: "Грозовое Облако, Мозги, Красный Гром"
+    title_es: "Nube De Tormenta, Cerebros, Trueno Rojo"
+    title_zh: "风暴云，大脑，红色雷电"
+    description_en: "Digital print on paper. Symbolic exploration of mental storms"
+    description_ru: "Цифровая печать на бумаге. Символическое исследование ментальных бурь"
+    description_es: "Impresión digital en papel. Exploración simbólica de tormentas mentales"
+    description_zh: "数字印刷在纸上。精神风暴的象征性探索"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Storm-Cloud-Brains-Red-Thunder/115891/11537395/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537395/10599647-XWKWSQTM-6.jpg"
+    image_filename: "storm-cloud-brains-red-thunder.jpg"
+
+  - title_en: "Chebu-Rasha"
+    title_ru: "Чебу-Раша"
+    title_es: "Chebu-Rasha"
+    title_zh: "切布拉莎"
+    description_en: "Digital print on paper. Original character from surreal universe"
+    description_ru: "Цифровая печать на бумаге. Оригинальный персонаж из сюрреалистической вселенной"
+    description_es: "Impresión digital en papel. Personaje original del universo surrealista"
+    description_zh: "数字印刷在纸上。超现实宇宙中的原创角色"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Chebu-Rasha/115891/11537343/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537343/10599595-DDNCNTHT-6.jpg"
+    image_filename: "chebu-rasha.jpg"
+
+  - title_en: "Red Hills Of My Innocence Or First Shoot"
+    title_ru: "Красные Холмы Моей Невинности Или Первый Выстрел"
+    title_es: "Colinas Rojas De Mi Inocencia O Primer Disparo"
+    title_zh: "我的纯真红山或第一枪"
+    description_en: "Digital print on paper. Exploration of childhood memories"
+    description_ru: "Цифровая печать на бумаге. Исследование детских воспоминаний"
+    description_es: "Impresión digital en papel. Exploración de recuerdos de infancia"
+    description_zh: "数字印刷在纸上。童年记忆的探索"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Red-Hills-of-my-Innocence-or-First-Shoot/115891/11537337/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537337/10599589-VDYQPAJJ-6.jpg"
+    image_filename: "red-hills-innocence.jpg"
+
+  - title_en: "The Gold Of White Breasts, Multiple Breasts, Lotus, Artemis"
+    title_ru: "Золото Белых Грудей, Множественные Груди, Лотос, Артемида"
+    title_es: "El Oro De Los Senos Blancos, Múltiples Senos, Loto, Artemisa"
+    title_zh: "白色乳房的黄金，多个乳房，莲花，阿耳忒弥斯"
+    description_en: "Digital print on paper. Mythological feminine symbolism"
+    description_ru: "Цифровая печать на бумаге. Мифологическая женская символика"
+    description_es: "Impresión digital en papel. Simbolismo femenino mitológico"
+    description_zh: "数字印刷在纸上。神话女性象征"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-The-Gold-of-White-Breasts-Multiple-Breasts-Lotus-Artemis/115891/11537309/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537309/10599561-OXQKECLR-6.jpg"
+    image_filename: "gold-white-breasts.jpg"
+
+  - title_en: "Chebu-Rasha, Breasts, Teeth"
+    title_ru: "Чебу-Раша, Груди, Зубы"
+    title_es: "Chebu-Rasha, Senos, Dientes"
+    title_zh: "切布拉莎，乳房，牙齿"
+    description_en: "Digital print on paper. Surreal body transformation"
+    description_ru: "Цифровая печать на бумаге. Сюрреалистическая трансформация тела"
+    description_es: "Impresión digital en papel. Transformación corporal surrealista"
+    description_zh: "数字印刷在纸上。超现实身体变形"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: true
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Chebu-Rasha-Breasts-Teeth/115891/11537293/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537293/10599545-QQLHKCRP-6.jpg"
+    image_filename: "chebu-rasha-breasts-teeth.jpg"
+
+  - title_en: "Golden Cube Or Cube Of My Nervous System"
+    title_ru: "Золотой Куб Или Куб Моей Нервной Системы"
+    title_es: "Cubo Dorado O Cubo De Mi Sistema Nervioso"
+    title_zh: "金色立方体或我的神经系统立方体"
+    description_en: "Digital print on paper. Geometric exploration of consciousness"
+    description_ru: "Цифровая печать на бумаге. Геометрическое исследование сознания"
+    description_es: "Impresión digital en papel. Exploración geométrica de la conciencia"
+    description_zh: "数字印刷在纸上。意识的几何探索"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Golden-Cube-or-Cube-of-my-Nervous-System/115891/11537287/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537287/10599539-GZNPIWBD-6.jpg"
+    image_filename: "golden-cube-nervous-system.jpg"
+
+  - title_en: "Yellow Cube Or Feet, Hands, Faces Taking Flight"
+    title_ru: "Желтый Куб Или Ноги, Руки, Лица Взлетающие"
+    title_es: "Cubo Amarillo O Pies, Manos, Caras Volando"
+    title_zh: "黄色立方体或脚、手、脸起飞"
+    description_en: "Digital print on paper. Bodies in motion and transformation"
+    description_ru: "Цифровая печать на бумаге. Тела в движении и трансформации"
+    description_es: "Impresión digital en papel. Cuerpos en movimiento y transformación"
+    description_zh: "数字印刷在纸上。运动和转变中的身体"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Yellow-Cube-or-Feet-Hands-Faces-taking-flight/115891/11537275/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537275/10599527-JUNAFETB-6.jpg"
+    image_filename: "yellow-cube-feet-hands.jpg"
+
+  - title_en: "Chebu-Rasha In Blue"
+    title_ru: "Чебу-Раша В Синем"
+    title_es: "Chebu-Rasha En Azul"
+    title_zh: "蓝色的切布拉莎"
+    description_en: "Digital print on paper. Blue period exploration"
+    description_ru: "Цифровая печать на бумаге. Исследование голубого периода"
+    description_es: "Impresión digital en papel. Exploración del período azul"
+    description_zh: "数字印刷在纸上。蓝色时期探索"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Chebu-Rasha-in-Blue/115891/11537259/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537259/10599511-OGIUZEPF-6.jpg"
+    image_filename: "chebu-rasha-blue.jpg"
+
+  - title_en: "Pink Bubbles Of Chebu-Rasha Or We Have Long Ears"
+    title_ru: "Розовые Пузыри Чебу-Раши Или У Нас Длинные Уши"
+    title_es: "Burbujas Rosas De Chebu-Rasha O Tenemos Orejas Largas"
+    title_zh: "切布拉莎的粉红泡泡或我们有长耳朵"
+    description_en: "Digital print on paper. Playful exploration of identity and listening"
+    description_ru: "Цифровая печать на бумаге. Игровое исследование идентичности и слушания"
+    description_es: "Impresión digital en papel. Exploración juguetona de identidad y escucha"
+    description_zh: "数字印刷在纸上。关于身份和倾听的有趣探索"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 50 cm"
+    year: 2024
+    is_available: true
+    is_featured: true
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Pink-Bubbles-of-Chebu-Rasha-or-We-have-long-ears/115891/11537225/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537225/10599477-AQIFFEON-6.jpg"
+    image_filename: "pink-bubbles-long-ears.jpg"
+
+  - title_en: "Octopus Head"
+    title_ru: "Голова Осьминога"
+    title_es: "Cabeza De Pulpo"
+    title_zh: "章鱼头"
+    description_en: "Digital print on paper. Marine creature metamorphosis"
+    description_ru: "Цифровая печать на бумаге. Метаморфоза морского существа"
+    description_es: "Impresión digital en papel. Metamorfosis de criatura marina"
+    description_zh: "数字印刷在纸上。海洋生物变形"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Octopus-Head/115891/11537209/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11537209/10599461-KPFBVVPU-6.jpg"
+    image_filename: "octopus-head.jpg"
+
+  - title_en: "Last Supper In The Jaws Of Chebu-Rasha"
+    title_ru: "Тайная Вечеря В Пасти Чебу-Раши"
+    title_es: "La Última Cena En Las Fauces De Chebu-Rasha"
+    title_zh: "切布拉莎下巴中的最后晚餐"
+    description_en: "Digital print on paper. Biblical reference reimagined"
+    description_ru: "Цифровая печать на бумаге. Библейская отсылка переосмыслена"
+    description_es: "Impresión digital en papel. Referencia bíblica reimaginada"
+    description_zh: "数字印刷在纸上。重新想象的圣经典故"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Last-Supper-in-the-Jaws-of-Chebu-Rasha/115891/11467173/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11467173/10529427-XSRHBOJY-6.jpg"
+    image_filename: "last-supper-jaws.jpg"
+
+  - title_en: "Fire Breathing Chebu-Rasha"
+    title_ru: "Огнедышащая Чебу-Раша"
+    title_es: "Chebu-Rasha Escupiendo Fuego"
+    title_zh: "喷火的切布拉莎"
+    description_en: "Digital print on paper. Dynamic expression of inner fire and transformation"
+    description_ru: "Цифровая печать на бумаге. Динамическое выражение внутреннего огня и трансформации"
+    description_es: "Impresión digital en papel. Expresión dinámica de fuego interior y transformación"
+    description_zh: "数字印刷在纸上。内在火焰和转变的动态表达"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "60 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Fire-Breathing-Chebu-Rasha/115891/11467153/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11467153/10529407-ASAKKBPG-6.jpg"
+    image_filename: "fire-breathing-chebu-rasha.jpg"
+
+  - title_en: "Omniscient Or Eye"
+    title_ru: "Всевидящее Или Глаз"
+    title_es: "Omnisciente O Ojo"
+    title_zh: "全知或眼睛"
+    description_en: "Digital print on paper. All-seeing eye symbolism"
+    description_ru: "Цифровая печать на бумаге. Символика всевидящего ока"
+    description_es: "Impresión digital en papel. Simbolismo del ojo que todo lo ve"
+    description_zh: "数字印刷在纸上。全视之眼的象征"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Omniscient-or-Eye/115891/11467137/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11467137/10529391-SXYOUALQ-6.jpg"
+    image_filename: "omniscient-eye.jpg"
+
+  - title_en: "Cherry"
+    title_ru: "Вишня"
+    title_es: "Cereza"
+    title_zh: "樱桃"
+    description_en: "Digital print on paper. Botanical study with surreal elements"
+    description_ru: "Цифровая печать на бумаге. Ботанический этюд с сюрреалистическими элементами"
+    description_es: "Impresión digital en papel. Estudio botánico con elementos surrealistas"
+    description_zh: "数字印刷在纸上。带有超现实元素的植物研究"
+    price: 2453
+    medium: "Digital on Paper"
+    dimensions: "60 x 46.9 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Cherry-or/115891/11460701/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11460701/10522955-LPNNCGSK-6.jpg"
+    image_filename: "cherry.jpg"
+
+  - title_en: "Cube Legs"
+    title_ru: "Куб Ноги"
+    title_es: "Cubo Piernas"
+    title_zh: "立方体腿"
+    description_en: "Digital print on paper. Geometric deconstruction of human form"
+    description_ru: "Цифровая печать на бумаге. Геометрическая деконструкция человеческой формы"
+    description_es: "Impresión digital en papel. Deconstrucción geométrica de la forma humana"
+    description_zh: "数字印刷在纸上。人体形态的几何解构"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Cube-Legs/115891/11459967/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11459967/10522221-WTGABWLE-6.jpg"
+    image_filename: "cube-legs.jpg"
+
+  # Screenprinting on Paper Series
+  - title_en: "Yellow And Red Teeth Of Chebu-Rasha"
+    title_ru: "Желтые И Красные Зубы Чебу-Раши"
+    title_es: "Dientes Amarillos Y Rojos De Chebu-Rasha"
+    title_zh: "切布拉莎的黄色和红色牙齿"
+    description_en: "Screenprinting on paper. Bold color contrasts"
+    description_ru: "Шелкография на бумаге. Смелые цветовые контрасты"
+    description_es: "Serigrafía en papel. Contrastes de colores audaces"
+    description_zh: "丝网印刷在纸上。大胆的色彩对比"
+    price: 1456
+    medium: "Screenprinting on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Yellow-and-Red-Teeth-of-Chebu-Rasha/115891/11459923/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11459923/10522177-NUOSNXJR-6.jpg"
+    image_filename: "yellow-red-teeth.jpg"
+
+  - title_en: "Chebu-Rasha In Gloves"
+    title_ru: "Чебу-Раша В Перчатках"
+    title_es: "Chebu-Rasha Con Guantes"
+    title_zh: "戴手套的切布拉莎"
+    description_en: "Screenprinting on paper. Character study with accessories"
+    description_ru: "Шелкография на бумаге. Характерное исследование с аксессуарами"
+    description_es: "Serigrafía en papel. Estudio de personaje con accesorios"
+    description_zh: "丝网印刷在纸上。带配饰的角色研究"
+    price: 1456
+    medium: "Screenprinting on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Chebu-Rasha-in-Gloves/115891/11456101/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11456101/10518355-EXDKFLTC-6.jpg"
+    image_filename: "chebu-rasha-gloves.jpg"
+
+  - title_en: "Forest Of Pink Teeth Or Yellow Jaws Of Chebu-Rasha"
+    title_ru: "Лес Розовых Зубов Или Желтые Челюсти Чебу-Раши"
+    title_es: "Bosque De Dientes Rosas O Mandíbulas Amarillas De Chebu-Rasha"
+    title_zh: "粉红色牙齿之森或切布拉莎的黄色下巴"
+    description_en: "Digital print on paper. Organic patterns and natural forms"
+    description_ru: "Цифровая печать на бумаге. Органические узоры и природные формы"
+    description_es: "Impresión digital en papel. Patrones orgánicos y formas naturales"
+    description_zh: "数字印刷在纸上。有机图案和自然形态"
+    price: 1456
+    medium: "Digital on Paper"
+    dimensions: "40 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Forest-of-Pink-Teeth-or-Yellow-Jaws-of-Chebu-Rasha/115891/11456091/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11456091/10518345-MOHBNTXW-6.jpg"
+    image_filename: "forest-pink-teeth.jpg"
+
+  # The Bull Series - Screenprinting
+  - title_en: "The Bull 4"
+    title_ru: "Бык 4"
+    title_es: "El Toro 4"
+    title_zh: "公牛4"
+    description_en: "Screenprinting on paper. Fourth in bull transformation series"
+    description_ru: "Шелкография на бумаге. Четвертая работа серии трансформации быка"
+    description_es: "Serigrafía en papel. Cuarta de la serie de transformación del toro"
+    description_zh: "丝网印刷在纸上。公牛变形系列第四部"
+    price: 3089
+    medium: "Screenprinting on Paper"
+    dimensions: "70 x 50 cm"
+    year: 2024
+    is_available: true
+    is_featured: true
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-The-Bull-4/115891/11424817/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11424817/10487071-NZSBEQCX-6.jpg"
+    image_filename: "the-bull-4.jpg"
+
+  - title_en: "The Bull 3"
+    title_ru: "Бык 3"
+    title_es: "El Toro 3"
+    title_zh: "公牛3"
+    description_en: "Screenprinting on paper. Third in bull transformation series"
+    description_ru: "Шелкография на бумаге. Третья работа серии трансформации быка"
+    description_es: "Serigrafía en papel. Tercera de la serie de transformación del toro"
+    description_zh: "丝网印刷在纸上。公牛变形系列第三部"
+    price: 3089
+    medium: "Screenprinting on Paper"
+    dimensions: "70 x 50 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-The-Bull-3/115891/11424791/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11424791/10487045-JLNLULCG-6.jpg"
+    image_filename: "the-bull-3.jpg"
+
+  - title_en: "The Bull 2"
+    title_ru: "Бык 2"
+    title_es: "El Toro 2"
+    title_zh: "公牛2"
+    description_en: "Screenprinting on paper. Second in bull transformation series"
+    description_ru: "Шелкография на бумаге. Вторая работа серии трансформации быка"
+    description_es: "Serigrafía en papel. Segunda de la serie de transformación del toro"
+    description_zh: "丝网印刷在纸上。公牛变形系列第二部"
+    price: 3089
+    medium: "Screenprinting on Paper"
+    dimensions: "70 x 50 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-The-Bull-2/115891/11424773/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11424773/10487027-EKDXLGWU-6.jpg"
+    image_filename: "the-bull-2.jpg"
+
+  - title_en: "The Bull"
+    title_ru: "Бык"
+    title_es: "El Toro"
+    title_zh: "公牛"
+    description_en: "Screenprinting on paper. First in bull transformation series"
+    description_ru: "Шелкография на бумаге. Первая работа серии трансформации быка"
+    description_es: "Serigrafía en papel. Primera de la serie de transformación del toro"
+    description_zh: "丝网印刷在纸上。公牛变形系列第一部"
+    price: 3089
+    medium: "Screenprinting on Paper"
+    dimensions: "70 x 50 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-The-Bull/115891/11424735/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11424735/10486989-GEZKBGGB-6.jpg"
+    image_filename: "the-bull.jpg"
+
+  # Playing Cards Series
+  - title_en: "Clubs"
+    title_ru: "Трефы"
+    title_es: "Tréboles"
+    title_zh: "梅花"
+    description_en: "Paper print. Playing card suit reimagined"
+    description_ru: "Принт на бумаге. Переосмысленная масть игральных карт"
+    description_es: "Impresión en papel. Palo de naipes reimaginado"
+    description_zh: "纸质印刷。重新想象的扑克牌花色"
+    price: 993
+    medium: "Paper"
+    dimensions: "37 x 46.5 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Clubs/115891/11383621/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11383621/10445879-GBNWRISL-6.jpg"
+    image_filename: "clubs.jpg"
+
+  - title_en: "Spades"
+    title_ru: "Пики"
+    title_es: "Picas"
+    title_zh: "黑桃"
+    description_en: "Screenprinting on paper. Playing card suit reimagined"
+    description_ru: "Шелкография на бумаге. Переосмысленная масть игральных карт"
+    description_es: "Serigrafía en papel. Palo de naipes reimaginado"
+    description_zh: "丝网印刷在纸上。重新想象的扑克牌花色"
+    price: 994
+    medium: "Screenprinting on Paper"
+    dimensions: "37 x 46.5 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Spades/115891/11383585/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11383585/10445843-OVIMNJGY-6.jpg"
+    image_filename: "spades.jpg"
+
+  # Hand Series
+  - title_en: "Malevich, Black Hand"
+    title_ru: "Малевич, Черная Рука"
+    title_es: "Malevich, Mano Negra"
+    title_zh: "马列维奇，黑手"
+    description_en: "Paper print. Homage to suprematism founder"
+    description_ru: "Принт на бумаге. Дань основателю супрематизма"
+    description_es: "Impresión en papel. Homenaje al fundador del suprematismo"
+    description_zh: "纸质印刷。向至上主义创始人致敬"
+    price: 829
+    medium: "Paper"
+    dimensions: "55 x 44 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Malevich-Black-Hand/115891/11383573/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11383573/10445831-PGBFIDGX-6.jpg"
+    image_filename: "malevich-black-hand.jpg"
+
+  - title_en: "Hand With Cherry"
+    title_ru: "Рука С Вишней"
+    title_es: "Mano Con Cereza"
+    title_zh: "拿着樱桃的手"
+    description_en: "Paper print. Delicate gesture with fruit"
+    description_ru: "Принт на бумаге. Нежный жест с фруктом"
+    description_es: "Impresión en papel. Gesto delicado con fruta"
+    description_zh: "纸质印刷。拿着水果的细腻手势"
+    price: 836
+    medium: "Paper"
+    dimensions: "50 x 50 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Hand-with-Cherry/115891/11383549/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11383549/10445807-VIHMSWEG-6.jpg"
+    image_filename: "hand-cherry.jpg"
+
+  - title_en: "Squatting Lady, Princess Frog"
+    title_ru: "Сидящая На Корточках Леди, Царевна Лягушка"
+    title_es: "Dama En Cuclillas, Princesa Rana"
+    title_zh: "蹲着的女士，青蛙公主"
+    description_en: "Paper print. Fairy tale reference"
+    description_ru: "Принт на бумаге. Отсылка к сказке"
+    description_es: "Impresión en papel. Referencia a cuento de hadas"
+    description_zh: "纸质印刷。童话故事引用"
+    price: 836
+    medium: "Paper"
+    dimensions: "50 x 50 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Squatting-Lady-Princess-Frog/115891/11383545/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/11383545/10445803-FRVCBDZK-6.jpg"
+    image_filename: "squatting-lady.jpg"
+
+  # Head Series - Screenprinting
+  - title_en: "White Head On Black"
+    title_ru: "Белая Голова На Черном"
+    title_es: "Cabeza Blanca Sobre Negro"
+    title_zh: "黑底白头"
+    description_en: "Screenprinting on paper. High contrast portrait"
+    description_ru: "Шелкография на бумаге. Высококонтрастный портрет"
+    description_es: "Serigrafía en papel. Retrato de alto contraste"
+    description_zh: "丝网印刷在纸上。高对比度肖像"
+    price: 620
+    medium: "Screenprinting on Paper"
+    dimensions: "30 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-White-Head-on-Black/115891/10752221/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/10752221/9814691-KWLKJOSD-6.jpg"
+    image_filename: "white-head-black.jpg"
+
+  - title_en: "Red Head On Blue"
+    title_ru: "Красная Голова На Синем"
+    title_es: "Cabeza Roja Sobre Azul"
+    title_zh: "蓝底红头"
+    description_en: "Screenprinting on paper. Complementary color portrait"
+    description_ru: "Шелкография на бумаге. Портрет в дополняющих цветах"
+    description_es: "Serigrafía en papel. Retrato de colores complementarios"
+    description_zh: "丝网印刷在纸上。互补色肖像"
+    price: 620
+    medium: "Screenprinting on Paper"
+    dimensions: "30 x 40 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Printmaking-Red-Head-on-Blue/115891/10752049/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/10752049/9814519-HKUGTWRE-6.jpg"
+    image_filename: "red-head-blue.jpg"
+
+  # Bronze Sculptures
+  - title_en: "Woman Faunus Or Woman On Hooves"
+    title_ru: "Женщина Фавн Или Женщина На Копытах"
+    title_es: "Mujer Fauno O Mujer Sobre Pezuñas"
+    title_zh: "女性半神或站在蹄子上的女人"
+    description_en: "Bronze sculpture. Mythological transformation"
+    description_ru: "Бронзовая скульптура. Мифологическая трансформация"
+    description_es: "Escultura de bronce. Transformación mitológica"
+    description_zh: "青铜雕塑。神话般的变形"
+    price: 11408
+    medium: "Bronze"
+    dimensions: "13 x 34 x 12 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Sculpture-Woman-Faunus-or-Woman-on-Hooves/115891/8118557/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/8118557/7185102-HSC00002-6.jpg"
+    image_filename: "woman-faunus.jpg"
+
+  - title_en: "Woman Buddha Or Woman As A Brush"
+    title_ru: "Женщина Будда Или Женщина Как Кисть"
+    title_es: "Mujer Buda O Mujer Como Pincel"
+    title_zh: "佛陀女性或女人作为画笔"
+    description_en: "Bronze sculpture. Spiritual and artistic fusion"
+    description_ru: "Бронзовая скульптура. Духовное и художественное слияние"
+    description_es: "Escultura de bronce. Fusión espiritual y artística"
+    description_zh: "青铜雕塑。精神与艺术的融合"
+    price: 11408
+    medium: "Bronze"
+    dimensions: "13.4 x 27.5 x 8 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Sculpture-Woman-Buddha-or-Woman-as-a-Brush/115891/8118543/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/8118543/7185088-HSC00002-6.jpg"
+    image_filename: "woman-buddha.jpg"
+
+  - title_en: "Mirror Mirror On The Wall Who's The Fairest Of Them All"
+    title_ru: "Свет Мой, Зеркальце, Скажи, Кто На Свете Всех Милее"
+    title_es: "Espejito, Espejito, ¿Quién Es La Más Bella?"
+    title_zh: "魔镜魔镜告诉我，谁是世上最美的人"
+    description_en: "Bronze sculpture. Fairy tale vanity explored"
+    description_ru: "Бронзовая скульптура. Исследование сказочного тщеславия"
+    description_es: "Escultura de bronce. Vanidad de cuento de hadas explorada"
+    description_zh: "青铜雕塑。探索童话虚荣"
+    price: 11428
+    medium: "Bronze"
+    dimensions: "23 x 15 x 24.9 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Sculpture-Mirror-Mirror-on-the-wall-who-s-the-fairest-of-them-all/115891/6568535/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/6568535/5638207-HSC00002-6.jpg"
+    image_filename: "mirror-mirror.jpg"
+
+  - title_en: "Woman As A Table, Woman On A Bear Hide"
+    title_ru: "Женщина Как Стол, Женщина На Медвежьей Шкуре"
+    title_es: "Mujer Como Mesa, Mujer Sobre Piel De Oso"
+    title_zh: "女人作为桌子，熊皮上的女人"
+    description_en: "Bronze sculpture. Object and subject merged"
+    description_ru: "Бронзовая скульптура. Слияние объекта и субъекта"
+    description_es: "Escultura de bronce. Objeto y sujeto fusionados"
+    description_zh: "青铜雕塑。物体与主体的融合"
+    price: 11458
+    medium: "Bronze"
+    dimensions: "24 x 13.4 x 37.5 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Sculpture-Woman-as-a-table-Woman-on-a-bear-hide/115891/6568507/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/6568507/5638179-LMREUWVN-6.jpg"
+    image_filename: "woman-table.jpg"
+
+  # Photography
+  - title_en: "The Reader Or The Princess And The Pea"
+    title_ru: "Читательница Или Принцесса На Горошине"
+    title_es: "La Lectora O La Princesa Y El Guisante"
+    title_zh: "读者或豌豆公主"
+    description_en: "Digital photograph. Literary fairy tale reference"
+    description_ru: "Цифровая фотография. Отсылка к литературной сказке"
+    description_es: "Fotografía digital. Referencia a cuento de hadas literario"
+    description_zh: "数字摄影。文学童话引用"
+    price: 1548
+    medium: "Digital on Other"
+    dimensions: "70 x 50 cm"
+    year: 2024
+    is_available: true
+    is_featured: false
+    source_url: "https://www.saatchiart.com/en-tr/art/Photography-The-Reader-or-The-Princess-and-the-Pea/115891/108921/view"
+    image_url: "https://images.saatchiart.com/saatchi/115891/art/281639/139300-HSC00001-6.jpg"
+    image_filename: "reader-princess-pea.jpg"

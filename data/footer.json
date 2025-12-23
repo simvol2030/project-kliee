@@ -1,0 +1,102 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-11-08",
+  "brand": {
+    "title": "Svetlana K-Liée",
+    "subtitle": {
+      "en": "Contemporary Artist",
+      "ru": "Современный художник",
+      "es": "Artista Contemporánea",
+      "zh": "当代艺术家"
+    },
+    "quote": {
+      "en": "\"I am the Artist - This is my Vision\"",
+      "ru": "\"Я художник - это моё видение\"",
+      "es": "\"Soy la Artista - Esta es mi Visión\"",
+      "zh": "\"我是艺术家 - 这是我的愿景\""
+    }
+  },
+  "social": {
+    "title": {
+      "en": "Follow",
+      "ru": "Подписаться",
+      "es": "Seguir",
+      "zh": "关注"
+    },
+    "links": [
+      {
+        "id": "instagram-en",
+        "platform": "Instagram",
+        "label": "IG",
+        "badge": null,
+        "url": "https://instagram.com/Official.k.liee",
+        "icon": "instagram",
+        "order": 1
+      },
+      {
+        "id": "instagram-ru",
+        "platform": "Instagram",
+        "label": "IG RU",
+        "badge": "RU",
+        "url": "https://instagram.com/svetlana.k.liee",
+        "icon": "instagram",
+        "order": 2
+      },
+      {
+        "id": "telegram",
+        "platform": "Telegram",
+        "label": "TG",
+        "badge": null,
+        "url": "https://t.me/SvetlanaKliee",
+        "icon": "telegram",
+        "order": 3
+      },
+      {
+        "id": "youtube",
+        "platform": "YouTube",
+        "label": "YT",
+        "badge": null,
+        "url": "https://www.youtube.com/@SvetlanaKLiee",
+        "icon": "youtube",
+        "order": 4
+      },
+      {
+        "id": "pinterest",
+        "platform": "Pinterest",
+        "label": "PIN",
+        "badge": null,
+        "url": "https://uk.pinterest.com/svetaklie/_profile/",
+        "icon": "pinterest",
+        "order": 5
+      },
+      {
+        "id": "tiktok",
+        "platform": "TikTok",
+        "label": "TT",
+        "badge": null,
+        "url": "https://www.tiktok.com/@svetlanakliee_art",
+        "icon": "tiktok",
+        "order": 6
+      },
+      {
+        "id": "opensea",
+        "platform": "OpenSea",
+        "label": "OS",
+        "badge": null,
+        "url": "https://opensea.io/collection/k-lieesculptures",
+        "icon": "opensea",
+        "order": 7
+      }
+    ]
+  },
+  "contact": {
+    "title": {
+      "en": "Contact",
+      "ru": "Контакты",
+      "es": "Contacto",
+      "zh": "联系"
+    },
+    "email": "info@k-lie.com"
+  },
+  "copyright": "© 2025 K-LIÉE. All rights reserved."
+}

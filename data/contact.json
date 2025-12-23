@@ -1,0 +1,152 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-12-20",
+  "contact": {
+    "email": "info@k-liee.com",
+    "socialLinks": [
+      {
+        "platform": "instagram",
+        "url": "https://instagram.com/kliee_art",
+        "label": "Instagram"
+      },
+      {
+        "platform": "facebook",
+        "url": "https://facebook.com/kliee.art",
+        "label": "Facebook"
+      },
+      {
+        "platform": "opensea",
+        "url": "https://opensea.io/kliee",
+        "label": "OpenSea"
+      }
+    ],
+    "studio": {
+      "city": {
+        "en": "London",
+        "ru": "Лондон",
+        "es": "Londres",
+        "zh": "伦敦"
+      },
+      "country": {
+        "en": "United Kingdom",
+        "ru": "Великобритания",
+        "es": "Reino Unido",
+        "zh": "英国"
+      }
+    }
+  },
+  "page": {
+    "hero": {
+      "title": {
+        "en": "Contact",
+        "ru": "Контакты",
+        "es": "Contacto",
+        "zh": "联系方式"
+      },
+      "subtitle": {
+        "en": "Get in touch to discuss commissions, exhibitions or collaborations",
+        "ru": "Свяжитесь для обсуждения заказов, выставок или сотрудничества",
+        "es": "Ponte en contacto para discutir encargos, exposiciones o colaboraciones",
+        "zh": "联系我们讨论委托、展览或合作事宜"
+      }
+    },
+    "form": {
+      "title": {
+        "en": "Send a Message",
+        "ru": "Отправить сообщение",
+        "es": "Enviar un Mensaje",
+        "zh": "发送消息"
+      },
+      "fields": {
+        "name": {
+          "label": {
+            "en": "Name",
+            "ru": "Имя",
+            "es": "Nombre",
+            "zh": "姓名"
+          },
+          "placeholder": {
+            "en": "Your name",
+            "ru": "Ваше имя",
+            "es": "Tu nombre",
+            "zh": "您的姓名"
+          }
+        },
+        "email": {
+          "label": {
+            "en": "Email",
+            "ru": "Email",
+            "es": "Correo electrónico",
+            "zh": "电子邮件"
+          },
+          "placeholder": {
+            "en": "your@email.com",
+            "ru": "ваш@email.com",
+            "es": "tu@email.com",
+            "zh": "您的@邮箱.com"
+          }
+        },
+        "subject": {
+          "label": {
+            "en": "Subject",
+            "ru": "Тема",
+            "es": "Asunto",
+            "zh": "主题"
+          },
+          "options": {
+            "en": ["General Inquiry", "Commission Request", "Exhibition Proposal", "Press Inquiry", "Other"],
+            "ru": ["Общий вопрос", "Запрос на заказ", "Предложение выставки", "Запрос от СМИ", "Другое"],
+            "es": ["Consulta General", "Solicitud de Encargo", "Propuesta de Exposición", "Consulta de Prensa", "Otro"],
+            "zh": ["一般咨询", "委托请求", "展览提案", "媒体咨询", "其他"]
+          }
+        },
+        "message": {
+          "label": {
+            "en": "Message",
+            "ru": "Сообщение",
+            "es": "Mensaje",
+            "zh": "留言"
+          },
+          "placeholder": {
+            "en": "Your message...",
+            "ru": "Ваше сообщение...",
+            "es": "Tu mensaje...",
+            "zh": "您的留言..."
+          }
+        }
+      },
+      "submit": {
+        "en": "Send Message",
+        "ru": "Отправить сообщение",
+        "es": "Enviar Mensaje",
+        "zh": "发送消息"
+      },
+      "success": {
+        "en": "Thank you! Your message has been sent.",
+        "ru": "Спасибо! Ваше сообщение отправлено.",
+        "es": "¡Gracias! Tu mensaje ha sido enviado.",
+        "zh": "谢谢！您的消息已发送。"
+      },
+      "error": {
+        "en": "Sorry, something went wrong. Please try again.",
+        "ru": "Извините, что-то пошло не так. Пожалуйста, попробуйте снова.",
+        "es": "Lo sentimos, algo salió mal. Por favor, inténtalo de nuevo.",
+        "zh": "抱歉，出了点问题。请重试。"
+      }
+    }
+  },
+  "seo": {
+    "title": {
+      "en": "Contact | Svetlana K-Liée",
+      "ru": "Контакты | Светлана К-Лье",
+      "es": "Contacto | Svetlana K-Liée",
+      "zh": "联系方式 | 斯韦特兰娜·K-Liée"
+    },
+    "description": {
+      "en": "Contact contemporary artist Svetlana K-Liée for commissions, exhibitions, press inquiries and collaborations.",
+      "ru": "Свяжитесь с современным художником Светланой К-Лье для заказов, выставок, пресс-запросов и сотрудничества.",
+      "es": "Contacta a la artista contemporánea Svetlana K-Liée para encargos, exposiciones, consultas de prensa y colaboraciones.",
+      "zh": "联系当代艺术家斯韦特兰娜·K-Liée，了解委托、展览、媒体咨询和合作事宜。"
+    }
+  }
+}

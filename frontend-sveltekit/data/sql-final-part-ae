@@ -1,0 +1,200 @@
+  'Paper print. Homage to suprematism founder',
+  'Принт на бумаге. Дань основателю супрематизма',
+  'Impresión en papel. Homenaje al fundador del suprematismo',
+  '纸质印刷。向至上主义创始人致敬',
+  'Paper',
+  '55 x 44 cm',
+  2024,
+  829,
+  'USD',
+  0,
+  1,
+  1,
+  28,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 29: Hand With Cherry
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'hand-with-cherry',
+  'Hand With Cherry',
+  'Рука С Вишней',
+  'Mano Con Cereza',
+  '拿着樱桃的手',
+  'Paper print. Delicate gesture with fruit',
+  'Принт на бумаге. Нежный жест с фруктом',
+  'Impresión en papel. Gesto delicado con fruta',
+  '纸质印刷。拿着水果的细腻手势',
+  'Paper',
+  '50 x 50 cm',
+  2024,
+  836,
+  'USD',
+  0,
+  1,
+  1,
+  29,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 30: Squatting Lady, Princess Frog
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'squatting-lady-princess-frog',
+  'Squatting Lady, Princess Frog',
+  'Сидящая На Корточках Леди, Царевна Лягушка',
+  'Dama En Cuclillas, Princesa Rana',
+  '蹲着的女士，青蛙公主',
+  'Paper print. Fairy tale reference',
+  'Принт на бумаге. Отсылка к сказке',
+  'Impresión en papel. Referencia a cuento de hadas',
+  '纸质印刷。童话故事引用',
+  'Paper',
+  '50 x 50 cm',
+  2024,
+  836,
+  'USD',
+  0,
+  1,
+  1,
+  30,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 31: White Head On Black
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'white-head-on-black',
+  'White Head On Black',
+  'Белая Голова На Черном',
+  'Cabeza Blanca Sobre Negro',
+  '黑底白头',
+  'Screenprinting on paper. High contrast portrait',
+  'Шелкография на бумаге. Высококонтрастный портрет',
+  'Serigrafía en papel. Retrato de alto contraste',
+  '丝网印刷在纸上。高对比度肖像',
+  'Screenprinting on Paper',
+  '30 x 40 cm',
+  2024,
+  620,
+  'USD',
+  0,
+  1,
+  1,
+  31,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 32: Red Head On Blue
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'red-head-on-blue',
+  'Red Head On Blue',
+  'Красная Голова На Синем',
+  'Cabeza Roja Sobre Azul',
+  '蓝底红头',
+  'Screenprinting on paper. Complementary color portrait',
+  'Шелкография на бумаге. Портрет в дополняющих цветах',
+  'Serigrafía en papel. Retrato de colores complementarios',
+  '丝网印刷在纸上。互补色肖像',
+  'Screenprinting on Paper',
+  '30 x 40 cm',
+  2024,
+  620,
+  'USD',
+  0,
+  1,
+  1,
+  32,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 33: Woman Faunus Or Woman On Hooves
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'woman-faunus-or-woman-on-hooves',
+  'Woman Faunus Or Woman On Hooves',
+  'Женщина Фавн Или Женщина На Копытах',
+  'Mujer Fauno O Mujer Sobre Pezuñas',
+  '女性半神或站在蹄子上的女人',
+  'Bronze sculpture. Mythological transformation',
+  'Бронзовая скульптура. Мифологическая трансформация',
+  'Escultura de bronce. Transformación mitológica',
+  '青铜雕塑。神话般的变形',
+  'Bronze',
+  '13 x 34 x 12 cm',
+  2024,
+  11408,
+  'USD',
+  0,
+  1,
+  1,
+  33,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 34: Woman Buddha Or Woman As A Brush
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'woman-buddha-or-woman-as-a-brush',
+  'Woman Buddha Or Woman As A Brush',
+  'Женщина Будда Или Женщина Как Кисть',
+  'Mujer Buda O Mujer Como Pincel',
+  '佛陀女性或女人作为画笔',
+  'Bronze sculpture. Spiritual and artistic fusion',
+  'Бронзовая скульптура. Духовное и художественное слияние',
+  'Escultura de bronce. Fusión espiritual y artística',
+  '青铜雕塑。精神与艺术的融合',
+  'Bronze',
+  '13.4 x 27.5 x 8 cm',
+  2024,
+  11408,
+  'USD',
+  0,
+  1,
+  1,
+  34,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 35: Mirror Mirror On The Wall Who's The Fairest Of Them All
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'mirror-mirror-on-the-wall-who-s-the-fairest-of-them-all',
+  'Mirror Mirror On The Wall Who''s The Fairest Of Them All',

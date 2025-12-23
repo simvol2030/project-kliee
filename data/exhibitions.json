@@ -1,0 +1,337 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-12-20",
+  "exhibitions": [
+    {
+      "id": "ex-2024-paris",
+      "year": 2024,
+      "title": {
+        "en": "Tales of Xenophobia",
+        "ru": "Истории ксенофобии",
+        "es": "Cuentos de Xenofobia",
+        "zh": "仇外故事"
+      },
+      "venue": {
+        "en": "Tora and Art Foundation",
+        "ru": "Фонд Tora and Art",
+        "es": "Fundación Tora and Art",
+        "zh": "Tora and Art基金会"
+      },
+      "location": {
+        "en": "Paris, France",
+        "ru": "Париж, Франция",
+        "es": "París, Francia",
+        "zh": "法国巴黎"
+      },
+      "type": "solo",
+      "current": true,
+      "image": "/images/exhibitions/paris-2024-v2.jpg"
+    },
+    {
+      "id": "ex-2024-shanghai",
+      "year": 2024,
+      "title": {
+        "en": "Lev Tolstoy",
+        "ru": "Лев Толстой",
+        "es": "Lev Tolstoi",
+        "zh": "列夫·托尔斯泰"
+      },
+      "venue": {
+        "en": "Shanghai History Museum",
+        "ru": "Шанхайский исторический музей",
+        "es": "Museo de Historia de Shanghái",
+        "zh": "上海历史博物馆"
+      },
+      "location": {
+        "en": "Shanghai, China",
+        "ru": "Шанхай, Китай",
+        "es": "Shanghái, China",
+        "zh": "中国上海"
+      },
+      "type": "group",
+      "current": true,
+      "image": "/images/exhibitions/shanghai-2024-v2.jpg"
+    },
+    {
+      "id": "ex-2022-miami",
+      "year": 2022,
+      "title": {
+        "en": "Scope Miami Beach",
+        "ru": "Scope Miami Beach",
+        "es": "Scope Miami Beach",
+        "zh": "迈阿密海滩Scope展"
+      },
+      "venue": {
+        "en": "Art Basel",
+        "ru": "Art Basel",
+        "es": "Art Basel",
+        "zh": "巴塞尔艺术展"
+      },
+      "location": {
+        "en": "Miami Beach, USA",
+        "ru": "Майами-Бич, США",
+        "es": "Miami Beach, EE.UU.",
+        "zh": "美国迈阿密海滩"
+      },
+      "type": "fair",
+      "current": false,
+      "image": "/images/exhibitions/miami-2022.jpg"
+    },
+    {
+      "id": "ex-2011-hempel",
+      "year": 2011,
+      "title": {
+        "en": "Hotel-Hempel",
+        "ru": "Отель-Хемпель",
+        "es": "Hotel-Hempel",
+        "zh": "亨佩尔酒店"
+      },
+      "venue": {
+        "en": "L-gallery",
+        "ru": "L-галерея",
+        "es": "L-gallery",
+        "zh": "L画廊"
+      },
+      "location": {
+        "en": "Moscow, Russia",
+        "ru": "Москва, Россия",
+        "es": "Moscú, Rusia",
+        "zh": "俄罗斯莫斯科"
+      },
+      "type": "solo",
+      "current": false,
+      "image": "/images/exhibitions/moscow-2011.jpg"
+    },
+    {
+      "id": "ex-2010-brighton",
+      "year": 2010,
+      "title": {
+        "en": "Meat",
+        "ru": "Мясо",
+        "es": "Carne",
+        "zh": "肉"
+      },
+      "venue": {
+        "en": "Brighton Photo Fringe",
+        "ru": "Brighton Photo Fringe",
+        "es": "Brighton Photo Fringe",
+        "zh": "布莱顿摄影边缘展"
+      },
+      "location": {
+        "en": "Lewes, England",
+        "ru": "Льюис, Англия",
+        "es": "Lewes, Inglaterra",
+        "zh": "英国刘易斯"
+      },
+      "type": "solo",
+      "current": false,
+      "image": "/images/exhibitions/brighton-2010.jpg"
+    },
+    {
+      "id": "ex-2009-anglomoskva",
+      "year": 2009,
+      "title": {
+        "en": "Vesna Hempel",
+        "ru": "Весна Хемпель",
+        "es": "Vesna Hempel",
+        "zh": "维斯纳·亨佩尔"
+      },
+      "venue": {
+        "en": "The AngloMoskva Festival, Liberatum",
+        "ru": "Фестиваль AngloMoskva, Liberatum",
+        "es": "Festival AngloMoskva, Liberatum",
+        "zh": "AngloMoskva艺术节，Liberatum"
+      },
+      "location": {
+        "en": "Moscow, Russia",
+        "ru": "Москва, Россия",
+        "es": "Moscú, Rusia",
+        "zh": "俄罗斯莫斯科"
+      },
+      "type": "festival",
+      "current": false,
+      "image": "/images/exhibitions/moscow-2009.jpg"
+    },
+    {
+      "id": "ex-2008-cha",
+      "year": 2008,
+      "title": {
+        "en": "Highlights by Svetlana K-Lié",
+        "ru": "Highlights Светланы К-Лье",
+        "es": "Highlights de Svetlana K-Lié",
+        "zh": "斯韦特兰娜·K-Lié作品精选"
+      },
+      "venue": {
+        "en": "The Central House of Artists",
+        "ru": "Центральный дом художника",
+        "es": "Casa Central de Artistas",
+        "zh": "中央艺术家之家"
+      },
+      "location": {
+        "en": "Moscow, Russia",
+        "ru": "Москва, Россия",
+        "es": "Moscú, Rusia",
+        "zh": "俄罗斯莫斯科"
+      },
+      "type": "solo",
+      "current": false,
+      "image": "/images/exhibitions/moscow-2008.jpg"
+    },
+    {
+      "id": "ex-2006-paris",
+      "year": 2006,
+      "title": {
+        "en": "Stella Art International",
+        "ru": "Stella Art International",
+        "es": "Stella Art International",
+        "zh": "Stella Art International"
+      },
+      "venue": {
+        "en": "Stella Art International",
+        "ru": "Stella Art International",
+        "es": "Stella Art International",
+        "zh": "Stella Art International"
+      },
+      "location": {
+        "en": "Paris, France",
+        "ru": "Париж, Франция",
+        "es": "París, Francia",
+        "zh": "法国巴黎"
+      },
+      "type": "gallery",
+      "current": false,
+      "image": "/images/exhibitions/paris-2006.jpg"
+    },
+    {
+      "id": "ex-2005-spb",
+      "year": 2005,
+      "title": {
+        "en": "Please Meet Svetlana Kuleshova",
+        "ru": "Познакомьтесь со Светланой Кулешовой",
+        "es": "Conozcan a Svetlana Kuleshova",
+        "zh": "请认识斯韦特兰娜·库列绍娃"
+      },
+      "venue": {
+        "en": "The House of Artists",
+        "ru": "Дом художников",
+        "es": "Casa de Artistas",
+        "zh": "艺术家之家"
+      },
+      "location": {
+        "en": "St. Petersburg, Russia",
+        "ru": "Санкт-Петербург, Россия",
+        "es": "San Petersburgo, Rusia",
+        "zh": "俄罗斯圣彼得堡"
+      },
+      "type": "solo",
+      "current": false,
+      "image": "/images/exhibitions/spb-2005.jpg"
+    }
+  ],
+  "artFairs": [
+    {
+      "id": "fair-2024-seattle",
+      "year": 2024,
+      "title": {
+        "en": "Seattle Art Fair",
+        "ru": "Seattle Art Fair",
+        "es": "Feria de Arte de Seattle",
+        "zh": "西雅图艺术博览会"
+      },
+      "gallery": {
+        "en": "Jade Flower Gallery",
+        "ru": "Jade Flower Gallery",
+        "es": "Jade Flower Gallery",
+        "zh": "玉花画廊"
+      },
+      "location": {
+        "en": "Seattle, USA",
+        "ru": "Сиэтл, США",
+        "es": "Seattle, EE.UU.",
+        "zh": "美国西雅图"
+      }
+    },
+    {
+      "id": "fair-2024-jingdezhen",
+      "year": 2024,
+      "title": {
+        "en": "Spring Art Fair 'For Reunion'",
+        "ru": "Весенняя ярмарка искусств 'К воссоединению'",
+        "es": "Feria de Arte de Primavera 'Por la Reunión'",
+        "zh": "春季艺术博览会'为了重逢'"
+      },
+      "gallery": null,
+      "location": {
+        "en": "Jingdezhen, China",
+        "ru": "Цзиндэчжэнь, Китай",
+        "es": "Jingdezhen, China",
+        "zh": "中国景德镇"
+      }
+    },
+    {
+      "id": "fair-2023-hamptons",
+      "year": 2023,
+      "title": {
+        "en": "Hamptons Art Fair",
+        "ru": "Hamptons Art Fair",
+        "es": "Feria de Arte de los Hamptons",
+        "zh": "汉普顿艺术博览会"
+      },
+      "gallery": null,
+      "location": {
+        "en": "Southampton, New York, USA",
+        "ru": "Саутгемптон, Нью-Йорк, США",
+        "es": "Southampton, Nueva York, EE.UU.",
+        "zh": "美国纽约州南安普敦"
+      }
+    },
+    {
+      "id": "fair-2023-nyc",
+      "year": 2023,
+      "title": {
+        "en": "Art on Paper Art Fair",
+        "ru": "Art on Paper Art Fair",
+        "es": "Feria Art on Paper",
+        "zh": "纸上艺术博览会"
+      },
+      "gallery": null,
+      "location": {
+        "en": "New York City, New York, USA",
+        "ru": "Нью-Йорк, США",
+        "es": "Nueva York, EE.UU.",
+        "zh": "美国纽约市"
+      }
+    },
+    {
+      "id": "fair-2022-dallas",
+      "year": 2022,
+      "title": {
+        "en": "Artexpo Dallas",
+        "ru": "Artexpo Dallas",
+        "es": "Artexpo Dallas",
+        "zh": "达拉斯艺术博览会"
+      },
+      "gallery": null,
+      "location": {
+        "en": "Texas, USA",
+        "ru": "Техас, США",
+        "es": "Texas, EE.UU.",
+        "zh": "美国德克萨斯州"
+      }
+    }
+  ],
+  "seo": {
+    "title": {
+      "en": "Exhibitions | Svetlana K-Liée",
+      "ru": "Выставки | Светлана К-Лье",
+      "es": "Exposiciones | Svetlana K-Liée",
+      "zh": "展览 | 斯韦特兰娜·K-Liée"
+    },
+    "description": {
+      "en": "Explore past and current exhibitions of contemporary artist Svetlana K-Liée, from the Hermitage to Art Basel Miami.",
+      "ru": "Изучите прошлые и текущие выставки современного художника Светланы К-Лье, от Эрмитажа до Art Basel Miami.",
+      "es": "Explora exposiciones pasadas y actuales de la artista contemporánea Svetlana K-Liée, desde el Hermitage hasta Art Basel Miami.",
+      "zh": "探索当代艺术家斯韦特兰娜·K-Liée的过往和当前展览，从冬宫到迈阿密巴塞尔艺术展。"
+    }
+  }
+}

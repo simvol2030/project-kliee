@@ -1,0 +1,200 @@
+  '数字印刷在纸上。有机图案和自然形态',
+  'Digital on Paper',
+  '40 x 40 cm',
+  2024,
+  1456,
+  'USD',
+  0,
+  1,
+  1,
+  21,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 22: The Bull 4
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'the-bull-4',
+  'The Bull 4',
+  'Бык 4',
+  'El Toro 4',
+  '公牛4',
+  'Screenprinting on paper. Fourth in bull transformation series',
+  'Шелкография на бумаге. Четвертая работа серии трансформации быка',
+  'Serigrafía en papel. Cuarta de la serie de transformación del toro',
+  '丝网印刷在纸上。公牛变形系列第四部',
+  'Screenprinting on Paper',
+  '70 x 50 cm',
+  2024,
+  3089,
+  'USD',
+  1,
+  1,
+  1,
+  22,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 23: The Bull 3
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'the-bull-3',
+  'The Bull 3',
+  'Бык 3',
+  'El Toro 3',
+  '公牛3',
+  'Screenprinting on paper. Third in bull transformation series',
+  'Шелкография на бумаге. Третья работа серии трансформации быка',
+  'Serigrafía en papel. Tercera de la serie de transformación del toro',
+  '丝网印刷在纸上。公牛变形系列第三部',
+  'Screenprinting on Paper',
+  '70 x 50 cm',
+  2024,
+  3089,
+  'USD',
+  0,
+  1,
+  1,
+  23,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 24: The Bull 2
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'the-bull-2',
+  'The Bull 2',
+  'Бык 2',
+  'El Toro 2',
+  '公牛2',
+  'Screenprinting on paper. Second in bull transformation series',
+  'Шелкография на бумаге. Вторая работа серии трансформации быка',
+  'Serigrafía en papel. Segunda de la serie de transformación del toro',
+  '丝网印刷在纸上。公牛变形系列第二部',
+  'Screenprinting on Paper',
+  '70 x 50 cm',
+  2024,
+  3089,
+  'USD',
+  0,
+  1,
+  1,
+  24,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 25: The Bull
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'the-bull',
+  'The Bull',
+  'Бык',
+  'El Toro',
+  '公牛',
+  'Screenprinting on paper. First in bull transformation series',
+  'Шелкография на бумаге. Первая работа серии трансформации быка',
+  'Serigrafía en papel. Primera de la serie de transformación del toro',
+  '丝网印刷在纸上。公牛变形系列第一部',
+  'Screenprinting on Paper',
+  '70 x 50 cm',
+  2024,
+  3089,
+  'USD',
+  0,
+  1,
+  1,
+  25,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 26: Clubs
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'clubs',
+  'Clubs',
+  'Трефы',
+  'Tréboles',
+  '梅花',
+  'Paper print. Playing card suit reimagined',
+  'Принт на бумаге. Переосмысленная масть игральных карт',
+  'Impresión en papel. Palo de naipes reimaginado',
+  '纸质印刷。重新想象的扑克牌花色',
+  'Paper',
+  '37 x 46.5 cm',
+  2024,
+  993,
+  'USD',
+  0,
+  1,
+  1,
+  26,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 27: Spades
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'spades',
+  'Spades',
+  'Пики',
+  'Picas',
+  '黑桃',
+  'Screenprinting on paper. Playing card suit reimagined',
+  'Шелкография на бумаге. Переосмысленная масть игральных карт',
+  'Serigrafía en papel. Palo de naipes reimaginado',
+  '丝网印刷在纸上。重新想象的扑克牌花色',
+  'Screenprinting on Paper',
+  '37 x 46.5 cm',
+  2024,
+  994,
+  'USD',
+  0,
+  1,
+  1,
+  27,
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+);
+
+-- Product 28: Malevich, Black Hand
+INSERT INTO artworks (id, slug, title_en, title_ru, title_es, title_zh, 
+  description_en, description_ru, description_es, description_zh,
+  technique, dimensions, year, price, currency, 
+  is_featured, available, is_visible, order_index, created_at, updated_at)
+VALUES (
+  lower(hex(randomblob(16))),
+  'malevich-black-hand',
+  'Malevich, Black Hand',
+  'Малевич, Черная Рука',
+  'Malevich, Mano Negra',
+  '马列维奇，黑手',

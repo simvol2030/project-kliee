@@ -1,0 +1,61 @@
+{
+  "mcpServers": {
+    "serena": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena-mcp-server",
+        "--context",
+        "ide-assistant"
+      ]
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest",
+        "--browser",
+        "chrome",
+        "--headless"
+      ]
+    },
+    "sqlite": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "mcp-server-sqlite",
+        "--db-path",
+        "./.claude/database.db"
+      ]
+    },
+    "ssh-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "ssh-mcp",
+        "--",
+        "--host=188.120.240.173",
+        "--port=22",
+        "--user=webmaster",
+        "--key=/home/solo18/.ssh/mcp_murzico",
+        "--timeout=60000",
+        "--maxChars=none"
+      ]
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "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"
+      }
+    },
+    "svelte-llm": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["mcp-remote", "https://svelte-llm.stanislav.garden/mcp/mcp"]
+    }
+  }
+}

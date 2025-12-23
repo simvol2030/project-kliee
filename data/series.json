@@ -1,0 +1,158 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-12-20",
+  "series": [
+    {
+      "id": "chebu-rasha",
+      "slug": "chebu-rasha",
+      "title": {
+        "en": "CHEBU-RASHA",
+        "ru": "ЧЕБУ-РАША",
+        "es": "CHEBU-RASHA",
+        "zh": "切布-拉沙"
+      },
+      "description": {
+        "en": "A series exploring the iconic Russian cartoon character Cheburashka reimagined through contemporary art lens, featuring mixed media, porcelain, and bronze works.",
+        "ru": "Серия, исследующая культового персонажа советского мультфильма Чебурашку через призму современного искусства, включающая работы в смешанной технике, фарфоре и бронзе.",
+        "es": "Una serie que explora el icónico personaje de dibujos animados ruso Cheburashka reimaginado a través del lente del arte contemporáneo, con obras en técnica mixta, porcelana y bronce.",
+        "zh": "该系列通过当代艺术视角重新诠释了标志性的俄罗斯卡通人物切布拉什卡，包括混合媒介、瓷器和青铜作品。"
+      },
+      "coverImage": "/images/works/chebu-rasha/cheburasha.jpg",
+      "artworkCount": 17,
+      "order": 1
+    },
+    {
+      "id": "last-supper",
+      "slug": "last-supper",
+      "title": {
+        "en": "«π» OR THE LAST SUPPER",
+        "ru": "«π» ИЛИ ТАЙНАЯ ВЕЧЕРЯ",
+        "es": "«π» O LA ÚLTIMA CENA",
+        "zh": "«π» 或最后的晚餐"
+      },
+      "description": {
+        "en": "A conceptual series reinterpreting the iconic Last Supper theme through mathematical and philosophical perspectives, featuring mixed media on craft paper and silkscreen prints.",
+        "ru": "Концептуальная серия, переосмысляющая тему Тайной Вечери через математическую и философскую призму, включающая работы в смешанной технике на крафтовой бумаге и шелкографии.",
+        "es": "Una serie conceptual que reinterpreta el icónico tema de la Última Cena a través de perspectivas matemáticas y filosóficas, con técnica mixta sobre papel kraft y serigrafías.",
+        "zh": "一个概念系列，通过数学和哲学视角重新诠释标志性的最后晚餐主题，包括牛皮纸上的混合媒介和丝网印刷作品。"
+      },
+      "coverImage": "/images/works/last-supper/tv26.jpg",
+      "artworkCount": 4,
+      "order": 2
+    },
+    {
+      "id": "sbsa",
+      "slug": "sbsa",
+      "title": {
+        "en": "SOMEBODY'S BOUDOIR, SOMEBODY'S ABATTOIR",
+        "ru": "ЧЕЙ-ТО БУДУАР, ЧЬЯ-ТО БОЙНЯ",
+        "es": "EL TOCADOR DE ALGUIEN, EL MATADERO DE ALGUIEN",
+        "zh": "某人的闺房，某人的屠宰场"
+      },
+      "description": {
+        "en": "A provocative photography series exploring the duality of femininity, luxury and violence, shot in opulent settings with surrealist staging.",
+        "ru": "Провокационная фотосерия, исследующая двойственность женственности, роскоши и насилия, снятая в роскошных интерьерах с сюрреалистической постановкой.",
+        "es": "Una provocadora serie fotográfica que explora la dualidad de la feminidad, el lujo y la violencia, fotografiada en escenarios opulentos con puesta en escena surrealista.",
+        "zh": "一个挑衅性的摄影系列，探索女性气质、奢华与暴力的二元性，在华丽的环境中以超现实主义的布景拍摄。"
+      },
+      "coverImage": "/images/works/sbsa/______Horns_and_Hoov.JPG",
+      "artworkCount": 6,
+      "order": 3
+    },
+    {
+      "id": "the-bull",
+      "slug": "the-bull",
+      "title": {
+        "en": "THE BULL",
+        "ru": "БЫК",
+        "es": "EL TORO",
+        "zh": "公牛"
+      },
+      "description": {
+        "en": "A powerful silkscreen series featuring the symbolic bull figure, exploring themes of strength, mythology and primal energy.",
+        "ru": "Мощная серия шелкографий с символическим образом быка, исследующая темы силы, мифологии и первобытной энергии.",
+        "es": "Una poderosa serie de serigrafías con la figura simbólica del toro, explorando temas de fuerza, mitología y energía primordial.",
+        "zh": "一个强大的丝网印刷系列，以象征性的公牛形象为特色，探索力量、神话和原始能量的主题。"
+      },
+      "coverImage": "/images/works/the-bull/bull4.png",
+      "artworkCount": 3,
+      "order": 4
+    },
+    {
+      "id": "hotel-series",
+      "slug": "hotel-series",
+      "title": {
+        "en": "HOTEL SERIES",
+        "ru": "СЕРИЯ ОТЕЛЬ",
+        "es": "SERIE HOTEL",
+        "zh": "酒店系列"
+      },
+      "description": {
+        "en": "An intimate photography series capturing moments in luxury hotels including Chèvre d'Or and Hempel Hotel, exploring themes of transience, luxury and the staged nature of hospitality.",
+        "ru": "Интимная фотосерия, запечатлевающая моменты в роскошных отелях, включая Chèvre d'Or и Hempel Hotel, исследуя темы преходящего, роскоши и постановочной природы гостеприимства.",
+        "es": "Una íntima serie fotográfica que captura momentos en hoteles de lujo como Chèvre d'Or y Hempel Hotel, explorando temas de transitoriedad, lujo y la naturaleza escenificada de la hospitalidad.",
+        "zh": "一个亲密的摄影系列，捕捉了在豪华酒店的时刻，包括金山羊酒店和亨佩尔酒店，探索短暂、奢华和待客之道的表演性质等主题。"
+      },
+      "coverImage": "/images/works/hotel-series/1-DSC_0567.jpg",
+      "artworkCount": 15,
+      "order": 5
+    },
+    {
+      "id": "sculptures",
+      "slug": "sculptures",
+      "title": {
+        "en": "SCULPTURES",
+        "ru": "СКУЛЬПТУРЫ",
+        "es": "ESCULTURAS",
+        "zh": "雕塑"
+      },
+      "description": {
+        "en": "A diverse collection of three-dimensional works in bronze, ceramic and mixed materials, exploring the female form, nature and surrealist themes.",
+        "ru": "Разнообразная коллекция трехмерных работ из бронзы, керамики и смешанных материалов, исследующая женскую форму, природу и сюрреалистические темы.",
+        "es": "Una diversa colección de obras tridimensionales en bronce, cerámica y materiales mixtos, explorando la forma femenina, la naturaleza y temas surrealistas.",
+        "zh": "一个多样化的三维作品集，采用青铜、陶瓷和混合材料，探索女性形态、自然和超现实主义主题。"
+      },
+      "coverImage": "/images/works/sculptures/woman_as_brush.jpeg",
+      "artworkCount": 11,
+      "order": 6
+    },
+    {
+      "id": "porcelain",
+      "slug": "porcelain",
+      "title": {
+        "en": "PORCELAIN",
+        "ru": "ФАРФОР",
+        "es": "PORCELANA",
+        "zh": "瓷器"
+      },
+      "description": {
+        "en": "A refined collection of porcelain prints and pieces, combining traditional craft with contemporary imagery and surrealist elements.",
+        "ru": "Изысканная коллекция фарфоровых принтов и изделий, сочетающая традиционное ремесло с современными образами и сюрреалистическими элементами.",
+        "es": "Una refinada colección de impresiones y piezas de porcelana, combinando artesanía tradicional con imágenes contemporáneas y elementos surrealistas.",
+        "zh": "一个精致的瓷器印刷品和作品集，将传统工艺与当代意象和超现实主义元素相结合。"
+      },
+      "coverImage": "/images/works/porcelain/plate_3.jpeg",
+      "artworkCount": 13,
+      "order": 7
+    },
+    {
+      "id": "nft",
+      "slug": "nft",
+      "title": {
+        "en": "NFT",
+        "ru": "NFT",
+        "es": "NFT",
+        "zh": "NFT"
+      },
+      "description": {
+        "en": "Digital artworks available as NFTs, bringing traditional artistic vision into the blockchain era.",
+        "ru": "Цифровые произведения, доступные как NFT, привносящие традиционное художественное видение в эпоху блокчейна.",
+        "es": "Obras de arte digitales disponibles como NFTs, llevando la visión artística tradicional a la era blockchain.",
+        "zh": "作为NFT提供的数字艺术品，将传统艺术视野带入区块链时代。"
+      },
+      "coverImage": "/images/works/nft/Screenshot_2023-02-2.png",
+      "artworkCount": 5,
+      "order": 8
+    }
+  ]
+}

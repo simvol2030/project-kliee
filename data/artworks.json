@@ -1,0 +1,1856 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-12-20",
+  "artworks": [
+    {
+      "id": "artwork-001",
+      "title": {
+        "en": "Chebu-Rasha Series Work",
+        "ru": "Chebu-Rasha Series Work",
+        "es": "Chebu-Rasha Series Work",
+        "zh": "Chebu-Rasha Series Work"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Mixed media",
+        "ru": "Mixed media",
+        "es": "Mixed media",
+        "zh": "Mixed media"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/chebu-rasha/7_2.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-002",
+      "title": {
+        "en": "Chebu-Rasha at War",
+        "ru": "Chebu-Rasha at War",
+        "es": "Chebu-Rasha at War",
+        "zh": "Chebu-Rasha at War"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Chinese ink on paper",
+        "ru": "Chinese ink on paper",
+        "es": "Chinese ink on paper",
+        "zh": "Chinese ink on paper"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/chebu-rasha/Chebu-Rasha_at_War_2.jpeg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-003",
+      "title": {
+        "en": "Chebu-Rasha on Antlers",
+        "ru": "Chebu-Rasha on Antlers",
+        "es": "Chebu-Rasha on Antlers",
+        "zh": "Chebu-Rasha on Antlers"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Cast Bronze",
+        "ru": "Cast Bronze",
+        "es": "Cast Bronze",
+        "zh": "Cast Bronze"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/chebu-rasha/Chebu-Rasha_on_Antle.jpeg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-004",
+      "title": {
+        "en": "Chebu-Rasha on Wine",
+        "ru": "Chebu-Rasha on Wine",
+        "es": "Chebu-Rasha on Wine",
+        "zh": "Chebu-Rasha on Wine"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Chinese ink and French red wine",
+        "ru": "Chinese ink and French red wine",
+        "es": "Chinese ink and French red wine",
+        "zh": "Chinese ink and French red wine"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/chebu-rasha/Chebu-Rasha_on_Wine_.jpeg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-005",
+      "title": {
+        "en": "Cheburasha in Blue on Black",
+        "ru": "Cheburasha in Blue on Black",
+        "es": "Cheburasha in Blue on Black",
+        "zh": "Cheburasha in Blue on Black"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Paper Mixed Media",
+        "ru": "Paper Mixed Media",
+        "es": "Paper Mixed Media",
+        "zh": "Paper Mixed Media"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/chebu-rasha/Chebu_in_blue.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-006",
+      "title": {
+        "en": "Chebu-Rasha Porcelain",
+        "ru": "Chebu-Rasha Porcelain",
+        "es": "Chebu-Rasha Porcelain",
+        "zh": "Chebu-Rasha Porcelain"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": 1185,
+      "currency": "GBP",
+      "images": [
+        "/images/works/chebu-rasha/PORCELAIN_20_SKL_202.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-007",
+      "title": {
+        "en": "Chebu-Rasha throwing up eyes",
+        "ru": "Chebu-Rasha throwing up eyes",
+        "es": "Chebu-Rasha throwing up eyes",
+        "zh": "Chebu-Rasha throwing up eyes"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": 1185,
+      "currency": "GBP",
+      "images": [
+        "/images/works/chebu-rasha/PORCELAIN_9_SKL_2024.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-008",
+      "title": {
+        "en": "The Phenomenon of Chebu-Rasha",
+        "ru": "The Phenomenon of Chebu-Rasha",
+        "es": "The Phenomenon of Chebu-Rasha",
+        "zh": "The Phenomenon of Chebu-Rasha"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Mixed media",
+        "ru": "Mixed media",
+        "es": "Mixed media",
+        "zh": "Mixed media"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/chebu-rasha/The_appearance_of_Ch.jpeg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-009",
+      "title": {
+        "en": "Chebu-Rasha Torii Gate",
+        "ru": "Chebu-Rasha Torii Gate",
+        "es": "Chebu-Rasha Torii Gate",
+        "zh": "Chebu-Rasha Torii Gate"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Cast plastic",
+        "ru": "Cast plastic",
+        "es": "Cast plastic",
+        "zh": "Cast plastic"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/chebu-rasha/che3.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-010",
+      "title": {
+        "en": "Chebu-Rasha Work 4",
+        "ru": "Chebu-Rasha Work 4",
+        "es": "Chebu-Rasha Work 4",
+        "zh": "Chebu-Rasha Work 4"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Mixed media",
+        "ru": "Mixed media",
+        "es": "Mixed media",
+        "zh": "Mixed media"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/chebu-rasha/che4.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-011",
+      "title": {
+        "en": "Cheburasha in Gloves",
+        "ru": "Cheburasha in Gloves",
+        "es": "Cheburasha in Gloves",
+        "zh": "Cheburasha in Gloves"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": 1185,
+      "currency": "GBP",
+      "images": [
+        "/images/works/chebu-rasha/chebu_gloves.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-012",
+      "title": {
+        "en": "Cheburasha, Teletubbies",
+        "ru": "Cheburasha, Teletubbies",
+        "es": "Cheburasha, Teletubbies",
+        "zh": "Cheburasha, Teletubbies"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": 1185,
+      "currency": "GBP",
+      "images": [
+        "/images/works/chebu-rasha/chebu_teletubbies.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-013",
+      "title": {
+        "en": "Cheburasha Classic",
+        "ru": "Cheburasha Classic",
+        "es": "Cheburasha Classic",
+        "zh": "Cheburasha Classic"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Mixed media",
+        "ru": "Mixed media",
+        "es": "Mixed media",
+        "zh": "Mixed media"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/chebu-rasha/cheburasha.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-014",
+      "title": {
+        "en": "Fire Breathing Cheburasha",
+        "ru": "Fire Breathing Cheburasha",
+        "es": "Fire Breathing Cheburasha",
+        "zh": "Fire Breathing Cheburasha"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": 1185,
+      "currency": "GBP",
+      "images": [
+        "/images/works/chebu-rasha/fire_breathing_chebu.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-015",
+      "title": {
+        "en": "Forest of Pink Teeth",
+        "ru": "Forest of Pink Teeth",
+        "es": "Forest of Pink Teeth",
+        "zh": "Forest of Pink Teeth"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": 1185,
+      "currency": "GBP",
+      "images": [
+        "/images/works/chebu-rasha/forest_of_pink_teeth.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-016",
+      "title": {
+        "en": "Storm Cloud, Pussy, Comb",
+        "ru": "Storm Cloud, Pussy, Comb",
+        "es": "Storm Cloud, Pussy, Comb",
+        "zh": "Storm Cloud, Pussy, Comb"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Paper Mixed Media",
+        "ru": "Paper Mixed Media",
+        "es": "Paper Mixed Media",
+        "zh": "Paper Mixed Media"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/chebu-rasha/stormcloudpussycomb.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-017",
+      "title": {
+        "en": "Chebu-Rasha Thumbnail",
+        "ru": "Chebu-Rasha Thumbnail",
+        "es": "Chebu-Rasha Thumbnail",
+        "zh": "Chebu-Rasha Thumbnail"
+      },
+      "series": "chebu-rasha",
+      "technique": {
+        "en": "Mixed media",
+        "ru": "Mixed media",
+        "es": "Mixed media",
+        "zh": "Mixed media"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/chebu-rasha/thumbnail-7.jpeg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-018",
+      "title": {
+        "en": "Last Supper. Number Pi 1",
+        "ru": "Last Supper. Number Pi 1",
+        "es": "Last Supper. Number Pi 1",
+        "zh": "Last Supper. Number Pi 1"
+      },
+      "series": "last-supper",
+      "technique": {
+        "en": "Mixed media on craft paper",
+        "ru": "Mixed media on craft paper",
+        "es": "Mixed media on craft paper",
+        "zh": "Mixed media on craft paper"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/last-supper/4_2.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-019",
+      "title": {
+        "en": "Chairs, Teeth",
+        "ru": "Chairs, Teeth",
+        "es": "Chairs, Teeth",
+        "zh": "Chairs, Teeth"
+      },
+      "series": "last-supper",
+      "technique": {
+        "en": "Mixed media on craft paper",
+        "ru": "Mixed media on craft paper",
+        "es": "Mixed media on craft paper",
+        "zh": "Mixed media on craft paper"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/last-supper/5_2.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-020",
+      "title": {
+        "en": "Red Last Supper",
+        "ru": "Red Last Supper",
+        "es": "Red Last Supper",
+        "zh": "Red Last Supper"
+      },
+      "series": "last-supper",
+      "technique": {
+        "en": "Silkscreen",
+        "ru": "Silkscreen",
+        "es": "Silkscreen",
+        "zh": "Silkscreen"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": 2500,
+      "currency": "GBP",
+      "images": [
+        "/images/works/last-supper/tv26.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-021",
+      "title": {
+        "en": "Secret Supper. The Egg",
+        "ru": "Secret Supper. The Egg",
+        "es": "Secret Supper. The Egg",
+        "zh": "Secret Supper. The Egg"
+      },
+      "series": "last-supper",
+      "technique": {
+        "en": "Silkscreen",
+        "ru": "Silkscreen",
+        "es": "Silkscreen",
+        "zh": "Silkscreen"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": 2500,
+      "currency": "GBP",
+      "images": [
+        "/images/works/last-supper/tv27.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-022",
+      "title": {
+        "en": "Horns and Hooves or Louboutins",
+        "ru": "Horns and Hooves or Louboutins",
+        "es": "Horns and Hooves or Louboutins",
+        "zh": "Horns and Hooves or Louboutins"
+      },
+      "series": "sbsa",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sbsa/______Horns_and_Hoov.JPG"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-023",
+      "title": {
+        "en": "Searching for the Soul",
+        "ru": "Searching for the Soul",
+        "es": "Searching for the Soul",
+        "zh": "Searching for the Soul"
+      },
+      "series": "sbsa",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sbsa/_______Searching_for.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-024",
+      "title": {
+        "en": "Hamlet or Morning Again",
+        "ru": "Hamlet or Morning Again",
+        "es": "Hamlet or Morning Again",
+        "zh": "Hamlet or Morning Again"
+      },
+      "series": "sbsa",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sbsa/_4-_____Metamorphosi.JPG"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-025",
+      "title": {
+        "en": "Reader or Princess on a Pea",
+        "ru": "Reader or Princess on a Pea",
+        "es": "Reader or Princess on a Pea",
+        "zh": "Reader or Princess on a Pea"
+      },
+      "series": "sbsa",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sbsa/______The_Reader_or_.JPG"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-026",
+      "title": {
+        "en": "The Descent of the Holy Spirit",
+        "ru": "The Descent of the Holy Spirit",
+        "es": "The Descent of the Holy Spirit",
+        "zh": "The Descent of the Holy Spirit"
+      },
+      "series": "sbsa",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sbsa/The_Descent_of_the_H.png"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-027",
+      "title": {
+        "en": "New Shoes for Cinderella",
+        "ru": "New Shoes for Cinderella",
+        "es": "New Shoes for Cinderella",
+        "zh": "New Shoes for Cinderella"
+      },
+      "series": "sbsa",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sbsa/_____New_Shoes_for_C.JPG"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-028",
+      "title": {
+        "en": "The Bull",
+        "ru": "The Bull",
+        "es": "The Bull",
+        "zh": "The Bull"
+      },
+      "series": "the-bull",
+      "technique": {
+        "en": "Silkscreen",
+        "ru": "Silkscreen",
+        "es": "Silkscreen",
+        "zh": "Silkscreen"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": 2500,
+      "currency": "GBP",
+      "images": [
+        "/images/works/the-bull/Screenshot_2024-06-1.png"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-029",
+      "title": {
+        "en": "The Bull 2",
+        "ru": "The Bull 2",
+        "es": "The Bull 2",
+        "zh": "The Bull 2"
+      },
+      "series": "the-bull",
+      "technique": {
+        "en": "Silkscreen",
+        "ru": "Silkscreen",
+        "es": "Silkscreen",
+        "zh": "Silkscreen"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": 2500,
+      "currency": "GBP",
+      "images": [
+        "/images/works/the-bull/bull4.png"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-030",
+      "title": {
+        "en": "The Bull 3",
+        "ru": "The Bull 3",
+        "es": "The Bull 3",
+        "zh": "The Bull 3"
+      },
+      "series": "the-bull",
+      "technique": {
+        "en": "Silkscreen",
+        "ru": "Silkscreen",
+        "es": "Silkscreen",
+        "zh": "Silkscreen"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": 2500,
+      "currency": "GBP",
+      "images": [
+        "/images/works/the-bull/bull4_2.png"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-031",
+      "title": {
+        "en": "What are you choosing",
+        "ru": "What are you choosing",
+        "es": "What are you choosing",
+        "zh": "What are you choosing"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/1-DSC_0567.jpg"
+      ],
+      "available": true,
+      "note": "Chevre D'Or"
+    },
+    {
+      "id": "artwork-032",
+      "title": {
+        "en": "Will it pop?",
+        "ru": "Will it pop?",
+        "es": "Will it pop?",
+        "zh": "Will it pop?"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/1-DSC_0848.jpg"
+      ],
+      "available": true,
+      "note": "Hempel Hotel"
+    },
+    {
+      "id": "artwork-033",
+      "title": {
+        "en": "Hotel Series Work",
+        "ru": "Hotel Series Work",
+        "es": "Hotel Series Work",
+        "zh": "Hotel Series Work"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/IMG_6374.JPG"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-034",
+      "title": {
+        "en": "Hotel Interior",
+        "ru": "Hotel Interior",
+        "es": "Hotel Interior",
+        "zh": "Hotel Interior"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/DSC_0986.JPG"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-035",
+      "title": {
+        "en": "Hotel Portrait",
+        "ru": "Hotel Portrait",
+        "es": "Hotel Portrait",
+        "zh": "Hotel Portrait"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/DSC_0926.JPG"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-036",
+      "title": {
+        "en": "Garden, Apples",
+        "ru": "Garden, Apples",
+        "es": "Garden, Apples",
+        "zh": "Garden, Apples"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/IMG_4031.jpg"
+      ],
+      "available": true,
+      "note": "Hempel Hotel"
+    },
+    {
+      "id": "artwork-037",
+      "title": {
+        "en": "Sightseeing, Eiffel Tower",
+        "ru": "Sightseeing, Eiffel Tower",
+        "es": "Sightseeing, Eiffel Tower",
+        "zh": "Sightseeing, Eiffel Tower"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/IMG_4869.jpg"
+      ],
+      "available": true,
+      "note": "Hempel Hotel"
+    },
+    {
+      "id": "artwork-038",
+      "title": {
+        "en": "Watermelon, Butterfly",
+        "ru": "Watermelon, Butterfly",
+        "es": "Watermelon, Butterfly",
+        "zh": "Watermelon, Butterfly"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/IMG_4859.jpg"
+      ],
+      "available": true,
+      "note": "Chevre D'Or"
+    },
+    {
+      "id": "artwork-039",
+      "title": {
+        "en": "Red Velvet Dress",
+        "ru": "Red Velvet Dress",
+        "es": "Red Velvet Dress",
+        "zh": "Red Velvet Dress"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/IMG_4851.jpg"
+      ],
+      "available": true,
+      "note": "Chevre D'Or"
+    },
+    {
+      "id": "artwork-040",
+      "title": {
+        "en": "Presidential Suite",
+        "ru": "Presidential Suite",
+        "es": "Presidential Suite",
+        "zh": "Presidential Suite"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/IMG_8134.JPG"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-041",
+      "title": {
+        "en": "Hotel Bathroom",
+        "ru": "Hotel Bathroom",
+        "es": "Hotel Bathroom",
+        "zh": "Hotel Bathroom"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/IMG_8171_2.JPG"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-042",
+      "title": {
+        "en": "Playing with Macarons",
+        "ru": "Playing with Macarons",
+        "es": "Playing with Macarons",
+        "zh": "Playing with Macarons"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/IMG_4172.jpg"
+      ],
+      "available": true,
+      "note": "Chevre D'Or"
+    },
+    {
+      "id": "artwork-043",
+      "title": {
+        "en": "Golden Pineapple 1",
+        "ru": "Golden Pineapple 1",
+        "es": "Golden Pineapple 1",
+        "zh": "Golden Pineapple 1"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/IMG_5208.jpg"
+      ],
+      "available": true,
+      "note": "Chevre D'Or"
+    },
+    {
+      "id": "artwork-044",
+      "title": {
+        "en": "Golden Pineapple 2",
+        "ru": "Golden Pineapple 2",
+        "es": "Golden Pineapple 2",
+        "zh": "Golden Pineapple 2"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/IMG_5206.jpg"
+      ],
+      "available": true,
+      "note": "Chevre D'Or"
+    },
+    {
+      "id": "artwork-045",
+      "title": {
+        "en": "Overcome the Grape",
+        "ru": "Overcome the Grape",
+        "es": "Overcome the Grape",
+        "zh": "Overcome the Grape"
+      },
+      "series": "hotel-series",
+      "technique": {
+        "en": "Photography",
+        "ru": "Photography",
+        "es": "Photography",
+        "zh": "Photography"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/hotel-series/IMG_5078.JPG"
+      ],
+      "available": true,
+      "note": "Hempel Hotel"
+    },
+    {
+      "id": "artwork-046",
+      "title": {
+        "en": "Woman Sculpture",
+        "ru": "Woman Sculpture",
+        "es": "Woman Sculpture",
+        "zh": "Woman Sculpture"
+      },
+      "series": "sculptures",
+      "technique": {
+        "en": "Bronze",
+        "ru": "Bronze",
+        "es": "Bronze",
+        "zh": "Bronze"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sculptures/kuleshova_svetlana_w.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-047",
+      "title": {
+        "en": "Woman Brush, Woman Buddha",
+        "ru": "Woman Brush, Woman Buddha",
+        "es": "Woman Brush, Woman Buddha",
+        "zh": "Woman Brush, Woman Buddha"
+      },
+      "series": "sculptures",
+      "technique": {
+        "en": "Bronze",
+        "ru": "Bronze",
+        "es": "Bronze",
+        "zh": "Bronze"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sculptures/woman_as_brush.jpeg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-048",
+      "title": {
+        "en": "Woman as a table",
+        "ru": "Woman as a table",
+        "es": "Woman as a table",
+        "zh": "Woman as a table"
+      },
+      "series": "sculptures",
+      "technique": {
+        "en": "Bronze",
+        "ru": "Bronze",
+        "es": "Bronze",
+        "zh": "Bronze"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sculptures/woman_as_table.jpeg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-049",
+      "title": {
+        "en": "Sculpture Work 11",
+        "ru": "Sculpture Work 11",
+        "es": "Sculpture Work 11",
+        "zh": "Sculpture Work 11"
+      },
+      "series": "sculptures",
+      "technique": {
+        "en": "Bronze",
+        "ru": "Bronze",
+        "es": "Bronze",
+        "zh": "Bronze"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sculptures/11_2.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-050",
+      "title": {
+        "en": "Hangers, boy and girl",
+        "ru": "Hangers, boy and girl",
+        "es": "Hangers, boy and girl",
+        "zh": "Hangers, boy and girl"
+      },
+      "series": "sculptures",
+      "technique": {
+        "en": "Bronze",
+        "ru": "Bronze",
+        "es": "Bronze",
+        "zh": "Bronze"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sculptures/source_sc_4_klie_han.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-051",
+      "title": {
+        "en": "Cards on a log",
+        "ru": "Cards on a log",
+        "es": "Cards on a log",
+        "zh": "Cards on a log"
+      },
+      "series": "sculptures",
+      "technique": {
+        "en": "Bronze with gold",
+        "ru": "Bronze with gold",
+        "es": "Bronze with gold",
+        "zh": "Bronze with gold"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sculptures/IMG_9902_copy.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-052",
+      "title": {
+        "en": "Feathers, Apples and Pears",
+        "ru": "Feathers, Apples and Pears",
+        "es": "Feathers, Apples and Pears",
+        "zh": "Feathers, Apples and Pears"
+      },
+      "series": "sculptures",
+      "technique": {
+        "en": "Bronze",
+        "ru": "Bronze",
+        "es": "Bronze",
+        "zh": "Bronze"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sculptures/K-Lie_Feathers.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-053",
+      "title": {
+        "en": "Crow swallowing Easter Egg",
+        "ru": "Crow swallowing Easter Egg",
+        "es": "Crow swallowing Easter Egg",
+        "zh": "Crow swallowing Easter Egg"
+      },
+      "series": "sculptures",
+      "technique": {
+        "en": "Bronze",
+        "ru": "Bronze",
+        "es": "Bronze",
+        "zh": "Bronze"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sculptures/CIMG1919.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-054",
+      "title": {
+        "en": "Watermelon",
+        "ru": "Watermelon",
+        "es": "Watermelon",
+        "zh": "Watermelon"
+      },
+      "series": "sculptures",
+      "technique": {
+        "en": "Ceramic",
+        "ru": "Ceramic",
+        "es": "Ceramic",
+        "zh": "Ceramic"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sculptures/6_2.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-055",
+      "title": {
+        "en": "Ovary",
+        "ru": "Ovary",
+        "es": "Ovary",
+        "zh": "Ovary"
+      },
+      "series": "sculptures",
+      "technique": {
+        "en": "Bronze",
+        "ru": "Bronze",
+        "es": "Bronze",
+        "zh": "Bronze"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sculptures/8_2.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-056",
+      "title": {
+        "en": "Sculpture Work 10",
+        "ru": "Sculpture Work 10",
+        "es": "Sculpture Work 10",
+        "zh": "Sculpture Work 10"
+      },
+      "series": "sculptures",
+      "technique": {
+        "en": "Bronze",
+        "ru": "Bronze",
+        "es": "Bronze",
+        "zh": "Bronze"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/sculptures/10_1.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-057",
+      "title": {
+        "en": "Cube Legs",
+        "ru": "Cube Legs",
+        "es": "Cube Legs",
+        "zh": "Cube Legs"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/Copy_of__DSC1076.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-058",
+      "title": {
+        "en": "Antlers on Roses",
+        "ru": "Antlers on Roses",
+        "es": "Antlers on Roses",
+        "zh": "Antlers on Roses"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/_DSC1080.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-059",
+      "title": {
+        "en": "Yellow Cube",
+        "ru": "Yellow Cube",
+        "es": "Yellow Cube",
+        "zh": "Yellow Cube"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/Copy_of__DSC1041.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-060",
+      "title": {
+        "en": "Multiple Breasts, Lotus",
+        "ru": "Multiple Breasts, Lotus",
+        "es": "Multiple Breasts, Lotus",
+        "zh": "Multiple Breasts, Lotus"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/multiple_breasts_1.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-061",
+      "title": {
+        "en": "Multiple Breasts 2",
+        "ru": "Multiple Breasts 2",
+        "es": "Multiple Breasts 2",
+        "zh": "Multiple Breasts 2"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/multiple_breasts_2.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-062",
+      "title": {
+        "en": "Multiple Breasts on a Bed",
+        "ru": "Multiple Breasts on a Bed",
+        "es": "Multiple Breasts on a Bed",
+        "zh": "Multiple Breasts on a Bed"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/multiple_breasts_on_.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-063",
+      "title": {
+        "en": "The Gold of White Breasts",
+        "ru": "The Gold of White Breasts",
+        "es": "The Gold of White Breasts",
+        "zh": "The Gold of White Breasts"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/the_gold_of_white_br.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-064",
+      "title": {
+        "en": "White, Blue Cloud",
+        "ru": "White, Blue Cloud",
+        "es": "White, Blue Cloud",
+        "zh": "White, Blue Cloud"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/white_blue_cloud.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-065",
+      "title": {
+        "en": "Golden Cube",
+        "ru": "Golden Cube",
+        "es": "Golden Cube",
+        "zh": "Golden Cube"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/_DSC1039.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-066",
+      "title": {
+        "en": "Octopus Head",
+        "ru": "Octopus Head",
+        "es": "Octopus Head",
+        "zh": "Octopus Head"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/octopus_head.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-067",
+      "title": {
+        "en": "Omniscient/Eye",
+        "ru": "Omniscient/Eye",
+        "es": "Omniscient/Eye",
+        "zh": "Omniscient/Eye"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/omniscient.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-068",
+      "title": {
+        "en": "Red Hills of Innocence",
+        "ru": "Red Hills of Innocence",
+        "es": "Red Hills of Innocence",
+        "zh": "Red Hills of Innocence"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain print",
+        "ru": "Porcelain print",
+        "es": "Porcelain print",
+        "zh": "Porcelain print"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/_DSC1090.jpg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-069",
+      "title": {
+        "en": "Chebu-Rasha Golden Ears",
+        "ru": "Chebu-Rasha Golden Ears",
+        "es": "Chebu-Rasha Golden Ears",
+        "zh": "Chebu-Rasha Golden Ears"
+      },
+      "series": "porcelain",
+      "technique": {
+        "en": "Porcelain",
+        "ru": "Porcelain",
+        "es": "Porcelain",
+        "zh": "Porcelain"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/porcelain/plate_3.jpeg"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-070",
+      "title": {
+        "en": "NFT Collection",
+        "ru": "NFT Collection",
+        "es": "NFT Collection",
+        "zh": "NFT Collection"
+      },
+      "series": "nft",
+      "technique": {
+        "en": "Digital",
+        "ru": "Digital",
+        "es": "Digital",
+        "zh": "Digital"
+      },
+      "year": null,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/nft/Screenshot_2023-02-2.png"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-071",
+      "title": {
+        "en": "Cats",
+        "ru": "Cats",
+        "es": "Cats",
+        "zh": "Cats"
+      },
+      "series": "nft",
+      "technique": {
+        "en": "Bronze",
+        "ru": "Bronze",
+        "es": "Bronze",
+        "zh": "Bronze"
+      },
+      "year": 2003,
+      "dimensions": null,
+      "price": null,
+      "currency": null,
+      "images": [
+        "/images/works/nft/Screenshot_2023-02-2.png"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-072",
+      "title": {
+        "en": "Squatting Down",
+        "ru": "Squatting Down",
+        "es": "Squatting Down",
+        "zh": "Squatting Down"
+      },
+      "series": "nft",
+      "technique": {
+        "en": "Bronze, Jade",
+        "ru": "Bronze, Jade",
+        "es": "Bronze, Jade",
+        "zh": "Bronze, Jade"
+      },
+      "year": 2016,
+      "dimensions": null,
+      "price": 7000,
+      "currency": "GBP",
+      "images": [
+        "/images/works/nft/Screenshot_2023-02-2.png"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-073",
+      "title": {
+        "en": "Cherry",
+        "ru": "Cherry",
+        "es": "Cherry",
+        "zh": "Cherry"
+      },
+      "series": "nft",
+      "technique": {
+        "en": "Silver, Jasper, Jade",
+        "ru": "Silver, Jasper, Jade",
+        "es": "Silver, Jasper, Jade",
+        "zh": "Silver, Jasper, Jade"
+      },
+      "year": 2010,
+      "dimensions": null,
+      "price": 16000,
+      "currency": "GBP",
+      "images": [
+        "/images/works/nft/Screenshot_2023-02-2.png"
+      ],
+      "available": true,
+      "note": null
+    },
+    {
+      "id": "artwork-074",
+      "title": {
+        "en": "Metamorphosis",
+        "ru": "Metamorphosis",
+        "es": "Metamorphosis",
+        "zh": "Metamorphosis"
+      },
+      "series": "nft",
+      "technique": {
+        "en": "Bronze, Granite",
+        "ru": "Bronze, Granite",
+        "es": "Bronze, Granite",
+        "zh": "Bronze, Granite"
+      },
+      "year": 2022,
+      "dimensions": null,
+      "price": 22500,
+      "currency": "GBP",
+      "images": [
+        "/images/works/nft/Screenshot_2023-02-2.png"
+      ],
+      "available": true,
+      "note": null
+    }
+  ]
+}

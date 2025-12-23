@@ -1,0 +1,113 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-12-20",
+  "page": {
+    "hero": {
+      "title": {
+        "en": "NFT Collection",
+        "ru": "NFT Коллекция",
+        "es": "Colección NFT",
+        "zh": "NFT收藏"
+      },
+      "subtitle": {
+        "en": "Digital artworks available on OpenSea",
+        "ru": "Цифровые работы доступны на OpenSea",
+        "es": "Obras de arte digitales disponibles en OpenSea",
+        "zh": "在OpenSea上可购买的数字艺术品"
+      }
+    },
+    "description": {
+      "en": "Explore the digital dimension of K-Liée's art. Each NFT is a unique piece that brings traditional artistic vision into the blockchain era, combining physical artwork heritage with digital ownership.",
+      "ru": "Исследуйте цифровое измерение искусства К-Лье. Каждый NFT — уникальное произведение, переносящее традиционное художественное видение в эпоху блокчейна, сочетая наследие физического искусства с цифровым владением.",
+      "es": "Explora la dimensión digital del arte de K-Liée. Cada NFT es una pieza única que lleva la visión artística tradicional a la era blockchain, combinando el patrimonio del arte físico con la propiedad digital.",
+      "zh": "探索K-Liée艺术的数字维度。每个NFT都是独特的作品，将传统艺术视野带入区块链时代，将实体艺术遗产与数字所有权相结合。"
+    }
+  },
+  "openSeaCollection": {
+    "url": "https://opensea.io/collection/kliee",
+    "collectionName": "K-Liée Art",
+    "blockchain": "Ethereum"
+  },
+  "featuredNfts": [
+    {
+      "id": "nft-001",
+      "title": {
+        "en": "Cats",
+        "ru": "Кошки",
+        "es": "Gatos",
+        "zh": "猫"
+      },
+      "technique": "Bronze",
+      "year": 2003,
+      "image": "/images/works/nft/Screenshot_2023-02-2-v2.png",
+      "openSeaUrl": null
+    },
+    {
+      "id": "nft-002",
+      "title": {
+        "en": "Squatting Down",
+        "ru": "Присев",
+        "es": "Agachándose",
+        "zh": "蹲下"
+      },
+      "technique": "Bronze, Jade",
+      "year": 2016,
+      "price": 7000,
+      "currency": "GBP",
+      "image": "/images/works/nft/Screenshot_2023-02-2-v2.png",
+      "openSeaUrl": null
+    },
+    {
+      "id": "nft-003",
+      "title": {
+        "en": "Cherry",
+        "ru": "Вишня",
+        "es": "Cereza",
+        "zh": "樱桃"
+      },
+      "technique": "Silver, Jasper, Jade",
+      "year": 2010,
+      "price": 16000,
+      "currency": "GBP",
+      "image": "/images/works/nft/Screenshot_2023-02-2-v2.png",
+      "openSeaUrl": null
+    },
+    {
+      "id": "nft-004",
+      "title": {
+        "en": "Metamorphosis",
+        "ru": "Метаморфозы",
+        "es": "Metamorfosis",
+        "zh": "变形"
+      },
+      "technique": "Bronze, Granite",
+      "year": 2022,
+      "price": 22500,
+      "currency": "GBP",
+      "image": "/images/works/nft/Screenshot_2023-02-2-v2.png",
+      "openSeaUrl": null
+    }
+  ],
+  "cta": {
+    "viewCollection": {
+      "en": "View Full Collection on OpenSea",
+      "ru": "Посмотреть полную коллекцию на OpenSea",
+      "es": "Ver Colección Completa en OpenSea",
+      "zh": "在OpenSea查看完整收藏"
+    }
+  },
+  "seo": {
+    "title": {
+      "en": "NFT Collection | Svetlana K-Liée",
+      "ru": "NFT Коллекция | Светлана К-Лье",
+      "es": "Colección NFT | Svetlana K-Liée",
+      "zh": "NFT收藏 | 斯韦特兰娜·K-Liée"
+    },
+    "description": {
+      "en": "Discover Svetlana K-Liée's NFT collection on OpenSea. Digital artworks bringing traditional artistic vision into the blockchain era.",
+      "ru": "Откройте NFT-коллекцию Светланы К-Лье на OpenSea. Цифровые произведения искусства, переносящие традиционное художественное видение в эпоху блокчейна.",
+      "es": "Descubre la colección NFT de Svetlana K-Liée en OpenSea. Obras de arte digitales que llevan la visión artística tradicional a la era blockchain.",
+      "zh": "在OpenSea上发现斯韦特兰娜·K-Liée的NFT收藏。将传统艺术视野带入区块链时代的数字艺术品。"
+    }
+  }
+}

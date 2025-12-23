@@ -1,0 +1,15 @@
+# Svetlana K-LIEE Portfolio
+# https://k-lie.com
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://k-lie.com/sitemap.xml
+
+# Block admin area from indexing
+Disallow: /admin/
+Disallow: /api/
+
+# Block internal assets
+Disallow: /_app/

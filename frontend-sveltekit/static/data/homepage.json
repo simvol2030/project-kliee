@@ -1,0 +1,472 @@
+{
+  "pageType": "homepage",
+  "meta": {
+    "title": {
+      "en": "Svetlana K-LIÉE | Contemporary Artist",
+      "ru": "Светлана К-ЛИЕ | Современный художник",
+      "es": "Svetlana K-LIÉE | Artista Contemporánea",
+      "zh": "Svetlana K-LIÉE | 当代艺术家"
+    },
+    "description": {
+      "en": "Exploring the boundaries between soul and body, cosmos and consciousness through contemporary art",
+      "ru": "Исследование границ между душой и телом, космосом и сознанием через современное искусство",
+      "es": "Explorando los límites entre alma y cuerpo, cosmos y conciencia a través del arte contemporáneo",
+      "zh": "通过当代艺术探索灵魂与身体、宇宙与意识之间的界限"
+    },
+    "keywords": {
+      "en": "contemporary art, sculpture, bronze, ceramics, porcelain, Russian artist, K-LIÉE",
+      "ru": "современное искусство, скульптура, бронза, керамика, фарфор, русский художник, К-ЛИЕ",
+      "es": "arte contemporáneo, escultura, bronce, cerámica, porcelana, artista rusa, K-LIÉE",
+      "zh": "当代艺术, 雕塑, 青铜, 陶瓷, 瓷器, 俄罗斯艺术家, K-LIÉE"
+    }
+  },
+  "sections": {
+    "hero": {
+      "slides": [
+        {
+          "image": "/images/home/_MG_3235.jpg",
+          "alt": {
+            "en": "K-LIÉE Contemporary Art",
+            "ru": "Современное искусство К-ЛИЕ",
+            "es": "Arte contemporáneo de K-LIÉE",
+            "zh": "K-LIÉE当代艺术"
+          },
+          "duration": 4000
+        },
+        {
+          "image": "/images/works/chebu-rasha/stormcloudpussycomb.jpg",
+          "alt": {
+            "en": "CHEBU-RASHA artwork by K-LIÉE",
+            "ru": "Работа ЧЕБУ-РАША К-ЛИЕ",
+            "es": "Obra CHEBU-RASHA de K-LIÉE",
+            "zh": "K-LIÉE的CHEBU-RASHA作品"
+          },
+          "duration": 4000
+        },
+        {
+          "image": "/images/works/porcelain/omniscient.jpg",
+          "alt": {
+            "en": "Porcelain sculpture by K-LIÉE",
+            "ru": "Фарфоровая скульптура К-ЛИЕ",
+            "es": "Obra de la Serie Hotel de K-LIÉE",
+            "zh": "K-LIÉE的酒店系列作品"
+          },
+          "duration": 4000
+        }
+      ],
+      "title": {
+        "en": "SVETLANA K-LIÉE",
+        "ru": "СВЕТЛАНА K-LIÉE",
+        "es": "SVETLANA K-LIÉE",
+        "zh": "SVETLANA K-LIÉE"
+      },
+      "subtitle": {
+        "en": "Contemporary Artist",
+        "ru": "Современный художник",
+        "es": "Artista Contemporánea",
+        "zh": "当代艺术家"
+      },
+      "quote": {
+        "en": "Art is the mirror of the soul, reflecting the boundaries between flesh and spirit, past and future",
+        "ru": "Искусство - это зеркало души, отражающее границы между плотью и духом, прошлым и будущим",
+        "es": "El arte es el espejo del alma, reflejando los límites entre carne y espíritu, pasado y futuro",
+        "zh": "艺术是灵魂的镜子，反映肉体与精神、过去与未来之间的界限"
+      },
+      "announcement": {
+        "highlight": {
+          "en": "Most Recent Auction Sale!",
+          "ru": "Последняя продажа на аукционе!",
+          "es": "¡Venta de subasta más reciente!",
+          "zh": "最新拍卖销售！"
+        },
+        "text": {
+          "en": "'Malevich, Black Hand' sold at Bonhams London for £640",
+          "ru": "'Малевич, Черная рука' продана на Bonhams London за £640",
+          "es": "'Malevich, Black Hand' vendida en Bonhams London por £640",
+          "zh": "'马列维奇，黑手' 在伦敦邦瀚斯拍卖行以£640售出"
+        }
+      }
+    },
+    "featuredCollections": {
+      "title": {
+        "en": "Featured Collections",
+        "ru": "Избранные коллекции",
+        "es": "Colecciones Destacadas",
+        "zh": "精选系列"
+      },
+      "subtitle": {
+        "en": "Exploring the boundaries between soul and body, cosmos and consciousness",
+        "ru": "Исследование границ между душой и телом, космосом и сознанием",
+        "es": "Explorando los límites entre alma y cuerpo, cosmos y conciencia",
+        "zh": "探索灵魂与身体、宇宙与意识之间的界限"
+      },
+      "collections": [
+        {
+          "id": "chebu-rasha",
+          "title": {
+            "en": "CHEBU-RASHA",
+            "ru": "ЧЕБУ-РАША",
+            "es": "CHEBU-RASHA",
+            "zh": "切布拉沙"
+          },
+          "description": {
+            "en": "Soviet nostalgia meets contemporary art",
+            "ru": "Советская ностальгия встречается с современным искусством",
+            "es": "La nostalgia soviética se encuentra con el arte contemporáneo",
+            "zh": "苏联怀旧与当代艺术的融合"
+          },
+          "coverImage": "/images/works/chebu-rasha/cheburasha.jpg",
+          "link": "/works/chebu-rasha"
+        },
+        {
+          "id": "porcelain",
+          "title": {
+            "en": "PORCELAIN",
+            "ru": "ФАРФОР",
+            "es": "PORCELANA",
+            "zh": "瓷器"
+          },
+          "description": {
+            "en": "Delicate forms, powerful messages",
+            "ru": "Нежные формы, мощные послания",
+            "es": "Formas delicadas, mensajes poderosos",
+            "zh": "精致的形式，强有力的信息"
+          },
+          "coverImage": "/images/works/porcelain/omniscient.jpg",
+          "link": "/works/porcelain"
+        },
+        {
+          "id": "the-bull",
+          "title": {
+            "en": "THE BULL",
+            "ru": "БЫК",
+            "es": "EL TORO",
+            "zh": "公牛"
+          },
+          "description": {
+            "en": "Strength and vulnerability intertwined",
+            "ru": "Сила и уязвимость переплетены",
+            "es": "Fuerza y vulnerabilidad entrelazadas",
+            "zh": "力量与脆弱交织"
+          },
+          "coverImage": "/images/works/the-bull/bull4.png",
+          "link": "/works/the-bull"
+        },
+        {
+          "id": "last-supper",
+          "title": {
+            "en": "THE LAST SUPPER",
+            "ru": "ТАЙНАЯ ВЕЧЕРЯ",
+            "es": "LA ÚLTIMA CENA",
+            "zh": "最后的晚餐"
+          },
+          "description": {
+            "en": "Reimagining classical narratives",
+            "ru": "Переосмысление классических нарративов",
+            "es": "Reimaginando narrativas clásicas",
+            "zh": "重新诠释经典叙事"
+          },
+          "coverImage": "/images/works/last-supper/5_2.jpg",
+          "link": "/works/last-supper"
+        },
+        {
+          "id": "sculptures",
+          "title": {
+            "en": "SCULPTURES",
+            "ru": "СКУЛЬПТУРЫ",
+            "es": "ESCULTURAS",
+            "zh": "雕塑"
+          },
+          "description": {
+            "en": "Three-dimensional poetry",
+            "ru": "Трехмерная поэзия",
+            "es": "Poesía tridimensional",
+            "zh": "三维诗歌"
+          },
+          "coverImage": "/images/works/sculptures/K-Lie_Feathers.jpg",
+          "link": "/works/sculptures"
+        },
+        {
+          "id": "hotel-series",
+          "title": {
+            "en": "HOTEL SERIES",
+            "ru": "ОТЕЛЬНАЯ СЕРИЯ",
+            "es": "SERIE HOTEL",
+            "zh": "酒店系列"
+          },
+          "description": {
+            "en": "Transient spaces, permanent impressions",
+            "ru": "Временные пространства, постоянные впечатления",
+            "es": "Espacios transitorios, impresiones permanentes",
+            "zh": "短暂的空间，永久的印象"
+          },
+          "coverImage": "/images/works/hotel-series/IMG_5206.jpg",
+          "link": "/works/hotel-series"
+        }
+      ]
+    },
+    "exhibitions": {
+      "title": {
+        "en": "Current Exhibitions",
+        "ru": "Текущие выставки",
+        "es": "Exposiciones Actuales",
+        "zh": "当前展览"
+      },
+      "subtitle": {
+        "en": "Curated presentations of contemporary works in dialogue with space and concept",
+        "ru": "Кураторские презентации современных работ в диалоге с пространством и концепцией",
+        "es": "Presentaciones curadas de obras contemporáneas en diálogo con el espacio y el concepto",
+        "zh": "与空间和概念对话的当代作品策展"
+      },
+      "featured": {
+        "id": "divot-2025",
+        "title": {
+          "en": "Divot Exhibition 2025",
+          "ru": "Выставка Divot 2025",
+          "es": "Exposición Divot 2025",
+          "zh": "Divot 2025展览"
+        },
+        "description": {
+          "en": "A provocative dialogue between art and gastronomy featuring 14 contemporary works exploring the boundaries between flesh, soul, and artistic expression.",
+          "ru": "Провокационный диалог между искусством и гастрономией, включающий 14 современных работ, исследующих границы между плотью, душой и художественным выражением.",
+          "es": "Un diálogo provocativo entre arte y gastronomía con 14 obras contemporáneas que exploran los límites entre la carne, el alma y la expresión artística.",
+          "zh": "艺术与美食之间的挑衅性对话，展出14件当代作品，探索肉体、灵魂和艺术表达之间的界限。"
+        },
+        "location": {
+          "en": "Divot Restaurant",
+          "ru": "Ресторан Divot",
+          "es": "Restaurante Divot",
+          "zh": "Divot餐厅"
+        },
+        "workCount": 14,
+        "dateRange": {
+          "start": "2025-08-01",
+          "end": null
+        },
+        "status": "current",
+        "coverImage": "/images/exhibitions/divot-2025/work-5/IMG_6152.jpg",
+        "link": "/exhibitions/divot-2025"
+      },
+      "viewAllLink": "/exhibitions"
+    },
+    "about": {
+      "title": {
+        "en": "About the Artist",
+        "ru": "О художнике",
+        "es": "Sobre la Artista",
+        "zh": "关于艺术家"
+      },
+      "paragraphs": [
+        {
+          "en": "Svetlana K-Liée, a Russian-born artist residing in England since 2006, is proficient in various techniques including bronze, ceramics, etching, printmaking, and photography.",
+          "ru": "Светлана К-Лие, художник российского происхождения, проживающая в Англии с 2006 года, владеет различными техниками, включая бронзу, керамику, офорт, гравюру и фотографию.",
+          "es": "Svetlana K-Liée, artista nacida en Rusia que reside en Inglaterra desde 2006, domina varias técnicas como bronce, cerámica, grabado, litografía y fotografía.",
+          "zh": "Svetlana K-Liée，俄罗斯出生的艺术家，自2006年起居住在英格兰，精通多种技术，包括青铜、陶瓷、蚀刻、版画和摄影。"
+        },
+        {
+          "en": "Her artwork has achieved international recognition, with exhibitions in renowned venues such as the Hermitage and Saatchi Galleries.",
+          "ru": "Ее работы получили международное признание, выставки проходили в таких известных местах, как Эрмитаж и галереи Саатчи.",
+          "es": "Su obra ha alcanzado reconocimiento internacional, con exposiciones en lugares prestigiosos como el Hermitage y las Galerías Saatchi.",
+          "zh": "她的作品获得了国际认可，在埃尔米塔日和萨奇画廊等著名场所举办展览。"
+        }
+      ],
+      "ctaText": {
+        "en": "Learn More",
+        "ru": "Узнать больше",
+        "es": "Saber más",
+        "zh": "了解更多"
+      },
+      "ctaLink": "/about",
+      "image": "/images/about/ELT_5672.jpg",
+      "imageAlt": {
+        "en": "Svetlana K-Liée in studio",
+        "ru": "Светлана К-Лие в студии",
+        "es": "Svetlana K-Liée en el estudio",
+        "zh": "Svetlana K-Liée在工作室"
+      }
+    },
+    "news": {
+      "title": {
+        "en": "Latest News & Exhibitions",
+        "ru": "Последние новости и выставки",
+        "es": "Últimas Noticias y Exposiciones",
+        "zh": "最新消息与展览"
+      },
+      "items": [
+        {
+          "id": "shanghai-dec-2024",
+          "date": "December 2024",
+          "title": {
+            "en": "Shanghai History Museum Exhibition",
+            "ru": "Выставка в Шанхайском историческом музее",
+            "es": "Exposición en el Museo de Historia de Shanghái",
+            "zh": "上海历史博物馆展览"
+          },
+          "excerpt": {
+            "en": "K-LIÉE's works featured in 'Lev Tolstoy' exhibition showcasing contemporary interpretations of classical Russian literature.",
+            "ru": "Работы К-Лие представлены на выставке 'Лев Толстой', демонстрирующей современные интерпретации классической русской литературы.",
+            "es": "Las obras de K-LIÉE aparecen en la exposición 'Lev Tolstoy', que muestra interpretaciones contemporáneas de la literatura rusa clásica.",
+            "zh": "K-LIÉE的作品在'列夫·托尔斯泰'展览中亮相，展示了对经典俄罗斯文学的当代诠释。"
+          },
+          "link": null
+        },
+        {
+          "id": "porcelain-nov-2024",
+          "date": "November 2024",
+          "title": {
+            "en": "New Porcelain Collection Launch",
+            "ru": "Запуск новой коллекции фарфора",
+            "es": "Lanzamiento de nueva colección de porcelana",
+            "zh": "新瓷器系列发布"
+          },
+          "excerpt": {
+            "en": "Unveiling the latest series exploring the fragility of human existence through delicate ceramic forms.",
+            "ru": "Представляем последнюю серию, исследующую хрупкость человеческого существования через изящные керамические формы.",
+            "es": "Presentación de la última serie que explora la fragilidad de la existencia humana a través de delicadas formas cerámicas.",
+            "zh": "通过精致的陶瓷形式探索人类存在的脆弱性的最新系列揭幕。"
+          },
+          "link": null
+        },
+        {
+          "id": "seattle-oct-2024",
+          "date": "October 2024",
+          "title": {
+            "en": "Seattle Art Fair Success",
+            "ru": "Успех на арт-ярмарке в Сиэтле",
+            "es": "Éxito en la Feria de Arte de Seattle",
+            "zh": "西雅图艺术博览会成功"
+          },
+          "excerpt": {
+            "en": "Overwhelming response at Seattle Art Fair with Jade Flower Gallery, multiple pieces acquired by collectors.",
+            "ru": "Ошеломляющий отклик на арт-ярмарке в Сиэтле с галереей Jade Flower, несколько работ приобретены коллекционерами.",
+            "es": "Respuesta abrumadora en la Feria de Arte de Seattle con Jade Flower Gallery, múltiples piezas adquiridas por coleccionistas.",
+            "zh": "在西雅图艺术博览会上与Jade Flower画廊获得热烈反响，多件作品被收藏家收购。"
+          },
+          "link": null
+        }
+      ]
+    },
+    "testimonials": {
+      "title": {
+        "en": "Critics & Collectors",
+        "ru": "Критики и коллекционеры",
+        "es": "Críticos y Coleccionistas",
+        "zh": "评论家与收藏家"
+      },
+      "testimonials": [
+        {
+          "id": "marina-abramovic",
+          "quote": {
+            "en": "K-LIÉE's work transcends traditional boundaries, creating a dialogue between the ancient and contemporary that is both profound and accessible.",
+            "ru": "Работа К-Лие выходит за традиционные границы, создавая диалог между древним и современным, который одновременно глубок и доступен.",
+            "es": "El trabajo de K-LIÉE trasciende los límites tradicionales, creando un diálogo entre lo antiguo y lo contemporáneo que es profundo y accesible.",
+            "zh": "K-LIÉE的作品超越了传统界限，在古代与当代之间建立了既深刻又易于理解的对话。"
+          },
+          "author": {
+            "name": "Marina Abramović",
+            "title": {
+              "en": "Performance Artist",
+              "ru": "Художник перформанса",
+              "es": "Artista de Performance",
+              "zh": "行为艺术家"
+            }
+          }
+        },
+        {
+          "id": "charles-saatchi",
+          "quote": {
+            "en": "The CHEBU-RASHA series is a masterful exploration of cultural memory and transformation. Each piece resonates with both nostalgia and radical reimagining.",
+            "ru": "Серия ЧЕБУ-РАША - это мастерское исследование культурной памяти и трансформации. Каждая работа резонирует как с ностальгией, так и с радикальным переосмыслением.",
+            "es": "La serie CHEBU-RASHA es una exploración magistral de la memoria cultural y la transformación. Cada pieza resuena con nostalgia y reimaginación radical.",
+            "zh": "CHEBU-RASHA系列是对文化记忆和转型的精湛探索。每件作品都同时体现了怀旧和激进的重新想象。"
+          },
+          "author": {
+            "name": "Charles Saatchi",
+            "title": {
+              "en": "Art Collector",
+              "ru": "Коллекционер искусства",
+              "es": "Coleccionista de Arte",
+              "zh": "艺术收藏家"
+            }
+          }
+        },
+        {
+          "id": "hans-ulrich-obrist",
+          "quote": {
+            "en": "Her porcelain works achieve a rare balance between fragility and strength, beauty and the grotesque. Truly contemporary in spirit.",
+            "ru": "Ее фарфоровые работы достигают редкого баланса между хрупкостью и силой, красотой и гротеском. Поистине современные по духу.",
+            "es": "Sus obras de porcelana logran un equilibrio raro entre fragilidad y fuerza, belleza y lo grotesco. Verdaderamente contemporáneas en espíritu.",
+            "zh": "她的瓷器作品在脆弱与力量、美丽与怪诞之间实现了罕见的平衡。真正具有当代精神。"
+          },
+          "author": {
+            "name": "Hans Ulrich Obrist",
+            "title": {
+              "en": "Curator, Serpentine Galleries",
+              "ru": "Куратор, галереи Serpentine",
+              "es": "Curador, Galerías Serpentine",
+              "zh": "策展人，蛇形画廊"
+            }
+          }
+        }
+      ]
+    },
+    "process": {
+      "title": {
+        "en": "Creative Process",
+        "ru": "Творческий процесс",
+        "es": "Proceso Creativo",
+        "zh": "创作过程"
+      },
+      "steps": [
+        {
+          "id": "conceptualization",
+          "title": {
+            "en": "Conceptualization",
+            "ru": "Концептуализация",
+            "es": "Conceptualización",
+            "zh": "概念化"
+          },
+          "description": {
+            "en": "Each series begins with deep exploration of cultural symbols and personal mythology",
+            "ru": "Каждая серия начинается с глубокого исследования культурных символов и личной мифологии",
+            "es": "Cada serie comienza con una exploración profunda de símbolos culturales y mitología personal",
+            "zh": "每个系列都始于对文化符号和个人神话的深入探索"
+          },
+          "image": "/images/works/sculptures/source_sc_4_klie_han.jpg"
+        },
+        {
+          "id": "material-exploration",
+          "title": {
+            "en": "Material Exploration",
+            "ru": "Исследование материалов",
+            "es": "Exploración de Materiales",
+            "zh": "材料探索"
+          },
+          "description": {
+            "en": "Working with bronze, ceramics, and mixed media to find the perfect expression",
+            "ru": "Работа с бронзой, керамикой и смешанными техниками для поиска идеального выражения",
+            "es": "Trabajando con bronce, cerámica y técnicas mixtas para encontrar la expresión perfecta",
+            "zh": "使用青铜、陶瓷和混合媒介寻找完美的表达"
+          },
+          "image": "/images/works/porcelain/_DSC1039.jpg"
+        },
+        {
+          "id": "transformation",
+          "title": {
+            "en": "Transformation",
+            "ru": "Трансформация",
+            "es": "Transformación",
+            "zh": "转化"
+          },
+          "description": {
+            "en": "The final work emerges through layers of meaning and technique",
+            "ru": "Окончательная работа возникает через слои смысла и техники",
+            "es": "La obra final emerge a través de capas de significado y técnica",
+            "zh": "最终作品通过意义和技术的层次呈现"
+          },
+          "image": "/images/works/hotel-series/IMG_5206.jpg"
+        }
+      ]
+    }
+  }
+}

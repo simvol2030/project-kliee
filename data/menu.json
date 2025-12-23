@@ -1,0 +1,194 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-11-08",
+  "items": [
+    {
+      "id": "home",
+      "label": {
+        "en": "Home",
+        "ru": "Главная",
+        "es": "Inicio",
+        "zh": "首页"
+      },
+      "href": "/",
+      "parentId": null,
+      "hasDropdown": false,
+      "order": 1,
+      "icon": "🏠"
+    },
+    {
+      "id": "about",
+      "label": {
+        "en": "About",
+        "ru": "О художнике",
+        "es": "Acerca de",
+        "zh": "关于"
+      },
+      "href": "/about",
+      "parentId": null,
+      "hasDropdown": false,
+      "order": 2,
+      "icon": "👤"
+    },
+    {
+      "id": "works",
+      "label": {
+        "en": "Works",
+        "ru": "Работы",
+        "es": "Obras",
+        "zh": "作品"
+      },
+      "href": "/works",
+      "parentId": null,
+      "hasDropdown": true,
+      "order": 3,
+      "icon": "🎨"
+    },
+    {
+      "id": "works-chebu-rasha",
+      "label": {
+        "en": "CHEBU-RASHA",
+        "ru": "ЧЕБУ-РАША",
+        "es": "CHEBU-RASHA",
+        "zh": "切布拉什卡"
+      },
+      "href": "/works/chebu-rasha",
+      "parentId": "works",
+      "hasDropdown": false,
+      "order": 1
+    },
+    {
+      "id": "works-last-supper",
+      "label": {
+        "en": "«π» OR THE LAST SUPPER",
+        "ru": "«π» ИЛИ ТАЙНАЯ ВЕЧЕРЯ",
+        "es": "«π» O LA ÚLTIMA CENA",
+        "zh": "«π» 或最后的晚餐"
+      },
+      "href": "/works/last-supper",
+      "parentId": "works",
+      "hasDropdown": false,
+      "order": 2
+    },
+    {
+      "id": "works-sbsa",
+      "label": {
+        "en": "SOMEBODY'S BOUDOIR, SOMEBODY'S ABATTOIR",
+        "ru": "ЧЬЯ-ТО БУДУАР, ЧЬЯ-ТО СКОТОБОЙНЯ",
+        "es": "EL TOCADOR DE ALGUIEN, EL MATADERO DE ALGUIEN",
+        "zh": "某人的闺房，某人的屠宰场"
+      },
+      "href": "/works/sbsa",
+      "parentId": "works",
+      "hasDropdown": false,
+      "order": 3
+    },
+    {
+      "id": "works-the-bull",
+      "label": {
+        "en": "THE BULL",
+        "ru": "БЫК",
+        "es": "EL TORO",
+        "zh": "公牛"
+      },
+      "href": "/works/the-bull",
+      "parentId": "works",
+      "hasDropdown": false,
+      "order": 4
+    },
+    {
+      "id": "works-hotel-series",
+      "label": {
+        "en": "HOTEL SERIES",
+        "ru": "ОТЕЛЬНАЯ СЕРИЯ",
+        "es": "SERIE HOTEL",
+        "zh": "酒店系列"
+      },
+      "href": "/works/hotel-series",
+      "parentId": "works",
+      "hasDropdown": false,
+      "order": 5
+    },
+    {
+      "id": "works-sculptures",
+      "label": {
+        "en": "SCULPTURES",
+        "ru": "СКУЛЬПТУРЫ",
+        "es": "ESCULTURAS",
+        "zh": "雕塑"
+      },
+      "href": "/works/sculptures",
+      "parentId": "works",
+      "hasDropdown": false,
+      "order": 6
+    },
+    {
+      "id": "works-porcelain",
+      "label": {
+        "en": "PORCELAIN",
+        "ru": "ФАРФОР",
+        "es": "PORCELANA",
+        "zh": "瓷器"
+      },
+      "href": "/works/porcelain",
+      "parentId": "works",
+      "hasDropdown": false,
+      "order": 7
+    },
+    {
+      "id": "works-nft",
+      "label": {
+        "en": "NFT",
+        "ru": "NFT",
+        "es": "NFT",
+        "zh": "NFT"
+      },
+      "href": "/works/nft",
+      "parentId": "works",
+      "hasDropdown": false,
+      "order": 8
+    },
+    {
+      "id": "exhibitions",
+      "label": {
+        "en": "Exhibitions",
+        "ru": "Выставки",
+        "es": "Exposiciones",
+        "zh": "展览"
+      },
+      "href": "/exhibitions",
+      "parentId": null,
+      "hasDropdown": false,
+      "order": 4,
+      "icon": "🖼️"
+    },
+    {
+      "id": "nft",
+      "label": {
+        "en": "NFT",
+        "ru": "NFT",
+        "es": "NFT",
+        "zh": "NFT"
+      },
+      "href": "/nft",
+      "parentId": null,
+      "hasDropdown": false,
+      "order": 5,
+      "icon": "💎"
+    },
+    {
+      "id": "contact",
+      "label": {
+        "en": "Contact",
+        "ru": "Контакты",
+        "es": "Contacto",
+        "zh": "联系"
+      },
+      "href": "/contact",
+      "parentId": null,
+      "hasDropdown": false,
+      "order": 6,
+      "icon": "📧"
+    }
+  ]
+}
