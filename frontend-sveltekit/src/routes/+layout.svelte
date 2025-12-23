@@ -27,7 +27,11 @@
 		$page.url.pathname.startsWith('/posts') ||
 		$page.url.pathname.startsWith('/settings') ||
 		$page.url.pathname.startsWith('/login') ||
-		$page.url.pathname.startsWith('/logout')
+		$page.url.pathname.startsWith('/logout') ||
+		$page.url.pathname.startsWith('/media') ||
+		$page.url.pathname.startsWith('/layout') ||
+		$page.url.pathname.startsWith('/homepage') ||
+		$page.url.pathname.startsWith('/shop')
 	);
 
 	// Mobile menu state
