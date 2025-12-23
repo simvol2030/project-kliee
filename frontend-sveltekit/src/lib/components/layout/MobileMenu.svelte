@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { goto } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
   import { toggleMode, mode } from 'mode-watcher';
   import type { LanguageCode } from '$lib/types/layout.types';
   import { currentTranslations } from '$lib/i18n';
@@ -127,6 +127,7 @@
     const currentPath = $page.url.pathname.replace(/^\/(en|ru|es|zh)/, '');
     closeMobileMenu();
     await goto(`/${langCode}${currentPath || '/'}`);
+    await invalidateAll();
   }
 
   /**
