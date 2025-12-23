@@ -167,6 +167,42 @@
     </button>
   </div>
 
+  <!-- Controls: Language and Theme at the top -->
+  <div class="mobile-menu-controls">
+    <!-- Language Selector -->
+    <div class="control-section">
+      <div class="language-row">
+        {#each languages as lang}
+          <button
+            class="lang-btn-compact"
+            class:active={lang.code === locale}
+            onclick={() => selectLanguage(lang.code)}
+            aria-label={`Switch to ${lang.name}`}
+          >
+            <span class="lang-flag">{lang.flag}</span>
+            <span class="lang-code">{lang.code.toUpperCase()}</span>
+          </button>
+        {/each}
+      </div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="control-section">
+      <button
+        class="theme-toggle-compact"
+        onclick={toggleTheme}
+        aria-label="Toggle theme"
+      >
+        <div class="toggle-track-compact" class:dark={mode.current === 'dark'}>
+          <div class="toggle-thumb-compact">
+            <span class="toggle-icon-compact">{mode.current === 'dark' ? '☀️' : '🌙'}</span>
+          </div>
+        </div>
+        <span class="theme-label-compact">{mode.current === 'dark' ? 'Dark' : 'Light'}</span>
+      </button>
+    </div>
+  </div>
+
   <nav class="mobile-nav" aria-label="Mobile navigation">
     <ul class="menu-list">
       {#each menuItems as item}
@@ -218,43 +254,6 @@
     </ul>
   </nav>
 
-  <!-- Footer with Language and Theme controls -->
-  <div class="mobile-menu-footer">
-    <!-- Language Selector -->
-    <div class="footer-section">
-      <span class="footer-label">Language</span>
-      <div class="language-grid">
-        {#each languages as lang}
-          <button
-            class="lang-btn"
-            class:active={lang.code === locale}
-            onclick={() => selectLanguage(lang.code)}
-            aria-label={`Switch to ${lang.name}`}
-          >
-            <span class="lang-flag">{lang.flag}</span>
-            <span class="lang-code">{lang.code.toUpperCase()}</span>
-          </button>
-        {/each}
-      </div>
-    </div>
-
-    <!-- Theme Toggle -->
-    <div class="footer-section">
-      <span class="footer-label">Theme</span>
-      <button
-        class="theme-toggle-btn"
-        onclick={toggleTheme}
-        aria-label="Toggle theme"
-      >
-        <div class="toggle-track" class:dark={mode.current === 'dark'}>
-          <div class="toggle-thumb">
-            <span class="toggle-icon">{mode.current === 'dark' ? '☀️' : '🌙'}</span>
-          </div>
-        </div>
-        <span class="theme-label">{mode.current === 'dark' ? 'Dark' : 'Light'}</span>
-      </button>
-    </div>
-  </div>
 </div>
 
 <style>
@@ -317,6 +316,158 @@
 
   :global(.dark) .mobile-menu-header {
     border-bottom: 1px solid var(--gray-700, #333);
+  }
+
+  /* Controls section at the top */
+  .mobile-menu-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(0, 0, 0, 0.02);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  :global(.dark) .mobile-menu-controls {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .control-section {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Compact Language Row */
+  .language-row {
+    display: flex;
+    gap: 6px;
+  }
+
+  .lang-btn-compact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 8px 10px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .lang-btn-compact:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  :global(.dark) .lang-btn-compact:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .lang-btn-compact.active {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--accent, #d4af37);
+  }
+
+  :global(.dark) .lang-btn-compact.active {
+    background: rgba(212, 175, 55, 0.15);
+  }
+
+  .lang-btn-compact .lang-flag {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .lang-btn-compact .lang-code {
+    font-size: 10px;
+    font-weight: 600;
+    color: #666;
+    letter-spacing: 0.3px;
+  }
+
+  :global(.dark) .lang-btn-compact .lang-code {
+    color: #aaa;
+  }
+
+  .lang-btn-compact.active .lang-code {
+    color: var(--accent, #d4af37);
+  }
+
+  .lang-btn-compact:focus {
+    outline: 2px solid var(--accent, #d4af37);
+    outline-offset: 2px;
+  }
+
+  /* Compact Theme Toggle */
+  .theme-toggle-compact {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .toggle-track-compact {
+    position: relative;
+    width: 44px;
+    height: 26px;
+    background: #e5e5e5;
+    border-radius: 13px;
+    transition: background 0.25s ease;
+    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+  }
+
+  :global(.dark) .toggle-track-compact {
+    background: #39393d;
+    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.04);
+  }
+
+  .toggle-track-compact.dark {
+    background: #d4af37;
+  }
+
+  .toggle-thumb-compact {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    background: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s ease;
+    box-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.15),
+      0 1px 1px rgba(0, 0, 0, 0.12);
+  }
+
+  .toggle-track-compact.dark .toggle-thumb-compact {
+    transform: translateX(18px);
+  }
+
+  .toggle-icon-compact {
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  .theme-label-compact {
+    font-size: 13px;
+    font-weight: 500;
+    color: #000;
+  }
+
+  :global(.dark) .theme-label-compact {
+    color: #fff;
+  }
+
+  .theme-toggle-compact:focus {
+    outline: 2px solid var(--accent, #d4af37);
+    outline-offset: 2px;
   }
 
   .mobile-logo a {
@@ -568,169 +719,4 @@
     outline-offset: 2px;
   }
 
-  /* Footer with Language and Theme controls */
-  .mobile-menu-footer {
-    padding: 24px;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
-    margin-top: auto;
-  }
-
-  :global(.dark) .mobile-menu-footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .footer-section {
-    margin-bottom: 20px;
-  }
-
-  .footer-section:last-child {
-    margin-bottom: 0;
-  }
-
-  .footer-label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #8e8e93;
-    margin-bottom: 12px;
-  }
-
-  /* Language Grid */
-  .language-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-  }
-
-  .lang-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 12px 8px;
-    background: rgba(0, 0, 0, 0.03);
-    border: 1px solid transparent;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  :global(.dark) .lang-btn {
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .lang-btn:hover {
-    background: rgba(0, 0, 0, 0.08);
-  }
-
-  :global(.dark) .lang-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .lang-btn.active {
-    background: rgba(212, 175, 55, 0.1);
-    border-color: var(--accent, #d4af37);
-  }
-
-  :global(.dark) .lang-btn.active {
-    background: rgba(212, 175, 55, 0.15);
-  }
-
-  .lang-flag {
-    font-size: 24px;
-    line-height: 1;
-  }
-
-  .lang-code {
-    font-size: 11px;
-    font-weight: 600;
-    color: #000;
-    letter-spacing: 0.5px;
-  }
-
-  :global(.dark) .lang-code {
-    color: #fff;
-  }
-
-  .lang-btn.active .lang-code {
-    color: var(--accent, #d4af37);
-  }
-
-  /* Theme Toggle Button */
-  .theme-toggle-btn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 0;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-
-  .theme-toggle-btn .toggle-track {
-    position: relative;
-    width: 51px;
-    height: 31px;
-    background: #e5e5e5;
-    border-radius: 16px;
-    transition: background 0.25s ease;
-    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.04);
-  }
-
-  :global(.dark) .theme-toggle-btn .toggle-track {
-    background: #39393d;
-    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.04);
-  }
-
-  .theme-toggle-btn .toggle-track.dark {
-    background: #d4af37;
-  }
-
-  .theme-toggle-btn .toggle-thumb {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 27px;
-    height: 27px;
-    background: #ffffff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.25s ease;
-    box-shadow:
-      0 3px 8px rgba(0, 0, 0, 0.15),
-      0 1px 1px rgba(0, 0, 0, 0.16);
-  }
-
-  .theme-toggle-btn .toggle-track.dark .toggle-thumb {
-    transform: translateX(20px);
-  }
-
-  .theme-toggle-btn .toggle-icon {
-    font-size: 13px;
-    line-height: 1;
-  }
-
-  .theme-label {
-    font-size: 15px;
-    font-weight: 500;
-    color: #000;
-  }
-
-  :global(.dark) .theme-label {
-    color: #fff;
-  }
-
-  .theme-toggle-btn:focus {
-    outline: 2px solid var(--accent, #d4af37);
-    outline-offset: 2px;
-  }
-
-  .lang-btn:focus {
-    outline: 2px solid var(--accent, #d4af37);
-    outline-offset: 2px;
-  }
 </style>

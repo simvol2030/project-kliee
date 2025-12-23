@@ -22,6 +22,7 @@
 		is_for_sale: boolean | null;
 		image: {
 			stored_filename: string;
+			folder: string | null;
 			alt_en: string | null;
 			alt_ru: string | null;
 			alt_es: string | null;
@@ -119,6 +120,7 @@
 							image: product.primary_image
 								? {
 										stored_filename: product.primary_image.stored_filename,
+										folder: product.primary_image.folder,
 										alt_en: product.primary_image.alt_en,
 										alt_ru: product.primary_image.alt_ru,
 										alt_es: product.primary_image.alt_es,
@@ -239,7 +241,7 @@
 							<div class="image-wrapper">
 								{#if product.image}
 									<img
-										src={`/uploads/${product.image.stored_filename}`}
+										src={`/uploads/${product.image.folder || 'products'}/${product.image.stored_filename}`}
 										alt={getAlt(product)}
 										loading="lazy"
 									/>
