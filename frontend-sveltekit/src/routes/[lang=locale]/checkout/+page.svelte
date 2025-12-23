@@ -382,7 +382,7 @@
 						<li class="order-item">
 							{#if item.image}
 								<img
-									src={`/uploads/${item.image.stored_filename}`}
+									src={`/uploads/${item.image.folder || 'products'}/${item.image.stored_filename}`}
 									alt={getTitle(item)}
 									class="item-image"
 								/>

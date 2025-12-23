@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { goto } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
   import type { LanguageCode } from '$lib/types/layout.types';
 
   interface Props {
@@ -42,8 +42,9 @@
     // Close dropdown first for better UX
     isOpen = false;
 
-    // Navigate to new language URL
+    // Navigate to new language URL and invalidate all data
     await goto(`/${langCode}${currentPath || '/'}`);
+    await invalidateAll();
   }
 
   /**
