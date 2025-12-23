@@ -186,7 +186,7 @@
 									<a href={`/${lang}/shop/${item.slug || item.artwork_id}`} class="item-image-link">
 										{#if item.image}
 											<img
-												src={`/uploads/${item.image.stored_filename}`}
+												src={`/uploads/${item.image.folder || 'products'}/${item.image.stored_filename}`}
 												alt={getAlt(item)}
 												class="item-image"
 												loading="lazy"

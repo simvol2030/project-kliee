@@ -20,6 +20,7 @@ function mapArtworkToLocalized(
 	artwork: typeof artworks.$inferSelect,
 	locale: LanguageCode,
 	primaryImageFilename?: string | null,
+	primaryImageFolder?: string | null,
 	seriesSlug?: string | null
 ): ArtworkLocalized {
 	// Get title by locale
@@ -38,7 +39,8 @@ function mapArtworkToLocalized(
 	// Build images array - use primary image if available
 	const images: string[] = [];
 	if (primaryImageFilename) {
-		images.push(`/uploads/${primaryImageFilename}`);
+		const folder = primaryImageFolder || 'products';
+		images.push(`/uploads/${folder}/${primaryImageFilename}`);
 	}
 
 	return {
@@ -65,7 +67,8 @@ export async function getAllArtworks(locale: LanguageCode = 'en'): Promise<Artwo
 		.select({
 			artwork: artworks,
 			seriesSlug: series.slug,
-			primaryImage: media.stored_filename
+			primaryImage: media.stored_filename,
+			primaryImageFolder: media.folder
 		})
 		.from(artworks)
 		.leftJoin(series, eq(artworks.series_id, series.id))
@@ -78,7 +81,7 @@ export async function getAllArtworks(locale: LanguageCode = 'en'): Promise<Artwo
 		.orderBy(desc(artworks.year), asc(artworks.order_index));
 
 	return result.map((row) =>
-		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.seriesSlug)
+		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug)
 	);
 }
 
@@ -107,7 +110,8 @@ export async function getArtworksBySeries(
 		.select({
 			artwork: artworks,
 			seriesSlug: series.slug,
-			primaryImage: media.stored_filename
+			primaryImage: media.stored_filename,
+			primaryImageFolder: media.folder
 		})
 		.from(artworks)
 		.leftJoin(series, eq(artworks.series_id, series.id))
@@ -120,7 +124,7 @@ export async function getArtworksBySeries(
 		.orderBy(desc(artworks.year), asc(artworks.order_index));
 
 	return result.map((row) =>
-		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.seriesSlug)
+		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug)
 	);
 }
 
@@ -138,7 +142,8 @@ export async function getArtworkById(
 		.select({
 			artwork: artworks,
 			seriesSlug: series.slug,
-			primaryImage: media.stored_filename
+			primaryImage: media.stored_filename,
+			primaryImageFolder: media.folder
 		})
 		.from(artworks)
 		.leftJoin(series, eq(artworks.series_id, series.id))
@@ -155,7 +160,7 @@ export async function getArtworkById(
 	}
 
 	const row = result[0];
-	return mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.seriesSlug);
+	return mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug);
 }
 
 /**
@@ -172,7 +177,8 @@ export async function getArtworksByYear(
 		.select({
 			artwork: artworks,
 			seriesSlug: series.slug,
-			primaryImage: media.stored_filename
+			primaryImage: media.stored_filename,
+			primaryImageFolder: media.folder
 		})
 		.from(artworks)
 		.leftJoin(series, eq(artworks.series_id, series.id))
@@ -185,7 +191,7 @@ export async function getArtworksByYear(
 		.orderBy(asc(artworks.order_index));
 
 	return result.map((row) =>
-		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.seriesSlug)
+		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug)
 	);
 }
 
@@ -199,7 +205,8 @@ export async function getAvailableArtworks(locale: LanguageCode = 'en'): Promise
 		.select({
 			artwork: artworks,
 			seriesSlug: series.slug,
-			primaryImage: media.stored_filename
+			primaryImage: media.stored_filename,
+			primaryImageFolder: media.folder
 		})
 		.from(artworks)
 		.leftJoin(series, eq(artworks.series_id, series.id))
@@ -212,7 +219,7 @@ export async function getAvailableArtworks(locale: LanguageCode = 'en'): Promise
 		.orderBy(desc(artworks.year), asc(artworks.order_index));
 
 	return result.map((row) =>
-		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.seriesSlug)
+		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug)
 	);
 }
 
@@ -230,7 +237,8 @@ export async function getFeaturedArtworks(
 		.select({
 			artwork: artworks,
 			seriesSlug: series.slug,
-			primaryImage: media.stored_filename
+			primaryImage: media.stored_filename,
+			primaryImageFolder: media.folder
 		})
 		.from(artworks)
 		.leftJoin(series, eq(artworks.series_id, series.id))
@@ -244,7 +252,7 @@ export async function getFeaturedArtworks(
 		.limit(limit);
 
 	return result.map((row) =>
-		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.seriesSlug)
+		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug)
 	);
 }
 
