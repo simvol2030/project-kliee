@@ -28,7 +28,7 @@ export const POST: RequestHandler = async ({ request }) => {
 				await db.delete(artworks).where(inArray(artworks.id, ids));
 				affected = ids.length;
 			} else if (action === 'set_visible') {
-				const result = await db
+				await db
 					.update(artworks)
 					.set({ is_visible: value ?? true })
 					.where(inArray(artworks.id, ids));

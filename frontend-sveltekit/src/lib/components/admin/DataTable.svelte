@@ -34,14 +34,26 @@
 
 	let searchTerm = $state('');
 
-	let allSelected = $derived(data.length > 0 && data.every((row) => selectedIds.has(String(row[idKey]))));
-	let someSelected = $derived(data.some((row) => selectedIds.has(String(row[idKey]))) && !allSelected);
+	// Filter data based on search term
+	let filteredData = $derived.by(() => {
+		if (!searchTerm.trim()) return data;
+		const term = searchTerm.toLowerCase();
+		return data.filter((row) =>
+			columns.some((col) => {
+				const value = row[col.key];
+				return value != null && String(value).toLowerCase().includes(term);
+			})
+		);
+	});
+
+	let allSelected = $derived(filteredData.length > 0 && filteredData.every((row) => selectedIds.has(String(row[idKey]))));
+	let someSelected = $derived(filteredData.some((row) => selectedIds.has(String(row[idKey]))) && !allSelected);
 
 	function toggleAll() {
 		if (allSelected) {
 			selectedIds = new Set();
 		} else {
-			selectedIds = new Set(data.map((row) => String(row[idKey])));
+			selectedIds = new Set(filteredData.map((row) => String(row[idKey])));
 		}
 		onSelectionChange?.(selectedIds);
 	}
@@ -59,6 +71,19 @@
 </script>
 
 <div class="data-table-wrapper">
+	{#if searchPlaceholder}
+		<div class="search-wrapper">
+			<input
+				type="text"
+				bind:value={searchTerm}
+				placeholder={searchPlaceholder}
+				class="search-input"
+			/>
+			{#if searchTerm}
+				<button class="clear-btn" onclick={() => (searchTerm = '')}>×</button>
+			{/if}
+		</div>
+	{/if}
 	<table class="data-table">
 		<thead>
 			<tr>
@@ -81,7 +106,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each data as row}
+			{#each filteredData as row}
 				<tr
 					onclick={() => onRowClick?.(row)}
 					class:clickable={!!onRowClick}
@@ -113,6 +138,39 @@
 <style>
 	.data-table-wrapper {
 		overflow-x: auto;
+	}
+	.search-wrapper {
+		position: relative;
+		margin-bottom: 1rem;
+		max-width: 300px;
+	}
+	.search-input {
+		width: 100%;
+		padding: 0.5rem 2rem 0.5rem 0.75rem;
+		border: 1px solid var(--color-border, #ddd);
+		border-radius: 0.375rem;
+		font-size: 0.875rem;
+	}
+	.search-input:focus {
+		outline: none;
+		border-color: var(--color-primary, #3b82f6);
+		box-shadow: 0 0 0 2px var(--color-primary-light, rgba(59, 130, 246, 0.2));
+	}
+	.clear-btn {
+		position: absolute;
+		right: 0.5rem;
+		top: 50%;
+		transform: translateY(-50%);
+		background: none;
+		border: none;
+		font-size: 1.25rem;
+		color: var(--color-muted, #6b7280);
+		cursor: pointer;
+		line-height: 1;
+		padding: 0 0.25rem;
+	}
+	.clear-btn:hover {
+		color: var(--color-text, #111);
 	}
 	.data-table {
 		width: 100%;
