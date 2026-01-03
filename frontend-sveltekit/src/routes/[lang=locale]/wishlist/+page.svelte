@@ -554,35 +554,35 @@
 	}
 
 	/* Dark theme */
-	:global([data-theme='dark']) .wishlist-page {
+	:global(.dark) .wishlist-page {
 		background-color: var(--color-bg, #111827);
 	}
 
-	:global([data-theme='dark']) .breadcrumb .current {
+	:global(.dark) .breadcrumb .current {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) h1 {
+	:global(.dark) h1 {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .empty-wishlist h2 {
+	:global(.dark) .empty-wishlist h2 {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .wishlist-card {
+	:global(.dark) .wishlist-card {
 		background: var(--color-card-bg, #1f2937);
 	}
 
-	:global([data-theme='dark']) .product-title {
+	:global(.dark) .product-title {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .product-price {
+	:global(.dark) .product-price {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .in-cart-badge {
+	:global(.dark) .in-cart-badge {
 		background: rgba(255, 255, 255, 0.1);
 	}
 </style>

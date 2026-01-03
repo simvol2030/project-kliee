@@ -715,35 +715,35 @@
 	}
 
 	/* Dark mode */
-	:global([data-theme='dark']) .catalog-hero {
+	:global(.dark) .catalog-hero {
 		background: var(--bg-secondary, #1c1c1e);
 	}
 
-	:global([data-theme='dark']) .filters-section {
+	:global(.dark) .filters-section {
 		background: var(--bg-primary, #000);
 		border-color: var(--border-color, #333);
 	}
 
-	:global([data-theme='dark']) .search-field input,
-	:global([data-theme='dark']) .filter-field select {
+	:global(.dark) .search-field input,
+	:global(.dark) .filter-field select {
 		background: var(--bg-secondary, #1c1c1e);
 		border-color: var(--border-color, #333);
 		color: var(--text-primary, #fff);
 	}
 
-	:global([data-theme='dark']) .artwork-image {
+	:global(.dark) .artwork-image {
 		background: var(--bg-tertiary, #2c2c2e);
 	}
 
-	:global([data-theme='dark']) .page-btn {
+	:global(.dark) .page-btn {
 		background: var(--bg-secondary, #1c1c1e);
 	}
 
-	:global([data-theme='dark']) .page-num {
+	:global(.dark) .page-num {
 		border-color: var(--border-color, #333);
 	}
 
-	:global([data-theme='dark']) .status.available {
+	:global(.dark) .status.available {
 		background: #1a4d2e;
 		color: #90ee90;
 	}

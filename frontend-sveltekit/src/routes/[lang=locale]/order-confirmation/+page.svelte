@@ -362,31 +362,31 @@
 	}
 
 	/* Dark theme */
-	:global([data-theme='dark']) .confirmation-page {
+	:global(.dark) .confirmation-page {
 		background-color: var(--color-bg, #111827);
 	}
 
-	:global([data-theme='dark']) h1 {
+	:global(.dark) h1 {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .detail-card {
+	:global(.dark) .detail-card {
 		background: var(--color-card-bg, #1f2937);
 	}
 
-	:global([data-theme='dark']) .value {
+	:global(.dark) .value {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .item-title {
+	:global(.dark) .item-title {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .total-price {
+	:global(.dark) .total-price {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .shipping-card p {
+	:global(.dark) .shipping-card p {
 		color: var(--color-text, #f3f4f6);
 	}
 </style>

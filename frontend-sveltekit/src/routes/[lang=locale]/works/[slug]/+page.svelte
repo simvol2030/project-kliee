@@ -632,21 +632,21 @@
 	}
 
 	/* Dark mode */
-	:global([data-theme='dark']) .breadcrumb,
-	:global([data-theme='dark']) .series-hero,
-	:global([data-theme='dark']) .series-nav {
+	:global(.dark) .breadcrumb,
+	:global(.dark) .series-hero,
+	:global(.dark) .series-nav {
 		background: var(--bg-secondary, #1c1c1e);
 	}
 
-	:global([data-theme='dark']) .nav-link {
+	:global(.dark) .nav-link {
 		background: var(--bg-tertiary, #2c2c2e);
 	}
 
-	:global([data-theme='dark']) .artwork-image-btn {
+	:global(.dark) .artwork-image-btn {
 		background: var(--bg-tertiary, #2c2c2e);
 	}
 
-	:global([data-theme='dark']) .status.available {
+	:global(.dark) .status.available {
 		background: #1a4d2e;
 		color: #90ee90;
 	}

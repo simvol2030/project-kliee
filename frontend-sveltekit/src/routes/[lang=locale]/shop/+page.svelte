@@ -34,7 +34,7 @@
 			noProductsDesc: 'Try adjusting your filters or browse our full collection.',
 			clearFilters: 'Clear Filters',
 			loadMore: 'Load More',
-			showLess: 'Show Less',
+			showLess: 'Previous',
 			showing: 'Showing',
 			of: 'of',
 			artworks: 'artworks',
@@ -56,7 +56,7 @@
 			noProductsDesc: 'Попробуйте изменить фильтры или просмотрите всю коллекцию.',
 			clearFilters: 'Сбросить фильтры',
 			loadMore: 'Загрузить ещё',
-			showLess: 'Показать меньше',
+			showLess: 'Предыдущие',
 			showing: 'Показано',
 			of: 'из',
 			artworks: 'работ',
@@ -78,7 +78,7 @@
 			noProductsDesc: 'Intenta ajustar los filtros o explora toda la colección.',
 			clearFilters: 'Limpiar filtros',
 			loadMore: 'Cargar más',
-			showLess: 'Mostrar menos',
+			showLess: 'Anteriores',
 			showing: 'Mostrando',
 			of: 'de',
 			artworks: 'obras',
@@ -100,7 +100,7 @@
 			noProductsDesc: '请尝试调整筛选条件或浏览全部收藏。',
 			clearFilters: '清除筛选',
 			loadMore: '加载更多',
-			showLess: '收起',
+			showLess: '上一页',
 			showing: '显示',
 			of: '共',
 			artworks: '件作品',
@@ -119,6 +119,24 @@
 
 	// Filter state
 	let mobileFiltersOpen = $state(false);
+
+	// Infinite scroll state
+	let allProducts = $state([...data.products.products]);
+	let currentPage = $state(data.filters.page);
+	let hasMoreProducts = $state(data.products.pagination.hasMore);
+	let totalProducts = $state(data.products.pagination.total);
+	let isLoadingMore = $state(false);
+
+	// Reset products when filters change (but not page)
+	$effect(() => {
+		// Track filter changes (series, min_price, max_price, sort)
+		const filterKey = `${data.filters.series_id}-${data.filters.min_price}-${data.filters.max_price}-${data.filters.sort}`;
+		// When filters change, reset to initial data
+		allProducts = [...data.products.products];
+		currentPage = data.filters.page;
+		hasMoreProducts = data.products.pagination.hasMore;
+		totalProducts = data.products.pagination.total;
+	});
 
 	// Current currency info
 	const currencyInfo = $derived(getCurrencyByLang(data.lang, currencyRates));
@@ -181,23 +199,42 @@
 		goto(url.toString(), { replaceState: true });
 	}
 
-	function loadMore() {
-		updateFilters({ page: (data.filters.page + 1).toString() });
-	}
+	async function loadMore() {
+		if (isLoadingMore || !hasMoreProducts) return;
 
-	function showLess() {
-		if (data.filters.page > 1) {
-			updateFilters({ page: (data.filters.page - 1).toString() });
-		} else {
-			// Go back to page 1 (remove page param)
-			const url = new URL($page.url);
-			url.searchParams.delete('page');
-			goto(url.toString(), { replaceState: true });
+		isLoadingMore = true;
+		const nextPage = currentPage + 1;
+
+		try {
+			// Build URL with current filters
+			const params = new URLSearchParams();
+			if (data.filters.series_id) params.set('series_id', data.filters.series_id.toString());
+			if (data.filters.min_price) params.set('min_price', data.filters.min_price.toString());
+			if (data.filters.max_price) params.set('max_price', data.filters.max_price.toString());
+			params.set('sort', data.filters.sort);
+			params.set('page', nextPage.toString());
+			params.set('limit', '12');
+
+			const response = await fetch(`/api/shop/products?${params}`);
+			if (response.ok) {
+				const result = await response.json();
+				// Append new products to existing ones
+				allProducts = [...allProducts, ...result.products];
+				currentPage = nextPage;
+				hasMoreProducts = result.pagination.hasMore;
+
+				// Update URL without navigation (for bookmarking)
+				const url = new URL($page.url);
+				url.searchParams.set('page', nextPage.toString());
+				history.replaceState({}, '', url.toString());
+			}
+		} catch (err) {
+			console.error('Failed to load more products:', err);
+		} finally {
+			isLoadingMore = false;
 		}
 	}
 
-	// Check if we can show less (page > 1)
-	const canShowLess = $derived(data.filters.page > 1);
 
 	// Initialize stores on mount
 	onMount(() => {
@@ -338,7 +375,7 @@
 				<!-- Results info -->
 				<div class="results-info">
 					<p>
-						{t.showing} {data.products.products.length} {t.of} {data.products.pagination.total} {t.artworks}
+						{t.showing} {allProducts.length} {t.of} {totalProducts} {t.artworks}
 					</p>
 
 					<div class="desktop-sort">
@@ -350,7 +387,7 @@
 					</div>
 				</div>
 
-				{#if data.products.products.length === 0}
+				{#if allProducts.length === 0}
 					<!-- Empty state -->
 					<div class="empty-state">
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
@@ -369,7 +406,7 @@
 				{:else}
 					<!-- Products grid -->
 					<div class="products-grid">
-						{#each data.products.products as product (product.id)}
+						{#each allProducts as product (product.id)}
 							<ProductCard
 								{product}
 								lang={data.lang}
@@ -382,19 +419,21 @@
 						{/each}
 					</div>
 
-					<!-- Pagination buttons -->
-					{#if data.products.pagination.hasMore || canShowLess}
+					<!-- Load More button -->
+					{#if hasMoreProducts}
 						<div class="pagination-buttons">
-							{#if canShowLess}
-								<button class="btn btn-outline" onclick={showLess}>
-									{t.showLess}
-								</button>
-							{/if}
-							{#if data.products.pagination.hasMore}
-								<button class="btn btn-secondary" onclick={loadMore}>
+							<button
+								class="btn btn-secondary"
+								onclick={loadMore}
+								disabled={isLoadingMore}
+							>
+								{#if isLoadingMore}
+									<span class="spinner-small"></span>
+									Loading...
+								{:else}
 									{t.loadMore}
-								</button>
-							{/if}
+								{/if}
+							</button>
 						</div>
 					{/if}
 				{/if}
@@ -468,6 +507,24 @@
 		to {
 			transform: translateX(0);
 			opacity: 1;
+		}
+	}
+
+	/* Loading spinner */
+	.spinner-small {
+		display: inline-block;
+		width: 16px;
+		height: 16px;
+		border: 2px solid rgba(255, 255, 255, 0.3);
+		border-top-color: white;
+		border-radius: 50%;
+		animation: spin 0.8s linear infinite;
+		margin-right: 0.5rem;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
 		}
 	}
 
@@ -727,76 +784,76 @@
 	}
 
 	/* Dark Theme */
-	:global([data-theme='dark']) .shop-hero {
+	:global(.dark) .shop-hero {
 		background: var(--bg-secondary, #1c1c1e);
 	}
 
-	:global([data-theme='dark']) .shop-hero h1 {
+	:global(.dark) .shop-hero h1 {
 		color: var(--text-primary, #ffffff);
 	}
 
-	:global([data-theme='dark']) .shop-hero p {
+	:global(.dark) .shop-hero p {
 		color: var(--text-secondary, #8e8e93);
 	}
 
-	:global([data-theme='dark']) .filter-toggle {
+	:global(.dark) .filter-toggle {
 		background: var(--bg-secondary, #1c1c1e);
 		border-color: var(--border-color, #333);
 		color: var(--text-primary, #ffffff);
 	}
 
-	:global([data-theme='dark']) .filter-toggle:hover {
+	:global(.dark) .filter-toggle:hover {
 		border-color: var(--text-secondary, #8e8e93);
 	}
 
-	:global([data-theme='dark']) .empty-state {
+	:global(.dark) .empty-state {
 		background: var(--bg-secondary, #1c1c1e);
 		border-color: var(--border-color, #333);
 	}
 
-	:global([data-theme='dark']) .empty-state h3,
-	:global([data-theme='dark']) .empty-state p {
+	:global(.dark) .empty-state h3,
+	:global(.dark) .empty-state p {
 		color: var(--text-primary, #ffffff);
 	}
 
-	:global([data-theme='dark']) .btn-secondary {
+	:global(.dark) .btn-secondary {
 		background: var(--bg-secondary, #1c1c1e);
 		border-color: var(--border-color, #333);
 		color: var(--text-primary, #ffffff);
 	}
 
-	:global([data-theme='dark']) .results-info p {
+	:global(.dark) .results-info p {
 		color: var(--text-secondary, #8e8e93);
 	}
 
-	:global([data-theme='dark']) .filters-header h2 {
+	:global(.dark) .filters-header h2 {
 		color: var(--text-primary, #ffffff);
 	}
 
-	:global([data-theme='dark']) .clear-btn {
+	:global(.dark) .clear-btn {
 		color: var(--text-secondary, #8e8e93);
 	}
 
-	:global([data-theme='dark']) .clear-btn:hover {
+	:global(.dark) .clear-btn:hover {
 		color: var(--text-primary, #ffffff);
 	}
 
-	:global([data-theme='dark']) .filter-badge {
+	:global(.dark) .filter-badge {
 		background: var(--text-primary, #ffffff);
 		color: var(--bg-primary, #000);
 	}
 
-	:global([data-theme='dark']) .btn-primary {
+	:global(.dark) .btn-primary {
 		background: var(--text-primary, #ffffff);
 		color: var(--bg-primary, #000);
 	}
 
-	:global([data-theme='dark']) .btn-outline {
+	:global(.dark) .btn-outline {
 		color: var(--text-primary, #ffffff);
 		border-color: var(--text-primary, #ffffff);
 	}
 
-	:global([data-theme='dark']) .btn-outline:hover {
+	:global(.dark) .btn-outline:hover {
 		background: var(--text-primary, #ffffff);
 		color: var(--bg-primary, #000);
 	}

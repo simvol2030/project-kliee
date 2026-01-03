@@ -218,7 +218,7 @@
 	}
 
 	/* Dark mode */
-	:global([data-theme='dark']) .works-hero {
+	:global(.dark) .works-hero {
 		background: var(--bg-secondary, #1c1c1e);
 	}
 </style>

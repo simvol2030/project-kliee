@@ -728,51 +728,51 @@
 	}
 
 	/* Dark theme */
-	:global([data-theme='dark']) .checkout-page {
+	:global(.dark) .checkout-page {
 		background-color: var(--color-bg, #111827);
 	}
 
-	:global([data-theme='dark']) h1 {
+	:global(.dark) h1 {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .form-section {
+	:global(.dark) .form-section {
 		background: var(--color-card-bg, #1f2937);
 	}
 
-	:global([data-theme='dark']) .form-section h2 {
+	:global(.dark) .form-section h2 {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .form-group label {
+	:global(.dark) .form-group label {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .form-group input,
-	:global([data-theme='dark']) .form-group select,
-	:global([data-theme='dark']) .form-group textarea {
+	:global(.dark) .form-group input,
+	:global(.dark) .form-group select,
+	:global(.dark) .form-group textarea {
 		background: var(--color-bg, #111827);
 		border-color: var(--color-border, #374151);
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .order-summary {
+	:global(.dark) .order-summary {
 		background: var(--color-card-bg, #1f2937);
 	}
 
-	:global([data-theme='dark']) .order-summary h2 {
+	:global(.dark) .order-summary h2 {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .item-title {
+	:global(.dark) .item-title {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .summary-row {
+	:global(.dark) .summary-row {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .summary-total {
+	:global(.dark) .summary-total {
 		color: var(--color-text, #f3f4f6);
 	}
 </style>

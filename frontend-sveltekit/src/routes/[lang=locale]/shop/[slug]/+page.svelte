@@ -541,27 +541,27 @@
 	}
 
 	/* Dark theme */
-	:global([data-theme='dark']) .breadcrumbs .current {
+	:global(.dark) .breadcrumbs .current {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .product-title {
+	:global(.dark) .product-title {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .product-price .price {
+	:global(.dark) .product-price .price {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .detail-value {
+	:global(.dark) .detail-value {
 		color: var(--color-text, #e5e7eb);
 	}
 
-	:global([data-theme='dark']) .product-details {
+	:global(.dark) .product-details {
 		border-color: #374151;
 	}
 
-	:global([data-theme='dark']) .btn-secondary {
+	:global(.dark) .btn-secondary {
 		background: #1f2937;
 		border-color: #374151;
 		color: #e5e7eb;

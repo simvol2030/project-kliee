@@ -352,34 +352,34 @@
 	}
 
 	/* Dark mode */
-	:global([data-theme='dark']) .nft-hero {
+	:global(.dark) .nft-hero {
 		background: var(--bg-tertiary, #2c2c2e);
 		border-bottom-color: rgba(255, 255, 255, 0.1);
 	}
 
-	:global([data-theme='dark']) .nft-gallery {
+	:global(.dark) .nft-gallery {
 		background: var(--bg-secondary, #1c1c1e);
 	}
 
-	:global([data-theme='dark']) .nft-card {
+	:global(.dark) .nft-card {
 		background: var(--bg-tertiary, #2c2c2e);
 	}
 
-	:global([data-theme='dark']) .view-link {
+	:global(.dark) .view-link {
 		background: rgba(44, 44, 46, 0.9);
 		color: #fff;
 	}
 
-	:global([data-theme='dark']) .view-link:hover {
+	:global(.dark) .view-link:hover {
 		background: var(--bg-tertiary, #2c2c2e);
 	}
 
-	:global([data-theme='dark']) .nft-cta {
+	:global(.dark) .nft-cta {
 		background: var(--bg-secondary, #1c1c1e);
 		border-top-color: rgba(255, 255, 255, 0.1);
 	}
 
-	:global([data-theme='dark']) .btn-primary {
+	:global(.dark) .btn-primary {
 		color: var(--black, #000);
 	}
 </style>

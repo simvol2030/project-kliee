@@ -641,61 +641,61 @@
 	}
 
 	/* Dark theme */
-	:global([data-theme='dark']) .cart-page {
+	:global(.dark) .cart-page {
 		background-color: var(--color-bg, #111827);
 	}
 
-	:global([data-theme='dark']) .breadcrumb .current {
+	:global(.dark) .breadcrumb .current {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) h1 {
+	:global(.dark) h1 {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .empty-cart h2 {
+	:global(.dark) .empty-cart h2 {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .cart-items-section {
+	:global(.dark) .cart-items-section {
 		background: var(--color-card-bg, #1f2937);
 	}
 
-	:global([data-theme='dark']) .cart-header {
+	:global(.dark) .cart-header {
 		background: rgba(0, 0, 0, 0.2);
 	}
 
-	:global([data-theme='dark']) .item-title {
+	:global(.dark) .item-title {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .item-price {
+	:global(.dark) .item-price {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .order-summary {
+	:global(.dark) .order-summary {
 		background: var(--color-card-bg, #1f2937);
 	}
 
-	:global([data-theme='dark']) .order-summary h2 {
+	:global(.dark) .order-summary h2 {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .summary-row {
+	:global(.dark) .summary-row {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .total-price {
+	:global(.dark) .total-price {
 		color: var(--color-text, #f3f4f6);
 	}
 
-	:global([data-theme='dark']) .btn-secondary {
+	:global(.dark) .btn-secondary {
 		background: var(--color-card-bg, #374151);
 		color: var(--color-text, #f3f4f6);
 		border-color: var(--color-border, #4b5563);
 	}
 
-	:global([data-theme='dark']) .btn-secondary:hover {
+	:global(.dark) .btn-secondary:hover {
 		background: rgba(255, 255, 255, 0.1);
 	}
 </style>

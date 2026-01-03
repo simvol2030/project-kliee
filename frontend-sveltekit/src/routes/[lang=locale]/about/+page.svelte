@@ -307,12 +307,12 @@
 	}
 
 	/* Dark mode */
-	:global([data-theme='dark']) .about-hero,
-	:global([data-theme='dark']) section:nth-child(even) {
+	:global(.dark) .about-hero,
+	:global(.dark) section:nth-child(even) {
 		background: var(--bg-secondary, #1c1c1e);
 	}
 
-	:global([data-theme='dark']) .residency-card {
+	:global(.dark) .residency-card {
 		background: var(--bg-tertiary, #2c2c2e);
 		border-color: var(--border-color, #3c3c3e);
 	}

@@ -344,17 +344,17 @@
 	}
 
 	/* Dark mode */
-	:global([data-theme='dark']) .exhibitions-hero,
-	:global([data-theme='dark']) .past-exhibitions {
+	:global(.dark) .exhibitions-hero,
+	:global(.dark) .past-exhibitions {
 		background: var(--bg-secondary, #1c1c1e);
 	}
 
-	:global([data-theme='dark']) .exhibition-card.featured,
-	:global([data-theme='dark']) .fair-card {
+	:global(.dark) .exhibition-card.featured,
+	:global(.dark) .fair-card {
 		background: var(--bg-tertiary, #2c2c2e);
 	}
 
-	:global([data-theme='dark']) .type-badge {
+	:global(.dark) .type-badge {
 		background: var(--bg-secondary, #1c1c1e);
 	}
 </style>

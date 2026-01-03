@@ -428,28 +428,28 @@
 	}
 
 	/* Dark mode */
-	:global([data-theme='dark']) .contact-hero {
+	:global(.dark) .contact-hero {
 		background: var(--bg-secondary, #1c1c1e);
 	}
 
-	:global([data-theme='dark']) .info-card {
+	:global(.dark) .info-card {
 		background: var(--bg-tertiary, #2c2c2e);
 	}
 
-	:global([data-theme='dark']) .form-group input,
-	:global([data-theme='dark']) .form-group select,
-	:global([data-theme='dark']) .form-group textarea {
+	:global(.dark) .form-group input,
+	:global(.dark) .form-group select,
+	:global(.dark) .form-group textarea {
 		background: var(--bg-tertiary, #2c2c2e);
 		border-color: var(--border-color, #3c3c3e);
 	}
 
-	:global([data-theme='dark']) .alert-success {
+	:global(.dark) .alert-success {
 		background: #1c3d2e;
 		color: #a3d9a5;
 		border-color: #2a5d3e;
 	}
 
-	:global([data-theme='dark']) .alert-error {
+	:global(.dark) .alert-error {
 		background: #3d1c1c;
 		color: #d9a3a3;
 		border-color: #5d2a2a;
