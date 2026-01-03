@@ -41,14 +41,15 @@ export const load: PageLoad = async ({ fetch, params, url }) => {
 	const page = parseInt(url.searchParams.get('page') || '1');
 
 	// Build products API URL
+	// When page > 1 (e.g., after browser back), load all products up to that page
 	const productsParams = new URLSearchParams();
 	productsParams.set('locale', lang); // Add locale for translations
 	if (seriesId) productsParams.set('series_id', seriesId);
 	if (minPrice) productsParams.set('min_price', minPrice);
 	if (maxPrice) productsParams.set('max_price', maxPrice);
 	productsParams.set('sort', sort);
-	productsParams.set('page', page.toString());
-	productsParams.set('limit', '12');
+	productsParams.set('page', '1'); // Always start from page 1
+	productsParams.set('limit', (page * 12).toString()); // Load all products up to current page
 
 	// Fetch data in parallel
 	const [productsRes, seriesRes, currenciesRes] = await Promise.all([
