@@ -727,52 +727,109 @@
 		}
 	}
 
-	/* Dark theme */
+	/* Dark theme - Apple Style */
 	:global(.dark) .checkout-page {
-		background-color: var(--color-bg, #111827);
+		background-color: var(--bg-primary);
 	}
 
 	:global(.dark) h1 {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .error-banner {
+		background: rgba(220, 38, 38, 0.15);
+		border-color: rgba(220, 38, 38, 0.3);
 	}
 
 	:global(.dark) .form-section {
-		background: var(--color-card-bg, #1f2937);
+		background: var(--bg-secondary);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 	}
 
 	:global(.dark) .form-section h2 {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
 	}
 
 	:global(.dark) .form-group label {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
 	}
 
 	:global(.dark) .form-group input,
 	:global(.dark) .form-group select,
 	:global(.dark) .form-group textarea {
-		background: var(--color-bg, #111827);
-		border-color: var(--color-border, #374151);
-		color: var(--color-text, #f3f4f6);
+		background: var(--bg-tertiary);
+		border-color: var(--border-primary);
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .form-group input::placeholder,
+	:global(.dark) .form-group textarea::placeholder {
+		color: var(--text-tertiary);
+	}
+
+	:global(.dark) .form-group input:focus,
+	:global(.dark) .form-group select:focus,
+	:global(.dark) .form-group textarea:focus {
+		border-color: var(--accent);
+		box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
 	}
 
 	:global(.dark) .order-summary {
-		background: var(--color-card-bg, #1f2937);
+		background: var(--bg-secondary);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 	}
 
 	:global(.dark) .order-summary h2 {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .order-item {
+		border-bottom-color: var(--border-primary);
+	}
+
+	:global(.dark) .item-image {
+		background: var(--bg-tertiary);
 	}
 
 	:global(.dark) .item-title {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .item-price {
+		color: var(--text-secondary);
+	}
+
+	:global(.dark) .summary-divider {
+		background: var(--border-primary);
 	}
 
 	:global(.dark) .summary-row {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .summary-row.shipping .note {
+		color: var(--text-secondary);
 	}
 
 	:global(.dark) .summary-total {
-		color: var(--color-text, #f3f4f6);
+		border-top-color: var(--border-primary);
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .btn-submit {
+		background: var(--accent);
+		color: var(--bg-primary);
+	}
+
+	:global(.dark) .btn-submit:hover:not(:disabled) {
+		background: var(--accent-dark);
+	}
+
+	:global(.dark) .back-link {
+		color: var(--text-secondary);
+	}
+
+	:global(.dark) .back-link:hover {
+		color: var(--accent);
 	}
 </style>

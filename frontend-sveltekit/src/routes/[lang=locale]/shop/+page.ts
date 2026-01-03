@@ -42,6 +42,7 @@ export const load: PageLoad = async ({ fetch, params, url }) => {
 
 	// Build products API URL
 	const productsParams = new URLSearchParams();
+	productsParams.set('locale', lang); // Add locale for translations
 	if (seriesId) productsParams.set('series_id', seriesId);
 	if (minPrice) productsParams.set('min_price', minPrice);
 	if (maxPrice) productsParams.set('max_price', maxPrice);

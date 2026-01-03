@@ -5,9 +5,10 @@
 	import PriceRangeFilter from '$lib/components/shop/PriceRangeFilter.svelte';
 	import SortSelect from '$lib/components/shop/SortSelect.svelte';
 	import FilterDrawer from '$lib/components/shop/FilterDrawer.svelte';
-	import { goto } from '$app/navigation';
+	import { goto, beforeNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
 	import type { LanguageCode, CurrencyRate } from '$lib/utils/currency';
 	import { getCurrencyByLang } from '$lib/utils/currency';
 	import { cartStore } from '$lib/stores/cart.svelte';
@@ -208,6 +209,7 @@
 		try {
 			// Build URL with current filters
 			const params = new URLSearchParams();
+			params.set('locale', data.lang); // Add locale for translations
 			if (data.filters.series_id) params.set('series_id', data.filters.series_id.toString());
 			if (data.filters.min_price) params.set('min_price', data.filters.min_price.toString());
 			if (data.filters.max_price) params.set('max_price', data.filters.max_price.toString());
@@ -236,10 +238,61 @@
 	}
 
 
-	// Initialize stores on mount
+	// Storage key for pagination state
+	const SHOP_STATE_KEY = 'shop_pagination_state';
+
+	// Save state before navigating away (to product page)
+	beforeNavigate(({ to }) => {
+		if (browser && to?.url.pathname.includes('/shop/')) {
+			// Save current state to sessionStorage
+			const state = {
+				products: allProducts,
+				page: currentPage,
+				hasMore: hasMoreProducts,
+				total: totalProducts,
+				scrollY: window.scrollY,
+				filters: data.filters
+			};
+			sessionStorage.setItem(SHOP_STATE_KEY, JSON.stringify(state));
+		}
+	});
+
+	// Initialize stores on mount and restore state if available
 	onMount(() => {
 		cartStore.init();
 		wishlistStore.init();
+
+		// Try to restore state from sessionStorage (when navigating back)
+		if (browser) {
+			const savedState = sessionStorage.getItem(SHOP_STATE_KEY);
+			if (savedState) {
+				try {
+					const state = JSON.parse(savedState);
+					// Only restore if filters match
+					const filtersMatch =
+						state.filters.series_id === data.filters.series_id &&
+						state.filters.min_price === data.filters.min_price &&
+						state.filters.max_price === data.filters.max_price &&
+						state.filters.sort === data.filters.sort;
+
+					if (filtersMatch && state.products.length > data.products.products.length) {
+						allProducts = state.products;
+						currentPage = state.page;
+						hasMoreProducts = state.hasMore;
+						totalProducts = state.total;
+
+						// Restore scroll position after a tick
+						setTimeout(() => {
+							window.scrollTo(0, state.scrollY);
+						}, 100);
+					}
+				} catch (e) {
+					console.error('Failed to restore shop state:', e);
+				}
+				// Clear saved state after restoring
+				sessionStorage.removeItem(SHOP_STATE_KEY);
+			}
+		}
 	});
 
 	// Loading and feedback state
