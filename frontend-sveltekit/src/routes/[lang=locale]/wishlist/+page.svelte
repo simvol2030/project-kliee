@@ -553,36 +553,100 @@
 		}
 	}
 
-	/* Dark theme */
+	/* Dark theme - Apple Style */
 	:global(.dark) .wishlist-page {
-		background-color: var(--color-bg, #111827);
+		background-color: var(--bg-primary);
+	}
+
+	:global(.dark) .breadcrumb a {
+		color: var(--text-secondary);
+	}
+
+	:global(.dark) .breadcrumb .separator {
+		color: var(--text-tertiary);
 	}
 
 	:global(.dark) .breadcrumb .current {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
 	}
 
 	:global(.dark) h1 {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .spinner {
+		border-color: var(--border-primary);
+		border-top-color: var(--accent);
 	}
 
 	:global(.dark) .empty-wishlist h2 {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .empty-wishlist p {
+		color: var(--text-secondary);
+	}
+
+	:global(.dark) .empty-wishlist svg {
+		color: var(--text-tertiary);
+	}
+
+	:global(.dark) .btn-primary {
+		background: var(--accent);
+		color: var(--bg-primary);
+	}
+
+	:global(.dark) .btn-primary:hover {
+		background: var(--accent-dark);
 	}
 
 	:global(.dark) .wishlist-card {
-		background: var(--color-card-bg, #1f2937);
+		background: var(--bg-secondary);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+	}
+
+	:global(.dark) .wishlist-card:hover {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+	}
+
+	:global(.dark) .image-wrapper {
+		background: var(--bg-tertiary);
 	}
 
 	:global(.dark) .product-title {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
 	}
 
 	:global(.dark) .product-price {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .btn-add-cart {
+		background: var(--accent);
+		color: var(--bg-primary);
+	}
+
+	:global(.dark) .btn-add-cart:hover:not(:disabled) {
+		background: var(--accent-dark);
 	}
 
 	:global(.dark) .in-cart-badge {
-		background: rgba(255, 255, 255, 0.1);
+		background: var(--bg-tertiary);
+		color: var(--text-secondary);
+	}
+
+	:global(.dark) .btn-remove {
+		background: rgba(220, 38, 38, 0.15);
+	}
+
+	:global(.dark) .btn-remove:hover {
+		background: rgba(220, 38, 38, 0.25);
+	}
+
+	@media (max-width: 640px) {
+		:global(.dark) .btn-remove {
+			background: var(--bg-secondary);
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+		}
 	}
 </style>

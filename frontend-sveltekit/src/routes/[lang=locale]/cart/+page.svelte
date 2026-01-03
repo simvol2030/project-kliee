@@ -640,62 +640,140 @@
 		}
 	}
 
-	/* Dark theme */
+	/* Dark theme - Apple Style */
 	:global(.dark) .cart-page {
-		background-color: var(--color-bg, #111827);
+		background-color: var(--bg-primary);
+	}
+
+	:global(.dark) .breadcrumb a {
+		color: var(--text-secondary);
+	}
+
+	:global(.dark) .breadcrumb .separator {
+		color: var(--text-tertiary);
 	}
 
 	:global(.dark) .breadcrumb .current {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
 	}
 
 	:global(.dark) h1 {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
 	}
 
 	:global(.dark) .empty-cart h2 {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .empty-cart p {
+		color: var(--text-secondary);
+	}
+
+	:global(.dark) .empty-cart svg {
+		color: var(--text-tertiary);
+	}
+
+	:global(.dark) .btn-primary {
+		background: var(--accent);
+		color: var(--bg-primary);
+	}
+
+	:global(.dark) .btn-primary:hover {
+		background: var(--accent-dark);
 	}
 
 	:global(.dark) .cart-items-section {
-		background: var(--color-card-bg, #1f2937);
+		background: var(--bg-secondary);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 	}
 
 	:global(.dark) .cart-header {
-		background: rgba(0, 0, 0, 0.2);
+		background: var(--bg-tertiary);
+		color: var(--text-secondary);
+	}
+
+	:global(.dark) .cart-item {
+		border-bottom-color: var(--border-primary);
+	}
+
+	:global(.dark) .item-image {
+		background: var(--bg-tertiary);
 	}
 
 	:global(.dark) .item-title {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .item-title:hover {
+		color: var(--accent);
 	}
 
 	:global(.dark) .item-price {
-		color: var(--color-text, #f3f4f6);
+		color: var(--text-primary);
 	}
 
-	:global(.dark) .order-summary {
-		background: var(--color-card-bg, #1f2937);
+	:global(.dark) .remove-btn {
+		color: var(--text-secondary);
 	}
 
-	:global(.dark) .order-summary h2 {
-		color: var(--color-text, #f3f4f6);
+	:global(.dark) .remove-btn:hover {
+		color: #dc2626;
+		background: rgba(220, 38, 38, 0.15);
 	}
 
-	:global(.dark) .summary-row {
-		color: var(--color-text, #f3f4f6);
-	}
-
-	:global(.dark) .total-price {
-		color: var(--color-text, #f3f4f6);
+	:global(.dark) .cart-actions {
+		border-top-color: var(--border-primary);
 	}
 
 	:global(.dark) .btn-secondary {
-		background: var(--color-card-bg, #374151);
-		color: var(--color-text, #f3f4f6);
-		border-color: var(--color-border, #4b5563);
+		background: var(--bg-tertiary);
+		color: var(--text-primary);
+		border-color: var(--border-primary);
 	}
 
 	:global(.dark) .btn-secondary:hover {
-		background: rgba(255, 255, 255, 0.1);
+		background: var(--border-secondary);
+	}
+
+	:global(.dark) .btn-danger {
+		background: rgba(220, 38, 38, 0.15);
+	}
+
+	:global(.dark) .btn-danger:hover {
+		background: rgba(220, 38, 38, 0.25);
+	}
+
+	:global(.dark) .order-summary {
+		background: var(--bg-secondary);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+	}
+
+	:global(.dark) .order-summary h2 {
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .summary-row {
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .summary-row.shipping .note {
+		color: var(--text-secondary);
+	}
+
+	:global(.dark) .summary-total {
+		border-top-color: var(--border-primary);
+	}
+
+	:global(.dark) .total-price {
+		color: var(--text-primary);
+	}
+
+	:global(.dark) .btn-checkout {
+		background: var(--accent);
+		color: var(--bg-primary);
+	}
+
+	:global(.dark) .btn-checkout:hover {
+		background: var(--accent-dark);
 	}
 </style>
