@@ -651,7 +651,7 @@ export const shopProducts = sqliteTable('shop_products', {
 	price_eur: integer('price_eur').notNull(),
 	compare_price_eur: integer('compare_price_eur'),
 	stock_quantity: integer('stock_quantity').default(1),
-	is_unlimited: integer('is_unlimited', { mode: 'boolean' }).default(false),
+	is_unlimited: integer('is_unlimited', { mode: 'boolean' }).default(true),
 	shipping_class: text('shipping_class', { enum: ['standard', 'fragile', 'oversized'] }).default('standard'),
 	weight_kg: text('weight_kg'),
 	dimensions_cm: text('dimensions_cm'),
