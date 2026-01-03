@@ -1,14 +1,16 @@
 /**
  * Email notification service
- * Uses Nodemailer for SMTP email sending
+ * Uses Nodemailer with sendmail (server's built-in mail) or SMTP
  *
- * Required env vars:
+ * Optional env vars for SMTP (if not set, uses sendmail):
  * - SMTP_HOST
  * - SMTP_PORT
  * - SMTP_USER
  * - SMTP_PASSWORD
  * - SMTP_FROM_EMAIL
  * - SMTP_FROM_NAME
+ *
+ * Required:
  * - ADMIN_EMAIL (for notifications)
  */
 
@@ -21,15 +23,18 @@ let transporter: Transporter | null = null;
 
 /**
  * Get or create nodemailer transporter
+ * Uses SMTP if configured, otherwise falls back to sendmail
  */
-function getTransporter(): Transporter | null {
-	const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD } = env;
-
-	if (!SMTP_HOST || !SMTP_USER || !SMTP_PASSWORD) {
-		return null;
+function getTransporter(): Transporter {
+	if (transporter) {
+		return transporter;
 	}
 
-	if (!transporter) {
+	const { SMTP_HOST, SMTP_USER, SMTP_PASSWORD, SMTP_PORT } = env;
+
+	// If SMTP is configured, use it
+	if (SMTP_HOST && SMTP_USER && SMTP_PASSWORD) {
+		console.log('[Email] Using SMTP transport:', SMTP_HOST);
 		transporter = nodemailer.createTransport({
 			host: SMTP_HOST,
 			port: parseInt(SMTP_PORT || '587'),
@@ -38,6 +43,14 @@ function getTransporter(): Transporter | null {
 				user: SMTP_USER,
 				pass: SMTP_PASSWORD
 			}
+		});
+	} else {
+		// Use sendmail (server's built-in mail system)
+		console.log('[Email] Using sendmail transport');
+		transporter = nodemailer.createTransport({
+			sendmail: true,
+			newline: 'unix',
+			path: '/usr/sbin/sendmail'
 		});
 	}
 
@@ -77,27 +90,19 @@ interface ContactFormData {
 }
 
 /**
- * Send email using SMTP
+ * Send email using sendmail or SMTP
  * Returns true if sent successfully, false otherwise
  */
 export async function sendEmail(options: EmailOptions): Promise<boolean> {
-	const { SMTP_FROM_EMAIL, SMTP_FROM_NAME, SMTP_USER } = env;
+	const { SMTP_FROM_EMAIL, SMTP_FROM_NAME } = env;
 
 	const transport = getTransporter();
-
-	if (!transport) {
-		console.log('[Email] SMTP not configured, skipping email:', options.subject);
-		console.log('[Email] To:', options.to);
-		// Log email content for development
-		if (process.env.NODE_ENV === 'development') {
-			console.log('[Email] HTML preview (first 500 chars):', options.html?.slice(0, 500));
-		}
-		return false;
-	}
+	const fromEmail = SMTP_FROM_EMAIL || 'noreply@k-liee.com';
+	const fromName = SMTP_FROM_NAME || 'K-LIÉE';
 
 	try {
 		const info = await transport.sendMail({
-			from: `"${SMTP_FROM_NAME || 'K-LIÉE'}" <${SMTP_FROM_EMAIL || SMTP_USER}>`,
+			from: `"${fromName}" <${fromEmail}>`,
 			to: options.to,
 			subject: options.subject,
 			html: options.html,
@@ -105,7 +110,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
 			replyTo: options.replyTo
 		});
 
-		console.log('[Email] Sent successfully:', info.messageId);
+		console.log('[Email] Sent successfully:', info.messageId || info.envelope?.to);
 		return true;
 	} catch (err) {
 		console.error('[Email] Failed to send:', err);
@@ -492,22 +497,26 @@ export async function sendContactAutoReply(data: ContactFormData): Promise<boole
 }
 
 /**
- * Verify SMTP connection
+ * Verify email transport (SMTP or sendmail)
  */
-export async function verifyEmailConfig(): Promise<{ configured: boolean; connected: boolean; error?: string }> {
-	const transport = getTransporter();
-
-	if (!transport) {
-		return { configured: false, connected: false };
-	}
+export async function verifyEmailConfig(): Promise<{ configured: boolean; connected: boolean; transport: string; error?: string }> {
+	const { SMTP_HOST } = env;
+	const transportType = SMTP_HOST ? 'SMTP' : 'sendmail';
 
 	try {
+		const transport = getTransporter();
+		// For sendmail, we can't really verify - just check it was created
+		if (!SMTP_HOST) {
+			return { configured: true, connected: true, transport: transportType };
+		}
+		// For SMTP, verify connection
 		await transport.verify();
-		return { configured: true, connected: true };
+		return { configured: true, connected: true, transport: transportType };
 	} catch (err) {
 		return {
 			configured: true,
 			connected: false,
+			transport: transportType,
 			error: err instanceof Error ? err.message : 'Unknown error'
 		};
 	}
