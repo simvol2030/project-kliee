@@ -380,9 +380,9 @@
 				<ul class="order-items">
 					{#each cart.items as item (item.id)}
 						<li class="order-item">
-							{#if item.image}
+							{#if item.image?.url}
 								<img
-									src={`/uploads/${item.image.folder || 'products'}/${item.image.stored_filename}`}
+									src={item.image.url}
 									alt={getTitle(item)}
 									class="item-image"
 								/>
@@ -391,7 +391,7 @@
 							{/if}
 							<div class="item-details">
 								<p class="item-title">{getTitle(item)}</p>
-								<p class="item-price">{formatPrice(item.price || 0, lang, currencyRates)}</p>
+								<p class="item-price">{formatPrice(item.price_eur || 0, lang, currencyRates)}</p>
 							</div>
 						</li>
 					{/each}
