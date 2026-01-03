@@ -5,7 +5,7 @@
 	import PriceRangeFilter from '$lib/components/shop/PriceRangeFilter.svelte';
 	import SortSelect from '$lib/components/shop/SortSelect.svelte';
 	import FilterDrawer from '$lib/components/shop/FilterDrawer.svelte';
-	import { goto, beforeNavigate } from '$app/navigation';
+	import { goto, beforeNavigate, afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
@@ -257,13 +257,18 @@
 		}
 	});
 
-	// Initialize stores on mount and restore state if available
+	// Initialize stores on mount
 	onMount(() => {
 		cartStore.init();
 		wishlistStore.init();
+	});
 
-		// Try to restore state from sessionStorage (when navigating back)
-		if (browser) {
+	// Restore state after navigation (including browser back)
+	afterNavigate(({ type }) => {
+		if (!browser) return;
+
+		// Only restore state on popstate (browser back/forward)
+		if (type === 'popstate') {
 			const savedState = sessionStorage.getItem(SHOP_STATE_KEY);
 			if (savedState) {
 				try {
