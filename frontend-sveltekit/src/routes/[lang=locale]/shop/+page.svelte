@@ -34,6 +34,7 @@
 			noProductsDesc: 'Try adjusting your filters or browse our full collection.',
 			clearFilters: 'Clear Filters',
 			loadMore: 'Load More',
+			showLess: 'Show Less',
 			showing: 'Showing',
 			of: 'of',
 			artworks: 'artworks',
@@ -55,6 +56,7 @@
 			noProductsDesc: 'Попробуйте изменить фильтры или просмотрите всю коллекцию.',
 			clearFilters: 'Сбросить фильтры',
 			loadMore: 'Загрузить ещё',
+			showLess: 'Показать меньше',
 			showing: 'Показано',
 			of: 'из',
 			artworks: 'работ',
@@ -76,6 +78,7 @@
 			noProductsDesc: 'Intenta ajustar los filtros o explora toda la colección.',
 			clearFilters: 'Limpiar filtros',
 			loadMore: 'Cargar más',
+			showLess: 'Mostrar menos',
 			showing: 'Mostrando',
 			of: 'de',
 			artworks: 'obras',
@@ -97,6 +100,7 @@
 			noProductsDesc: '请尝试调整筛选条件或浏览全部收藏。',
 			clearFilters: '清除筛选',
 			loadMore: '加载更多',
+			showLess: '收起',
 			showing: '显示',
 			of: '共',
 			artworks: '件作品',
@@ -180,6 +184,20 @@
 	function loadMore() {
 		updateFilters({ page: (data.filters.page + 1).toString() });
 	}
+
+	function showLess() {
+		if (data.filters.page > 1) {
+			updateFilters({ page: (data.filters.page - 1).toString() });
+		} else {
+			// Go back to page 1 (remove page param)
+			const url = new URL($page.url);
+			url.searchParams.delete('page');
+			goto(url.toString(), { replaceState: true });
+		}
+	}
+
+	// Check if we can show less (page > 1)
+	const canShowLess = $derived(data.filters.page > 1);
 
 	// Initialize stores on mount
 	onMount(() => {
@@ -364,12 +382,19 @@
 						{/each}
 					</div>
 
-					<!-- Load more -->
-					{#if data.products.pagination.hasMore}
-						<div class="load-more">
-							<button class="btn btn-secondary" onclick={loadMore}>
-								{t.loadMore}
-							</button>
+					<!-- Pagination buttons -->
+					{#if data.products.pagination.hasMore || canShowLess}
+						<div class="pagination-buttons">
+							{#if canShowLess}
+								<button class="btn btn-outline" onclick={showLess}>
+									{t.showLess}
+								</button>
+							{/if}
+							{#if data.products.pagination.hasMore}
+								<button class="btn btn-secondary" onclick={loadMore}>
+									{t.loadMore}
+								</button>
+							{/if}
 						</div>
 					{/if}
 				{/if}
@@ -608,10 +633,13 @@
 		color: var(--color-text-secondary, #6b7280);
 	}
 
-	/* Load More */
-	.load-more {
+	/* Pagination Buttons */
+	.pagination-buttons {
 		margin-top: 2rem;
-		text-align: center;
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		flex-wrap: wrap;
 	}
 
 	/* Buttons */
