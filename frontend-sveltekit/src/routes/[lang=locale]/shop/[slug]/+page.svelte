@@ -6,20 +6,20 @@
 	import { cartStore } from '$lib/stores/cart.svelte';
 	import { wishlistStore } from '$lib/stores/wishlist.svelte';
 	import { onMount } from 'svelte';
-	import { afterNavigate, invalidateAll } from '$app/navigation';
+	import { afterNavigate, goto } from '$app/navigation';
 	import { browser } from '$app/environment';
 
 	let { data }: { data: PageData } = $props();
 
-	// Handle browser back/forward - force page reload when navigating away from product
+	// Handle browser back/forward - force navigation when URL doesn't match product
 	afterNavigate(({ type }) => {
 		if (browser && type === 'popstate') {
 			// Check if URL no longer matches this product page
 			const currentPath = window.location.pathname;
 			const expectedPath = `/${data.lang}/shop/${data.product.slug}`;
 			if (currentPath !== expectedPath) {
-				// Force reload of new page data
-				invalidateAll();
+				// Force navigation to the new URL
+				goto(window.location.href, { replaceState: true, invalidateAll: true });
 			}
 		}
 	});
