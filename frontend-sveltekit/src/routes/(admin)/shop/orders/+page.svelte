@@ -869,4 +869,125 @@
 			display: none;
 		}
 	}
+
+	/* Dark theme support */
+	:global(.dark) .page-header h1 { color: #f9fafb; }
+	:global(.dark) .page-subtitle { color: #9ca3af; }
+
+	:global(.dark) .stat-card {
+		background: #1f2937;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+	}
+	:global(.dark) .stat-label { color: #9ca3af; }
+	:global(.dark) .stat-value { color: #f9fafb; }
+	:global(.dark) .stat-card.pending .stat-value { color: #fbbf24; }
+	:global(.dark) .stat-card.confirmed .stat-value { color: #60a5fa; }
+	:global(.dark) .stat-card.processing .stat-value { color: #a78bfa; }
+	:global(.dark) .stat-card.shipped .stat-value { color: #22d3ee; }
+	:global(.dark) .stat-card.completed .stat-value { color: #34d399; }
+	:global(.dark) .stat-card.revenue .stat-value { color: #fcd34d; }
+
+	:global(.dark) .search-input {
+		background: #374151;
+		border-color: #4b5563;
+		color: #f9fafb;
+	}
+	:global(.dark) .search-input::placeholder { color: #9ca3af; }
+	:global(.dark) .search-input:focus {
+		border-color: #667eea;
+		box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
+	}
+
+	:global(.dark) .filter-select {
+		background: #374151;
+		border-color: #4b5563;
+		color: #f9fafb;
+	}
+
+	:global(.dark) .orders-table-wrapper {
+		background: #1f2937;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+	}
+
+	:global(.dark) .orders-table th {
+		background: #374151;
+		color: #d1d5db;
+		border-color: #4b5563;
+	}
+
+	:global(.dark) .orders-table td {
+		border-color: #374151;
+	}
+
+	:global(.dark) .orders-table tr:hover {
+		background: #374151;
+	}
+
+	:global(.dark) .customer-name { color: #f9fafb; }
+	:global(.dark) .customer-email { color: #9ca3af; }
+	:global(.dark) .item-count { color: #9ca3af; }
+	:global(.dark) .order-total { color: #f9fafb; }
+	:global(.dark) .order-date { color: #9ca3af; }
+
+	:global(.dark) .btn-view {
+		background: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
+	:global(.dark) .btn-view:hover {
+		background: #4b5563;
+		border-color: #6b7280;
+	}
+
+	:global(.dark) .empty-state {
+		background: #1f2937;
+		color: #9ca3af;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+	}
+
+	:global(.dark) .modal { background: #1f2937; }
+	:global(.dark) .modal-header { border-color: #374151; }
+	:global(.dark) .modal-header h2 { color: #f9fafb; }
+	:global(.dark) .btn-close { color: #9ca3af; }
+	:global(.dark) .btn-close:hover { background: #374151; }
+
+	:global(.dark) .section { border-color: #374151; }
+	:global(.dark) .section h3 { color: #9ca3af; }
+
+	:global(.dark) .btn-status {
+		background: #374151;
+	}
+	:global(.dark) .btn-status:hover:not(:disabled) {
+		background: #4b5563;
+	}
+
+	:global(.dark) .message {
+		background: #7f1d1d;
+		color: #fecaca;
+	}
+	:global(.dark) .message.success {
+		background: #064e3b;
+		color: #d1fae5;
+	}
+
+	:global(.dark) .detail-item .label { color: #9ca3af; }
+	:global(.dark) .detail-item .value { color: #f9fafb; }
+
+	:global(.dark) .shipping-address { color: #e5e7eb; }
+
+	:global(.dark) .order-item { border-color: #374151; }
+	:global(.dark) .item-title { color: #f9fafb; }
+	:global(.dark) .item-price { color: #9ca3af; }
+
+	:global(.dark) .order-totals { border-color: #4b5563; }
+	:global(.dark) .total-row { color: #e5e7eb; }
+
+	:global(.dark) .note {
+		background: #374151;
+		color: #e5e7eb;
+	}
+	:global(.dark) .note-label { color: #9ca3af; }
+	:global(.dark) .admin-note { background: #78350f; }
+
+	:global(.dark) .created-date { color: #e5e7eb; }
 </style>

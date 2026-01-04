@@ -646,4 +646,124 @@
 		cursor: pointer;
 		font-weight: 500;
 	}
+
+	/* Dark theme support */
+	:global(.dark) .page-header h1 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .subtitle {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .tabs {
+		border-color: #374151;
+	}
+
+	:global(.dark) .tabs button {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .tabs button:hover {
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .tabs button.active {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+	}
+
+	:global(.dark) .card {
+		background: #1f2937;
+		border-color: #374151;
+	}
+
+	:global(.dark) .card h2 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .card h3 {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .form-group label {
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .form-group input,
+	:global(.dark) .form-group textarea {
+		background: #374151;
+		border-color: #4b5563;
+		color: #f9fafb;
+	}
+
+	:global(.dark) .form-group input::placeholder,
+	:global(.dark) .form-group textarea::placeholder {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .social-item {
+		background: #374151;
+	}
+
+	:global(.dark) .social-platform {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .social-url {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .btn-edit,
+	:global(.dark) .btn-delete {
+		background: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .btn-edit:hover {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-color: transparent;
+		color: white;
+	}
+
+	:global(.dark) .btn-delete:hover {
+		background: #7f1d1d;
+		border-color: #991b1b;
+		color: #fecaca;
+	}
+
+	:global(.dark) .empty {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .modal-content {
+		background: #1f2937;
+	}
+
+	:global(.dark) .modal-header {
+		border-color: #374151;
+	}
+
+	:global(.dark) .modal-header h2 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .btn-close {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .btn-close:hover {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .modal-footer {
+		border-color: #374151;
+	}
+
+	:global(.dark) .btn-cancel {
+		background: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
 </style>

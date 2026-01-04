@@ -350,4 +350,57 @@
 			margin-bottom: 0.5rem;
 		}
 	}
+
+	/* Dark theme support */
+	:global(.dark) .page-header h1 { color: #f9fafb; }
+	:global(.dark) .page-subtitle { color: #9ca3af; }
+
+	:global(.dark) .settings-section {
+		background: #1f2937;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+	}
+	:global(.dark) .section-header h2 { color: #f9fafb; }
+	:global(.dark) .section-description { color: #9ca3af; }
+	:global(.dark) .section-description strong { color: #e5e7eb; }
+
+	:global(.dark) .rates-table { border-color: #374151; }
+	:global(.dark) .rates-header {
+		background: #374151;
+		color: #9ca3af;
+		border-color: #4b5563;
+	}
+
+	:global(.dark) .rate-row { border-color: #374151; }
+	:global(.dark) .currency-symbol { color: #f9fafb; }
+	:global(.dark) .currency-name { color: #e5e7eb; }
+	:global(.dark) .currency-code { color: #6b7280; }
+
+	:global(.dark) .rate-input {
+		background: #374151;
+		border-color: #4b5563;
+		color: #f9fafb;
+	}
+	:global(.dark) .rate-input:focus {
+		border-color: #667eea;
+		box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
+	}
+	:global(.dark) .rate-input:disabled {
+		background: #1f2937;
+	}
+
+	:global(.dark) .rate-updated { color: #9ca3af; }
+
+	:global(.dark) .message {
+		background: #7f1d1d;
+		color: #fecaca;
+	}
+	:global(.dark) .message.success {
+		background: #064e3b;
+		color: #d1fae5;
+	}
+
+	:global(.dark) .coming-soon {
+		background: #374151;
+		color: #9ca3af;
+	}
 </style>

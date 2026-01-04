@@ -329,4 +329,44 @@
 			grid-template-columns: 1fr;
 		}
 	}
+
+	/* Dark theme support */
+	:global(.dark) h1 { color: #f9fafb; }
+	:global(.dark) .breadcrumb { color: #9ca3af; }
+	:global(.dark) .breadcrumb a { color: #818cf8; }
+
+	:global(.dark) .form-section {
+		background: #1f2937;
+		border-color: #374151;
+	}
+	:global(.dark) .form-section h2 {
+		color: #e5e7eb;
+		border-color: #374151;
+	}
+
+	:global(.dark) .form-field label { color: #e5e7eb; }
+	:global(.dark) .form-field input[type='text'],
+	:global(.dark) .form-field input[type='url'],
+	:global(.dark) .form-field input[type='date'],
+	:global(.dark) .form-field select {
+		background: #374151;
+		border-color: #4b5563;
+		color: #f9fafb;
+	}
+	:global(.dark) .form-field input::placeholder { color: #9ca3af; }
+	:global(.dark) .form-field input:focus,
+	:global(.dark) .form-field select:focus {
+		border-color: #818cf8;
+		box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
+	}
+
+	:global(.dark) .checkbox-field label { color: #e5e7eb; }
+
+	:global(.dark) .form-actions { border-color: #374151; }
+	:global(.dark) .btn-cancel {
+		background: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
+	:global(.dark) .btn-cancel:hover { background: #4b5563; }
 </style>

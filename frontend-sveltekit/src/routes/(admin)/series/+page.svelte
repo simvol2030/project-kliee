@@ -183,4 +183,25 @@
 	.hidden {
 		display: none;
 	}
+
+	/* Dark theme support */
+	:global(.dark) h1 { color: #f9fafb; }
+	:global(.dark) .subtitle { color: #9ca3af; }
+
+	:global(.dark) .btn-edit {
+		background: #1e3a5f;
+		color: #93c5fd;
+	}
+	:global(.dark) .btn-edit:hover {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+	}
+
+	:global(.dark) .btn-delete {
+		background: #7f1d1d;
+		color: #fecaca;
+	}
+	:global(.dark) .btn-delete:hover {
+		background: #991b1b;
+	}
 </style>

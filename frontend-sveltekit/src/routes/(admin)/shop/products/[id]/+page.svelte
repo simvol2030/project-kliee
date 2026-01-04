@@ -858,4 +858,90 @@
 			order: -1;
 		}
 	}
+
+	/* Dark theme support */
+	:global(.dark) .page-header h1 { color: #f9fafb; }
+	:global(.dark) .back-link { color: #9ca3af; }
+	:global(.dark) .back-link:hover { color: #f9fafb; }
+
+	:global(.dark) .message.success {
+		background: #064e3b;
+		color: #d1fae5;
+	}
+	:global(.dark) .message.error {
+		background: #7f1d1d;
+		color: #fecaca;
+	}
+
+	:global(.dark) .card {
+		background: #1f2937;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+	}
+	:global(.dark) .card h3 { color: #9ca3af; }
+
+	:global(.dark) .language-tabs { border-color: #374151; }
+	:global(.dark) .language-tabs button { color: #9ca3af; }
+	:global(.dark) .language-tabs button:hover { background: #374151; }
+	:global(.dark) .language-tabs button.active {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+	}
+
+	:global(.dark) .form-group label { color: #e5e7eb; }
+	:global(.dark) .form-group input,
+	:global(.dark) .form-group select,
+	:global(.dark) .form-group textarea {
+		background: #374151;
+		border-color: #4b5563;
+		color: #f9fafb;
+	}
+	:global(.dark) .form-group input::placeholder,
+	:global(.dark) .form-group textarea::placeholder { color: #9ca3af; }
+	:global(.dark) .form-group input:focus,
+	:global(.dark) .form-group select:focus,
+	:global(.dark) .form-group textarea:focus {
+		border-color: #667eea;
+		box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
+	}
+	:global(.dark) .form-group input:disabled {
+		background: #1f2937;
+	}
+
+	:global(.dark) .help-text { color: #9ca3af; }
+	:global(.dark) .checkbox-label { color: #e5e7eb; }
+
+	:global(.dark) .image-item { border-color: #374151; }
+	:global(.dark) .image-item.primary { border-color: #667eea; }
+	:global(.dark) .image-actions { background: #1f2937; }
+
+	:global(.dark) .btn-small {
+		background: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
+	:global(.dark) .btn-small:hover { background: #4b5563; }
+	:global(.dark) .btn-small.danger {
+		color: #fecaca;
+		border-color: #991b1b;
+	}
+	:global(.dark) .btn-small.danger:hover { background: #7f1d1d; }
+
+	:global(.dark) .empty-text { color: #9ca3af; }
+
+	:global(.dark) .btn-secondary {
+		background: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
+	:global(.dark) .btn-secondary:hover { background: #4b5563; }
+
+	:global(.dark) .modal { background: #1f2937; }
+	:global(.dark) .modal-header { border-color: #374151; }
+	:global(.dark) .modal-header h2 { color: #f9fafb; }
+	:global(.dark) .btn-close { color: #9ca3af; }
+	:global(.dark) .modal-footer { border-color: #374151; }
+
+	:global(.dark) .media-item { border-color: #374151; }
+	:global(.dark) .media-item:hover { border-color: #6b7280; }
+	:global(.dark) .media-item.selected { border-color: #667eea; }
 </style>

@@ -446,4 +446,45 @@
 		font-size: 0.875rem;
 		min-width: 60px;
 	}
+
+	/* Dark theme support */
+	:global(.dark) h1 { color: #f9fafb; }
+	:global(.dark) .subtitle { color: #9ca3af; }
+
+	:global(.dark) .view-toggle { background: #374151; }
+	:global(.dark) .toggle-btn { color: #9ca3af; }
+	:global(.dark) .toggle-btn:hover { color: #e5e7eb; }
+	:global(.dark) .toggle-btn.active {
+		background: #4b5563;
+		color: #f9fafb;
+		box-shadow: none;
+	}
+
+	:global(.dark) .btn-edit {
+		background: #1e3a5f;
+		color: #93c5fd;
+	}
+	:global(.dark) .btn-edit:hover {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+	}
+
+	:global(.dark) .btn-delete {
+		background: #7f1d1d;
+		color: #fecaca;
+	}
+	:global(.dark) .btn-delete:hover {
+		background: #991b1b;
+	}
+
+	:global(.dark) .reorder-container {
+		background: #1f2937;
+		border-color: #374151;
+	}
+	:global(.dark) .reorder-header { border-color: #374151; }
+	:global(.dark) .reorder-hint { color: #9ca3af; }
+
+	:global(.dark) .artwork-title { color: #f9fafb; }
+	:global(.dark) .artwork-year,
+	:global(.dark) .artwork-price { color: #9ca3af; }
 </style>

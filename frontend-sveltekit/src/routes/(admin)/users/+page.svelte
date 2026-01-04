@@ -408,4 +408,95 @@
 		justify-content: flex-end;
 		margin-top: 1.5rem;
 	}
+
+	/* Dark theme support */
+	:global(.dark) .page-header h1 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .text-muted {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .card {
+		background: #1f2937;
+	}
+
+	:global(.dark) thead {
+		background-color: #374151;
+	}
+
+	:global(.dark) th {
+		color: #d1d5db;
+	}
+
+	:global(.dark) td {
+		border-color: #374151;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .btn-secondary {
+		background-color: #374151;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .btn-secondary:hover {
+		background-color: #4b5563;
+	}
+
+	:global(.dark) .btn-edit {
+		background-color: #1e3a5f;
+		color: #93c5fd;
+	}
+
+	:global(.dark) .btn-edit:hover {
+		background-color: #1e40af;
+	}
+
+	:global(.dark) .btn-delete {
+		background-color: #7f1d1d;
+		color: #fecaca;
+	}
+
+	:global(.dark) .btn-delete:hover {
+		background-color: #991b1b;
+	}
+
+	:global(.dark) .alert-error {
+		background-color: #7f1d1d;
+		color: #fecaca;
+		border-color: #991b1b;
+	}
+
+	:global(.dark) .alert-success {
+		background-color: #064e3b;
+		color: #d1fae5;
+		border-color: #059669;
+	}
+
+	:global(.dark) .modal {
+		background: #1f2937;
+	}
+
+	:global(.dark) .modal h2 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .modal p {
+		color: #d1d5db;
+	}
+
+	:global(.dark) .form-group label {
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .form-group input {
+		background-color: #374151;
+		border-color: #4b5563;
+		color: #f9fafb;
+	}
+
+	:global(.dark) .form-group input::placeholder {
+		color: #9ca3af;
+	}
 </style>
