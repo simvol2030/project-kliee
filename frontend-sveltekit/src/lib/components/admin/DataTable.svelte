@@ -206,4 +206,46 @@
 		height: 16px;
 		cursor: pointer;
 	}
+
+	/* Dark theme support */
+	:global(.dark) .search-input {
+		background-color: #374151;
+		border-color: #4b5563;
+		color: #f9fafb;
+	}
+
+	:global(.dark) .search-input::placeholder {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .clear-btn {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .clear-btn:hover {
+		color: #f9fafb;
+	}
+
+	:global(.dark) th {
+		background: #374151;
+		color: #e5e7eb;
+		border-color: #4b5563;
+	}
+
+	:global(.dark) td {
+		border-color: #374151;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) tr.clickable:hover {
+		background: #1f2937;
+	}
+
+	:global(.dark) tr.selected {
+		background: #312e81;
+	}
+
+	:global(.dark) tr.selected:hover {
+		background: #3730a3;
+	}
 </style>

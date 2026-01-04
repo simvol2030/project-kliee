@@ -233,4 +233,56 @@
 		background-color: #d1fae5;
 		color: #065f46;
 	}
+
+	/* Dark theme support */
+	:global(.dark) .page-header h1 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .text-muted {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .stat-card {
+		background: #1f2937;
+	}
+
+	:global(.dark) .stat-label {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .stat-value {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .section {
+		background: #1f2937;
+	}
+
+	:global(.dark) .section h2 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) thead {
+		background-color: #374151;
+	}
+
+	:global(.dark) th {
+		color: #d1d5db;
+	}
+
+	:global(.dark) td {
+		border-top-color: #374151;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .badge {
+		background-color: #78350f;
+		color: #fef3c7;
+	}
+
+	:global(.dark) .badge.published {
+		background-color: #064e3b;
+		color: #d1fae5;
+	}
 </style>

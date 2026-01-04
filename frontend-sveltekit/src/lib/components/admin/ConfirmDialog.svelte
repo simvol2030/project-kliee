@@ -76,4 +76,27 @@
 		color: white;
 		border: none;
 	}
+
+	/* Dark theme support */
+	:global(.dark) .dialog {
+		background: #1f2937;
+		color: #f9fafb;
+	}
+
+	:global(.dark) h3 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) p {
+		color: #d1d5db;
+	}
+
+	:global(.dark) .btn-cancel {
+		background: #374151;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .btn-cancel:hover {
+		background: #4b5563;
+	}
 </style>

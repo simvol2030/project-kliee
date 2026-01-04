@@ -389,4 +389,78 @@
 			max-width: 85vw;
 		}
 	}
+
+	/* Dark theme support */
+	:global(.dark) .admin-layout {
+		background-color: #111827;
+	}
+
+	:global(.dark) .main-content {
+		background-color: #111827;
+		color: #f9fafb;
+	}
+
+	:global(.dark) .mobile-header {
+		background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+	}
+
+	/* Global admin dark theme styles */
+	:global(.dark) .main-content h1,
+	:global(.dark) .main-content h2,
+	:global(.dark) .main-content h3 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .main-content p {
+		color: #d1d5db;
+	}
+
+	:global(.dark) .main-content label {
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .main-content input,
+	:global(.dark) .main-content textarea,
+	:global(.dark) .main-content select {
+		background-color: #374151;
+		border-color: #4b5563;
+		color: #f9fafb;
+	}
+
+	:global(.dark) .main-content input::placeholder,
+	:global(.dark) .main-content textarea::placeholder {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .main-content table {
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .main-content th {
+		background-color: #374151;
+		color: #d1d5db;
+	}
+
+	:global(.dark) .main-content td {
+		border-color: #374151;
+	}
+
+	:global(.dark) .main-content tr:hover {
+		background-color: #1f2937;
+	}
+
+	/* Common card styles for dark theme */
+	:global(.dark) .main-content .card,
+	:global(.dark) .main-content .panel,
+	:global(.dark) .main-content .box {
+		background-color: #1f2937;
+		border-color: #374151;
+	}
+
+	/* Modal overlay for dark theme */
+	:global(.dark) .main-content .modal-content,
+	:global(.dark) .main-content .dialog {
+		background-color: #1f2937;
+		border-color: #374151;
+	}
 </style>

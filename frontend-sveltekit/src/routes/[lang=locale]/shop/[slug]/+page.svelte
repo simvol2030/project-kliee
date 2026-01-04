@@ -107,11 +107,40 @@
 	const t = $derived(translations[data.lang] || translations.en);
 	const product = data.product;
 
+	// Technique translations
+	const techniqueTranslations: Record<string, Record<typeof data.lang, string>> = {
+		'Acrylic on Canvas': {
+			en: 'Acrylic on Canvas',
+			ru: 'Акрил на холсте',
+			es: 'Acrílico sobre lienzo',
+			zh: '亚克力画布'
+		},
+		'Digital on Paper': {
+			en: 'Digital on Paper',
+			ru: 'Цифровая печать на бумаге',
+			es: 'Digital sobre papel',
+			zh: '数码纸上印刷'
+		},
+		'Oil on Canvas': {
+			en: 'Oil on Canvas',
+			ru: 'Масло на холсте',
+			es: 'Óleo sobre lienzo',
+			zh: '油画布'
+		}
+	};
+
 	// Product is already localized from the API
 	const title = $derived(product.title);
 	const description = $derived(product.description);
 	const isSold = $derived(!product.is_available);
 	const formattedPrice = $derived(formatPrice(product.price_eur, data.lang, currencyRates));
+
+	// Translate technique
+	const translatedTechnique = $derived(
+		product.technique
+			? techniqueTranslations[product.technique]?.[data.lang] || product.technique
+			: null
+	);
 
 	// Map images for ProductGallery (expects { url, alt })
 	const galleryImages = $derived(
@@ -257,10 +286,10 @@
 
 				<!-- Details -->
 				<div class="product-details">
-					{#if product.technique}
+					{#if translatedTechnique}
 						<div class="detail-row">
 							<span class="detail-label">{t.technique}</span>
-							<span class="detail-value">{product.technique}</span>
+							<span class="detail-value">{translatedTechnique}</span>
 						</div>
 					{/if}
 

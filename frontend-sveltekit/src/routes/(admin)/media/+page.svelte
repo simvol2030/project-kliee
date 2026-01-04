@@ -480,4 +480,121 @@
 		background: white;
 		border: 1px solid var(--color-border, #ddd);
 	}
+
+	/* Dark theme support */
+	:global(.dark) .page-header h1 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .folder-btn {
+		background: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .folder-btn:hover {
+		background: #4b5563;
+	}
+
+	:global(.dark) .folder-btn.active {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-color: transparent;
+		color: white;
+	}
+
+	:global(.dark) .empty-state {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .media-card {
+		background: #1f2937;
+		border-color: #374151;
+	}
+
+	:global(.dark) .media-preview {
+		background: #374151;
+	}
+
+	:global(.dark) .media-info {
+		border-color: #374151;
+	}
+
+	:global(.dark) .filename {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .meta {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .btn-edit,
+	:global(.dark) .btn-delete {
+		background: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .btn-edit:hover {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-color: transparent;
+		color: white;
+	}
+
+	:global(.dark) .btn-delete:hover {
+		background: #7f1d1d;
+		border-color: #991b1b;
+		color: #fecaca;
+	}
+
+	:global(.dark) .modal-content {
+		background: #1f2937;
+	}
+
+	:global(.dark) .modal-header {
+		border-color: #374151;
+	}
+
+	:global(.dark) .modal-header h2 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .btn-close {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .btn-close:hover {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .preview-meta {
+		color: #d1d5db;
+	}
+
+	:global(.dark) .alt-section h3 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .form-group label {
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .form-group input {
+		background: #374151;
+		border-color: #4b5563;
+		color: #f9fafb;
+	}
+
+	:global(.dark) .form-group input::placeholder {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .modal-footer {
+		border-color: #374151;
+	}
+
+	:global(.dark) .btn-cancel {
+		background: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
 </style>

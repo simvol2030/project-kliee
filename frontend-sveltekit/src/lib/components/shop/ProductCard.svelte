@@ -3,6 +3,28 @@
 	import type { CurrencyRate, LanguageCode } from '$lib/utils/currency';
 	import { formatPrice } from '$lib/utils/currency';
 
+	// Technique translations
+	const techniqueTranslations: Record<string, Record<LanguageCode, string>> = {
+		'Acrylic on Canvas': {
+			en: 'Acrylic on Canvas',
+			ru: 'Акрил на холсте',
+			es: 'Acrílico sobre lienzo',
+			zh: '亚克力画布'
+		},
+		'Digital on Paper': {
+			en: 'Digital on Paper',
+			ru: 'Цифровая печать на бумаге',
+			es: 'Digital sobre papel',
+			zh: '数码纸上印刷'
+		},
+		'Oil on Canvas': {
+			en: 'Oil on Canvas',
+			ru: 'Масло на холсте',
+			es: 'Óleo sobre lienzo',
+			zh: '油画布'
+		}
+	};
+
 	interface Props {
 		product: PublicShopProduct;
 		lang: LanguageCode;
@@ -28,6 +50,13 @@
 
 	// Description is already localized by the provider
 	const description = $derived(product.description);
+
+	// Translate technique
+	const translatedTechnique = $derived(
+		product.technique
+			? techniqueTranslations[product.technique]?.[lang] || product.technique
+			: null
+	);
 
 	// Get image alt
 	const imageAlt = $derived(product.primary_image?.alt || title);
@@ -124,8 +153,8 @@
 			<div class="product-info">
 				<h3 class="product-title">{title}</h3>
 
-				{#if product.technique}
-					<p class="product-series">{product.technique}</p>
+				{#if translatedTechnique}
+					<p class="product-series">{translatedTechnique}</p>
 				{/if}
 
 				<p class="product-price" class:sold={isSold}>
