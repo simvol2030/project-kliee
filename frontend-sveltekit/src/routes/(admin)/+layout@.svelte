@@ -463,4 +463,100 @@
 		background-color: #1f2937;
 		border-color: #374151;
 	}
+
+	/* Extended global dark theme styles for all admin pages */
+
+	/* All buttons with white background */
+	:global(.dark) .main-content button {
+		background-color: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .main-content button:hover {
+		background-color: #4b5563;
+	}
+
+	/* Primary buttons keep gradient */
+	:global(.dark) .main-content .btn-primary,
+	:global(.dark) .main-content .btn-save,
+	:global(.dark) .main-content button[type="submit"] {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-color: transparent;
+		color: white;
+	}
+
+	/* Delete buttons */
+	:global(.dark) .main-content .btn-delete:hover {
+		background-color: #7f1d1d;
+		border-color: #991b1b;
+		color: #fecaca;
+	}
+
+	/* All divs that look like cards/items with white bg */
+	:global(.dark) .main-content > div > div {
+		color: #e5e7eb;
+	}
+
+	/* Menu items, list items, cards with borders */
+	:global(.dark) .main-content [class*="item"],
+	:global(.dark) .main-content [class*="card"],
+	:global(.dark) .main-content [class*="menu-"] {
+		background-color: #1f2937;
+		border-color: #374151;
+		color: #e5e7eb;
+	}
+
+	/* All span elements */
+	:global(.dark) .main-content span {
+		color: inherit;
+	}
+
+	/* Muted text */
+	:global(.dark) .main-content .text-muted,
+	:global(.dark) .main-content .subtitle,
+	:global(.dark) .main-content [class*="-muted"],
+	:global(.dark) .main-content [class*="-secondary"] {
+		color: #9ca3af;
+	}
+
+	/* Close buttons */
+	:global(.dark) .main-content .btn-close {
+		background: transparent;
+		color: #9ca3af;
+	}
+
+	:global(.dark) .main-content .btn-close:hover {
+		color: #f9fafb;
+	}
+
+	/* Links */
+	:global(.dark) .main-content a {
+		color: #818cf8;
+	}
+
+	:global(.dark) .main-content a:hover {
+		color: #a5b4fc;
+	}
+
+	/* Empty states */
+	:global(.dark) .main-content .empty-state {
+		color: #9ca3af;
+	}
+
+	/* Badges */
+	:global(.dark) .main-content .badge {
+		background-color: #4b5563;
+		color: #e5e7eb;
+	}
+
+	/* HR and borders */
+	:global(.dark) .main-content hr {
+		border-color: #374151;
+	}
+
+	/* Children/nested containers */
+	:global(.dark) .main-content .children {
+		border-color: #374151;
+	}
 </style>
