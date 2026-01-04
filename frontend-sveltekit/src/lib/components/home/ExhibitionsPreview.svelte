@@ -73,7 +73,7 @@
 
 		{#if data.featured}
 			<div class="exhibition-featured">
-				<a href={data.featured.link} class="exhibition-featured__link">
+				<a href="/{locale}{data.featured.link}" class="exhibition-featured__link">
 					<div class="exhibition-featured__image-wrapper">
 						<img
 							src={data.featured.coverImage}
@@ -150,7 +150,7 @@
 				</a>
 
 				<div class="exhibition-featured__footer">
-					<a href={data.viewAllLink} class="exhibition-featured__view-all">
+					<a href="/{locale}{data.viewAllLink}" class="exhibition-featured__view-all">
 						{locale === 'en'
 							? 'View All Exhibitions'
 							: locale === 'ru'

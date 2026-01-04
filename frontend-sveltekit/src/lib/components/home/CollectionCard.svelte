@@ -10,7 +10,7 @@
 	let { collection, locale }: Props = $props();
 </script>
 
-<a href={collection.link} class="collection-card">
+<a href="/{locale}{collection.link}" class="collection-card">
 	<div class="collection-card__image-wrapper">
 		<img
 			src={collection.coverImage}

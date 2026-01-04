@@ -33,7 +33,7 @@
 					{/each}
 				</div>
 
-				<a href={data.ctaLink} class="about-preview__cta">
+				<a href="/{locale}{data.ctaLink}" class="about-preview__cta">
 					{data.ctaText[locale]}
 					<svg
 						width="20"
