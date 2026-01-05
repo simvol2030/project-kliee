@@ -1,10 +1,11 @@
 /**
  * Individual Series Page Data Loader
+ * Uses JSON provider for artwork data
  */
 
 import { error } from '@sveltejs/kit';
 import { getSeriesBySlug, getAllSeries } from '$lib/data/series.provider';
-import { getArtworksBySeries } from '$lib/data/artworks.provider';
+import { getArtworksBySeriesFromJson } from '$lib/data/artworks-json.provider';
 import type { LanguageCode } from '$lib/types/layout.types';
 import type { PageServerLoad } from './$types';
 
@@ -21,7 +22,7 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 		});
 	}
 
-	const artworks = await getArtworksBySeries(slug, localeCode);
+	const artworks = getArtworksBySeriesFromJson(slug, localeCode);
 	const allSeries = getAllSeries(localeCode);
 
 	// Find adjacent series for navigation
