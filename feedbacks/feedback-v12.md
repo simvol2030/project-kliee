@@ -263,8 +263,9 @@ Already has:
 
 ### To Modify:
 - `src/routes/[lang=locale]/works/[slug]/+page.server.ts` - switch to DB provider
-- `src/routes/[lang=locale]/works/[slug]/+page.svelte` - add "В продаже" UI
-- `src/lib/data/artworks.provider.ts` - add shop_slug to response
+- `src/routes/[lang=locale]/works/[slug]/+page.svelte` - add "Купить" link
+- `src/lib/data/artworks.provider.ts` - fix image paths + add slug to response
+- `src/lib/types/content.types.ts` - add slug to ArtworkLocalized interface
 - `src/routes/(admin)/artworks/[id]/+page.server.ts` - call sync on save
 
 ### Data Sources:
@@ -281,15 +282,123 @@ Already has:
 
 3. **Duplicate handling:** Check by ID before insert, skip existing.
 
-4. **Images:** Create media records pointing to existing paths. Files already served via nginx at `/images/works/`.
+4. **DB location:** `../data/db/sqlite/app.db` (relative to frontend-sveltekit)
 
-5. **DB location:** `../data/db/sqlite/app.db` (relative to frontend-sveltekit)
+5. **Price format:** JSON has `price: null` for most items. These will have `is_for_sale=true` but no price → visible in Works but NOT in Shop until price is set in admin.
 
-6. **Price format:** JSON has `price: null` for most items. These will have `is_for_sale=true` but no price → visible in Works but NOT in Shop until price is set in admin.
+6. **Shop compatibility:** Auto-created shopProducts must work with existing Cart, Wishlist, Checkout.
 
-7. **Shop compatibility:** Auto-created shopProducts must work with existing Cart, Wishlist, Checkout.
+7. **Manual shopProducts:** Artist can also create shopProducts manually (prints, merch) - these are independent.
 
-8. **Manual shopProducts:** Artist can also create shopProducts manually (prints, merch) - these are independent.
+---
+
+## ⚠️ CRITICAL: Image Paths Issue (Found in Audit)
+
+**Problem:** Current DB provider hardcodes `/uploads/` prefix:
+```typescript
+// artworks.provider.ts line 43
+images.push(`/uploads/${folder}/${primaryImageFilename}`);
+```
+
+But JSON images use `/images/works/...` paths served by nginx.
+
+**Solution:**
+
+**Step A: Modify `artworks.provider.ts` (line 41-44):**
+```typescript
+// Build images array - handle both uploaded and static images
+const images: string[] = [];
+if (primaryImageFilename) {
+  // If stored_filename starts with "/" - it's a full path (migrated from JSON)
+  if (primaryImageFilename.startsWith('/')) {
+    images.push(primaryImageFilename);
+  } else {
+    // Otherwise it's an uploaded file
+    const folder = primaryImageFolder || 'products';
+    images.push(`/uploads/${folder}/${primaryImageFilename}`);
+  }
+}
+```
+
+**Step B: In migration script, store full path:**
+```typescript
+// When creating media record for migrated images:
+const mediaRecord = {
+  filename: 'photo.jpg',
+  stored_filename: '/images/works/chebu-rasha/photo.jpg',  // FULL PATH!
+  folder: 'works/chebu-rasha',  // For reference only
+  // ...
+};
+```
+
+---
+
+## ⚠️ CRITICAL: Missing `slug` in ArtworkLocalized (Found in Audit)
+
+**Problem:** `ArtworkLocalized` interface doesn't have `slug` field, but we need it for Shop link.
+
+**Solution:**
+
+**Step A: Add `slug` to interface** (`src/lib/types/content.types.ts`):
+```typescript
+export interface ArtworkLocalized {
+  id: string;
+  slug: string;  // ← ADD THIS
+  title: string;
+  series: string;
+  // ...
+}
+```
+
+**Step B: Update `artworks.provider.ts`** - add slug to mapArtworkToLocalized:
+```typescript
+return {
+  id: artwork.id,
+  slug: artwork.slug || artwork.id,  // ← ADD THIS
+  title,
+  // ...
+};
+```
+
+---
+
+## ⚠️ Works UI Already Shows Price (Found in Audit)
+
+**Good news:** Works page already shows price and "Available" status!
+
+Location: `src/routes/[lang=locale]/works/[slug]/+page.svelte` lines 172-182
+
+**Current code:**
+```svelte
+{#if artwork.available && artwork.price}
+  <span class="price">€{artwork.price}</span>
+  <span class="status available">{labels.available[locale]}</span>
+{:else if !artwork.available}
+  <span class="status sold">{labels.sold[locale]}</span>
+{/if}
+```
+
+**What to ADD:**
+```svelte
+{#if artwork.available && artwork.price}
+  <span class="price">€{artwork.price}</span>
+  <a href="/{locale}/shop/{artwork.slug}" class="buy-link">
+    {labels.buyNow[locale]}
+  </a>
+{:else if !artwork.available}
+  <span class="status sold">{labels.sold[locale]}</span>
+{/if}
+```
+
+Add label:
+```typescript
+buyNow: {
+  en: 'Buy Now',
+  ru: 'Купить',
+  es: 'Comprar',
+  zh: '购买'
+}
+```
 
 ---
 
@@ -301,17 +410,19 @@ After implementation:
 - [ ] Migration script runs without errors
 - [ ] 8 series in `series` table
 - [ ] 74 artworks in `artworks` table
-- [ ] Media records created for images
+- [ ] Media records created with FULL PATHS (e.g., `/images/works/...`)
 - [ ] artworkImages linked correctly
 
 **Phase 2 - Works pages from DB:**
 - [ ] All 8 Works pages display artworks correctly
+- [ ] **Images load correctly** (not 404!)
 - [ ] Admin artworks list shows all 74 items
 
-**Phase 3 - Works UI "В продаже":**
-- [ ] Artworks with is_for_sale=true show badge "В продаже"
-- [ ] Price displayed for for-sale artworks
-- [ ] Link to Shop page works
+**Phase 3 - Works UI "Купить" link:**
+- [ ] Artworks with available=true + price show price
+- [ ] "Купить" link appears for for-sale artworks
+- [ ] Link navigates to correct Shop page (`/shop/{artwork.slug}`)
+- [ ] Non-sale artworks show no link
 
 **Phase 4 - Shop sync:**
 - [ ] `artwork-shop-sync.ts` created
@@ -319,6 +430,11 @@ After implementation:
 - [ ] Setting is_for_sale=false → shopProduct removed
 - [ ] Shop page shows synced products
 - [ ] Cart works with artwork-based shopProducts
+
+**Critical fixes:**
+- [ ] `artworks.provider.ts` handles both `/images/` and `/uploads/` paths
+- [ ] `ArtworkLocalized` has `slug` field
+- [ ] Works UI has "Купить" link with correct href
 
 **Quality:**
 - [ ] No TypeScript errors (`npm run check`)
