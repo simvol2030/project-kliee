@@ -4,6 +4,7 @@ import { artworks, series, artworkImages, media } from '$lib/server/db/schema';
 import { eq, asc } from 'drizzle-orm';
 import { fail, redirect, error } from '@sveltejs/kit';
 import { artworkSchema, validateOrFail } from '$lib/validation';
+import { syncArtworkToShop } from '$lib/data/artwork-shop-sync';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
@@ -160,11 +161,15 @@ export const actions: Actions = {
 				}
 			}
 
+			// Sync artwork to shop (creates/updates/removes shopProduct based on is_for_sale)
+			const syncResult = await syncArtworkToShop(artworkId);
+			console.log(`Shop sync result for ${artworkId}:`, syncResult);
+
 			if (isNew) {
 				throw redirect(303, `/artworks/${artworkId}`);
 			}
 
-			return { success: true, message: 'Artwork saved successfully' };
+			return { success: true, message: 'Artwork saved successfully', shopSync: syncResult };
 		} catch (e) {
 			if (e && typeof e === 'object' && 'status' in e) throw e; // re-throw redirects
 			console.error('Error saving artwork:', e);

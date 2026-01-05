@@ -21,11 +21,24 @@ import artworksDataRaw from '../../../../data/artworks.json';
 const artworksData = artworksDataRaw as ArtworksData;
 
 /**
+ * Generate a slug from English title
+ */
+function generateSlug(title: string): string {
+	return title
+		.toLowerCase()
+		.replace(/[^a-z0-9\s-]/g, '')
+		.replace(/\s+/g, '-')
+		.replace(/-+/g, '-')
+		.substring(0, 100);
+}
+
+/**
  * Localize a single artwork item
  */
 function localizeArtwork(artwork: Artwork, locale: LanguageCode): ArtworkLocalized {
 	return {
 		id: artwork.id,
+		slug: generateSlug(artwork.title.en), // Generate slug from English title
 		title: artwork.title[locale as keyof TranslatedString] || artwork.title.en,
 		series: artwork.series,
 		technique: artwork.technique[locale as keyof TranslatedString] || artwork.technique.en,
@@ -34,7 +47,8 @@ function localizeArtwork(artwork: Artwork, locale: LanguageCode): ArtworkLocaliz
 		price: artwork.price,
 		currency: artwork.currency,
 		images: artwork.images,
-		available: artwork.available
+		available: artwork.available,
+		shop_slug: null // JSON provider doesn't have shop integration
 	};
 }
 
