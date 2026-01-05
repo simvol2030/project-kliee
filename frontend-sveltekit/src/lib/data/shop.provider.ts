@@ -21,6 +21,21 @@ import {
 import { eq, desc, asc, and, like, or } from 'drizzle-orm';
 import type { LanguageCode } from '$lib/types/content.types';
 
+/**
+ * Build image URL from stored_filename and folder
+ * Handles both uploaded files (/uploads/...) and static images (/images/...)
+ */
+function buildShopImageUrl(storedFilename: string | null, folder: string | null): string | null {
+	if (!storedFilename) return null;
+	// If stored_filename starts with "/" - it's a full path (migrated from JSON or static)
+	if (storedFilename.startsWith('/')) {
+		return storedFilename;
+	}
+	// Otherwise construct /uploads/ path
+	const imageFolder = folder || 'products';
+	return `/uploads/${imageFolder}/${storedFilename}`;
+}
+
 export interface ShopProductWithDetails extends ShopProduct {
 	primaryImage?: {
 		id: number;
@@ -105,7 +120,7 @@ export async function getAllShopProducts(): Promise<ShopProductWithDetails[]> {
 		primaryImage: row.imageFilename
 			? {
 					id: row.imageId!,
-					url: `/uploads/${row.imageFolder || 'products'}/${row.imageFilename}`,
+					url: buildShopImageUrl(row.imageFilename, row.imageFolder) || '',
 					folder: row.imageFolder || 'products',
 					filename: row.imageFilename
 				}
@@ -146,7 +161,7 @@ export async function getVisibleShopProducts(locale: LanguageCode = 'en'): Promi
 		is_visible: row.product.is_visible,
 		is_featured: row.product.is_featured,
 		primaryImage: row.imageFilename
-			? `/uploads/${row.imageFolder || 'products'}/${row.imageFilename}`
+			? buildShopImageUrl(row.imageFilename, row.imageFolder)
 			: null,
 		artwork_id: row.product.artwork_id
 	}));
@@ -184,7 +199,7 @@ export async function getShopProductById(id: number): Promise<ShopProductWithDet
 		primaryImage: row.imageFilename
 			? {
 					id: row.imageId!,
-					url: `/uploads/${row.imageFolder || 'products'}/${row.imageFilename}`,
+					url: buildShopImageUrl(row.imageFilename, row.imageFolder) || '',
 					folder: row.imageFolder || 'products',
 					filename: row.imageFilename
 				}
@@ -216,7 +231,7 @@ export async function getProductImages(productId: number) {
 		media_id: row.media_id,
 		is_primary: row.is_primary,
 		order_index: row.order_index,
-		url: row.filename ? `/uploads/${row.folder || 'products'}/${row.filename}` : null
+		url: buildShopImageUrl(row.filename, row.folder)
 	}));
 }
 
@@ -342,7 +357,7 @@ export async function searchShopProducts(query: string): Promise<ShopProductWith
 		primaryImage: row.imageFilename
 			? {
 					id: row.imageId!,
-					url: `/uploads/${row.imageFolder || 'products'}/${row.imageFilename}`,
+					url: buildShopImageUrl(row.imageFilename, row.imageFolder) || '',
 					folder: row.imageFolder || 'products',
 					filename: row.imageFilename
 				}
@@ -387,7 +402,7 @@ export async function getFeaturedShopProducts(
 		is_visible: row.product.is_visible,
 		is_featured: row.product.is_featured,
 		primaryImage: row.imageFilename
-			? `/uploads/${row.imageFolder || 'products'}/${row.imageFilename}`
+			? buildShopImageUrl(row.imageFilename, row.imageFolder)
 			: null,
 		artwork_id: row.product.artwork_id
 	}));
@@ -452,7 +467,7 @@ export async function getAvailableArtworksForLinking() {
 			price: row.artwork.price,
 			currency: row.artwork.currency,
 			primaryImage: row.imageFilename
-				? `/uploads/${row.imageFolder || 'products'}/${row.imageFilename}`
+				? buildShopImageUrl(row.imageFilename, row.imageFolder)
 				: null
 		}));
 }
@@ -585,7 +600,7 @@ export async function getPublicShopProducts(
 			is_available: isAvailable,
 			primary_image: row.imageFilename
 				? {
-						url: `/uploads/${row.imageFolder || 'products'}/${row.imageFilename}`,
+						url: buildShopImageUrl(row.imageFilename, row.imageFolder) || '',
 						alt: altText,
 						width: row.imageWidth,
 						height: row.imageHeight
@@ -687,7 +702,7 @@ export async function getPublicProductBySlug(
 						: img.alt_en;
 
 		return {
-			url: img.filename ? `/uploads/${img.folder || 'products'}/${img.filename}` : '',
+			url: buildShopImageUrl(img.filename, img.folder) || '',
 			alt: altText,
 			width: img.width,
 			height: img.height,
@@ -787,7 +802,7 @@ export async function getPublicProductsByIds(
 				is_available: isAvailable,
 				primary_image: row.imageFilename
 					? {
-							url: `/uploads/${row.imageFolder || 'products'}/${row.imageFilename}`,
+							url: buildShopImageUrl(row.imageFilename, row.imageFolder) || '',
 							alt: altText,
 							width: row.imageWidth,
 							height: row.imageHeight
@@ -869,7 +884,7 @@ export async function getPublicProductById(
 		is_available: isAvailable,
 		primary_image: row.imageFilename
 			? {
-					url: `/uploads/${row.imageFolder || 'products'}/${row.imageFilename}`,
+					url: buildShopImageUrl(row.imageFilename, row.imageFolder) || '',
 					alt: altText,
 					width: row.imageWidth,
 					height: row.imageHeight
