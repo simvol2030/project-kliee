@@ -442,6 +442,45 @@ After implementation:
 
 ---
 
+## ⚠️ CRITICAL: Shop Product Edit Not Saving (Found in Audit)
+
+**Problem:** При редактировании товара в `/admin/shop/products/[id]` данные не сохраняются.
+
+**Score:** 14 (Developer task)
+- Complexity: 2 (async form + DB)
+- Files: 2 (page.svelte, shop.provider.ts)
+- Risk: 1 (admin only)
+- Time: 2 (needs debugging)
+
+**Location:** `src/routes/(admin)/shop/products/[id]/+page.svelte`
+
+**Investigation:**
+- Server logs show no errors (checked via SSH)
+- `updateShopProduct()` in `shop.provider.ts` looks correct
+- Issue likely on client-side (fetch response handling)
+
+**Suspected issue (line 103-110):**
+```typescript
+const result = await response.json();
+if (result.type === 'success') {
+  message = 'Product saved successfully';
+  messageType = 'success';
+} else {
+  message = result.data?.error || 'Failed to save product';
+  messageType = 'error';
+}
+```
+
+**Debug steps for Developer:**
+1. Add console.log before/after fetch
+2. Check if response.ok is true
+3. Log `result` to see actual structure
+4. Verify DB write occurs (check SQLite)
+
+**Note:** This bug MUST be fixed before Phase 4 (sync), otherwise artwork→shopProduct sync won't work.
+
+---
+
 ## Rollback Plan
 
 If something breaks:
