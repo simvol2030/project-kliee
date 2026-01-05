@@ -9,7 +9,7 @@
 
 ## Context
 
-Works section currently uses JSON provider (`artworks-json.provider.ts`) created as quick fix (Variant 1). Now need to implement full DB integration (Variant 2) **with Shop integration**.
+Works section currently uses JSON provider (`artworks-json.provider.ts`) created as quick fix (Variant 1). Now need to implement full DB integration (Variant 2) **with Shop link**.
 
 **Current state:**
 - 74 artworks in `data/artworks.json`
@@ -19,27 +19,65 @@ Works section currently uses JSON provider (`artworks-json.provider.ts`) created
 - DB tables already exist: `artworks`, `series`, `artworkImages`, `media`, `shopProducts`
 - Shop currently reads ONLY from `shopProducts` table
 
-**Key business requirement:**
-> "Работы из раздела Works должны быть связаны с Shop. В админке должна быть галочка 'продаётся', и если стоит - работа появляется в магазине с ценой."
+---
+
+## Business Logic (IMPORTANT)
+
+### Works vs Shop - разделение:
+
+| Раздел | Что показывает | Назначение |
+|--------|----------------|------------|
+| **Works** | ВСЕ работы (74 шт) | Портфолио/презентация |
+| **Shop** | Только продающиеся | Магазин/покупка |
+
+### Логика отображения в Works:
+
+```
+/works/[series] - галерея работ
+│
+├── Работа с is_for_sale=false:
+│   └── Просто карточка (изображение, название, техника)
+│
+└── Работа с is_for_sale=true + price:
+    ├── Карточка + бейдж "В продаже"
+    ├── Показываем цену
+    └── Ссылка → страница товара в Shop
+```
+
+### Принципы:
+
+1. **Works (artworks) независимы** - добавляются в админке как портфолио
+2. **Shop (shopProducts)** - автоматически создаётся когда `is_for_sale=true + price`
+3. **Принты** - создаются вручную как отдельный shopProduct (другая цена, количество)
+4. **Вариации** - пока не реализуем (принт = отдельный товар)
 
 ---
 
-## Architecture Decision: Unified Approach
-
-**Chosen approach:** Artworks with `is_for_sale=true` and `price` → automatically appear in Shop.
+## Architecture
 
 ```
-artworks table
-├── is_for_sale = true/false (галочка в админке)
-├── price = цена (EUR)
-└── is_visible = видимость
-        │
-        │ if is_for_sale=true && price > 0
-        ▼
-Shop displays artwork as product
+              ┌─────────────────────────────────┐
+              │      Admin /artworks/[id]       │
+              │  ☑ is_for_sale   💰 price       │
+              └───────────────┬─────────────────┘
+                              │ save
+              ┌───────────────┴───────────────┐
+              │                               │
+              ▼                               ▼
+     ┌────────────────┐            ┌─────────────────┐
+     │   artworks     │            │  shopProducts   │
+     │  (все работы)  │───sync────▶│ (авто-создаётся │
+     │                │            │  если is_for_sale)
+     └────────┬───────┘            └────────┬────────┘
+              │                             │
+              ▼                             ▼
+     ┌────────────────┐            ┌─────────────────┐
+     │  /works/[slug] │            │     /shop       │
+     │  ВСЕ работы    │            │  Только товары  │
+     │  + "В продаже" │───ссылка──▶│  + корзина      │
+     │  + цена        │            │                 │
+     └────────────────┘            └─────────────────┘
 ```
-
-**Why:** Single point of truth. Artist edits artwork in one place, toggles "for sale", sets price → appears in Shop.
 
 ---
 
@@ -71,7 +109,7 @@ series (slug)           →  series_id (FK lookup by slug)
 technique.en            →  technique (use English only)
 year                    →  year
 dimensions              →  dimensions
-price                   →  price (integer, cents)
+price                   →  price (integer, cents) - NULL if not set
 currency                →  currency (default 'EUR')
 images[]                →  artworkImages → media
 available               →  is_for_sale (boolean)
@@ -103,13 +141,39 @@ const artworks = await getArtworksBySeries(slug, localeCode);
 
 **Note:** DB provider is async, add `await`. Return type is same `ArtworkLocalized[]`.
 
-### Phase 3: Shop Integration (CRITICAL)
+### Phase 3: Works UI - "В продаже" indicator
 
-**Goal:** Shop displays artworks where `is_for_sale=true` AND `price > 0`.
+**Goal:** На странице Works показывать для продающихся работ:
+- Бейдж "В продаже" / "For Sale"
+- Цену
+- Ссылку на страницу товара в Shop
+
+**Modify:** `src/routes/[lang=locale]/works/[slug]/+page.svelte`
+
+**What to add to artwork card:**
+```svelte
+{#if artwork.is_for_sale && artwork.price}
+  <div class="sale-badge">В продаже</div>
+  <div class="price">{formatPrice(artwork.price, artwork.currency)}</div>
+  <a href="/{lang}/shop/{artwork.slug}">Купить →</a>
+{/if}
+```
+
+**Also need:**
+- Check if corresponding shopProduct exists (by artwork_id)
+- Get shopProduct.slug for link to Shop page
+
+**Modify provider** `src/lib/data/artworks.provider.ts`:
+- Add `shop_slug` field to `ArtworkLocalized` (slug of linked shopProduct, if exists)
+- Join with shopProducts to get slug
+
+### Phase 4: Shop Integration - Auto-sync
+
+**Goal:** When artwork saved with `is_for_sale=true` + `price` → auto-create shopProduct.
 
 #### ⚠️ CRITICAL COMPATIBILITY ISSUE
 
-**Problem discovered during audit:**
+**Problem:**
 - Cart API uses `product_id: number` → `shopProducts.id` (INTEGER)
 - Artworks table uses `id: TEXT`
 - Cart cannot directly add artworks!
@@ -123,9 +187,10 @@ const artworks = await getArtworksBySeries(slug, localeCode);
 4. Sync: `shopProduct.title_* = artwork.title_*`
 5. Sync: images from `artworkImages` → `shopProductImages`
 
-**Implementation approach:**
+**When artwork has `is_for_sale=false` OR no price:**
+1. Remove corresponding shopProduct (if exists and was auto-created)
 
-**Step 3a: Create sync function** in `src/lib/data/artwork-shop-sync.ts`:
+**Create file:** `src/lib/data/artwork-shop-sync.ts`
 
 ```typescript
 /**
@@ -136,7 +201,7 @@ export async function syncArtworkToShop(artworkId: string): Promise<void> {
   const artwork = await getArtworkById(artworkId);
 
   if (!artwork || !artwork.is_for_sale || !artwork.price) {
-    // Remove from shop if exists
+    // Remove from shop if exists (only auto-created ones)
     await removeArtworkFromShop(artworkId);
     return;
   }
@@ -144,53 +209,62 @@ export async function syncArtworkToShop(artworkId: string): Promise<void> {
   // Create or update shopProduct
   await upsertShopProductFromArtwork(artwork);
 }
+
+/**
+ * Create or update shopProduct from artwork
+ */
+async function upsertShopProductFromArtwork(artwork: Artwork): Promise<void> {
+  // Find existing shopProduct by artwork_id
+  // If exists: update price, title, images
+  // If not: create new with artwork_id reference
+}
+
+/**
+ * Remove auto-created shopProduct for artwork
+ */
+async function removeArtworkFromShop(artworkId: string): Promise<void> {
+  // Delete shopProduct where artwork_id = artworkId
+  // Note: only delete if it was auto-created (not manually created prints)
+}
 ```
 
-**Step 3b: Call sync on artwork save**
-
-Modify `src/routes/(admin)/artworks/[id]/+page.server.ts`:
+**Modify:** `src/routes/(admin)/artworks/[id]/+page.server.ts`
 - After saving artwork, call `syncArtworkToShop(artworkId)`
 
-**Step 3c: Migration script also syncs**
+**Migration script also syncs:**
+- After inserting artwork, if `is_for_sale=true` AND `price > 0` → create shopProduct
 
-In migration script, after inserting artwork:
-- If `is_for_sale=true` AND `price > 0` → create shopProduct
-
-#### Benefits of this approach:
-- ✅ Cart API unchanged (still uses product_id)
-- ✅ Shop pages unchanged (still reads shopProducts)
-- ✅ Single source of truth (artwork)
-- ✅ Automatic sync on save
-- ✅ Artist manages everything in /admin/artworks
-
-### Phase 4: Admin UI Enhancement (Optional but recommended)
+### Phase 5: Admin UI Enhancement (Optional)
 
 **In artworks admin edit page** (`src/routes/(admin)/artworks/[id]/+page.svelte`):
 
 Already has:
-- ✅ `isForSale` checkbox (line 35)
-- ✅ `price` input (line 33)
-- ✅ `currency` select (line 34)
+- ✅ `isForSale` checkbox
+- ✅ `price` input
+- ✅ `currency` select
 
 **Consider adding:**
-- Visual indicator when artwork will appear in Shop
-- Preview link to Shop page
+- Visual indicator: "Эта работа появится в магазине"
+- Preview link to Shop page (if shopProduct exists)
 
 ---
 
 ## Files Reference
 
 ### Existing (DO NOT MODIFY unless necessary):
-- `src/lib/server/db/schema.ts` - DB schema (artworks, series, artworkImages, media)
-- `src/lib/data/artworks.provider.ts` - DB provider with 13+ functions
-- `src/routes/(admin)/artworks/` - Admin CRUD (already works with DB)
+- `src/lib/server/db/schema.ts` - DB schema
+- `src/lib/data/artworks.provider.ts` - DB provider
+- `src/routes/(admin)/artworks/` - Admin CRUD
+- `src/lib/data/shop.provider.ts` - Shop provider
 
 ### To Create:
 - `frontend-sveltekit/scripts/migrate-artworks-to-db.ts` - one-time migration
 - `src/lib/data/artwork-shop-sync.ts` - sync artwork ↔ shopProduct
 
 ### To Modify:
-- `src/routes/[lang=locale]/works/[slug]/+page.server.ts` - switch provider
+- `src/routes/[lang=locale]/works/[slug]/+page.server.ts` - switch to DB provider
+- `src/routes/[lang=locale]/works/[slug]/+page.svelte` - add "В продаже" UI
+- `src/lib/data/artworks.provider.ts` - add shop_slug to response
 - `src/routes/(admin)/artworks/[id]/+page.server.ts` - call sync on save
 
 ### Data Sources:
@@ -213,43 +287,9 @@ Already has:
 
 6. **Price format:** JSON has `price: null` for most items. These will have `is_for_sale=true` but no price → visible in Works but NOT in Shop until price is set in admin.
 
-7. **Shop compatibility:** Artworks appearing in Shop must return same `PublicShopProduct` interface used by existing Shop components.
+7. **Shop compatibility:** Auto-created shopProducts must work with existing Cart, Wishlist, Checkout.
 
----
-
-## Schema Reference
-
-### artworks table (existing):
-```sql
-id TEXT PRIMARY KEY
-slug TEXT UNIQUE
-series_id TEXT REFERENCES series(id)
-title_en, title_ru, title_es, title_zh TEXT
-description_en, _ru, _es, _zh TEXT
-technique TEXT
-dimensions TEXT
-year INTEGER
-price INTEGER              -- Price in cents
-currency TEXT DEFAULT 'EUR'
-is_featured BOOLEAN
-is_for_sale BOOLEAN        -- ← KEY FIELD for Shop
-is_visible BOOLEAN
-order_index INTEGER
-seo_* fields
-created_at, updated_at
-```
-
-### series table (existing):
-```sql
-id TEXT PRIMARY KEY
-slug TEXT UNIQUE
-name_en, name_ru, name_es, name_zh TEXT
-description_en, _ru, _es, _zh TEXT
-cover_image_id INTEGER REFERENCES media(id)
-order_index INTEGER
-is_visible BOOLEAN
-show_in_shop BOOLEAN       -- ← Can filter Shop by series
-```
+8. **Manual shopProducts:** Artist can also create shopProducts manually (prints, merch) - these are independent.
 
 ---
 
@@ -264,19 +304,21 @@ After implementation:
 - [ ] Media records created for images
 - [ ] artworkImages linked correctly
 
-**Phase 2 - Works pages:**
+**Phase 2 - Works pages from DB:**
 - [ ] All 8 Works pages display artworks correctly
 - [ ] Admin artworks list shows all 74 items
 
-**Phase 3 - Shop sync:**
-- [ ] `artwork-shop-sync.ts` created with sync functions
-- [ ] Artworks with is_for_sale=true + price → have shopProduct
-- [ ] shopProduct.artwork_id links back to artwork
-- [ ] Setting is_for_sale=true + price=1000 in admin → shopProduct created
-- [ ] Setting is_for_sale=false in admin → shopProduct removed
+**Phase 3 - Works UI "В продаже":**
+- [ ] Artworks with is_for_sale=true show badge "В продаже"
+- [ ] Price displayed for for-sale artworks
+- [ ] Link to Shop page works
+
+**Phase 4 - Shop sync:**
+- [ ] `artwork-shop-sync.ts` created
+- [ ] Setting is_for_sale=true + price → shopProduct created
+- [ ] Setting is_for_sale=false → shopProduct removed
 - [ ] Shop page shows synced products
-- [ ] Cart add works for artwork-based shopProducts
-- [ ] Checkout flow works
+- [ ] Cart works with artwork-based shopProducts
 
 **Quality:**
 - [ ] No TypeScript errors (`npm run check`)
@@ -288,23 +330,26 @@ After implementation:
 
 If something breaks:
 1. Revert `+page.server.ts` to use JSON provider
-2. Revert shop.provider.ts changes
+2. Revert Works UI changes
 3. Works pages will use JSON again (Variant 1)
-4. Shop continues to work with shopProducts only
+4. Shop continues to work with manually created shopProducts
 5. DB data remains for admin panel
 
 ---
 
 ## Testing Scenarios
 
-1. **Works page:** Visit /en/works/chebu-rasha → see artworks
-2. **Shop page:** Visit /en/shop → see artworks with is_for_sale=true AND price
-3. **Admin toggle:** Edit artwork → set is_for_sale=true, price=1000 → appears in Shop
-4. **Admin untoggle:** Edit artwork → set is_for_sale=false → disappears from Shop
-5. **Cart:** Add artwork to cart → proceed to checkout
+1. **Works page:** Visit /en/works/chebu-rasha → see all artworks
+2. **For-sale artwork in Works:** See badge, price, link to Shop
+3. **Non-sale artwork in Works:** No badge, no price, no link
+4. **Shop page:** Visit /en/shop → see only for-sale items
+5. **Admin toggle ON:** Edit artwork → is_for_sale=true, price=5000 → appears in Shop
+6. **Admin toggle OFF:** Edit artwork → is_for_sale=false → disappears from Shop
+7. **Cart:** Add artwork-based product to cart → checkout works
+8. **Manual product:** Create print manually in /admin/shop/products → works independently
 
 ---
 
 *Integrator: Claude Code CLI*
 *Ready for: Claude Code Web Developer*
-*Last updated: 2026-01-05 (added Shop integration phase)*
+*Last updated: 2026-01-05 (added Works UI phase, clarified business logic)*
