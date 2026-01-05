@@ -57,6 +57,12 @@
 			ru: 'Продано',
 			es: 'Vendido',
 			zh: '已售'
+		},
+		buyNow: {
+			en: 'Buy Now',
+			ru: 'Купить',
+			es: 'Comprar',
+			zh: '购买'
 		}
 	};
 
@@ -175,7 +181,13 @@
 										{artwork.currency === 'EUR' ? '€' : artwork.currency}
 										{artwork.price?.toLocaleString()}
 									</span>
-									<span class="status available">{labels.available[locale]}</span>
+									{#if artwork.shop_slug}
+										<a href="/{locale}/shop/{artwork.shop_slug}" class="buy-link">
+											{labels.buyNow[locale]}
+										</a>
+									{:else}
+										<span class="status available">{labels.available[locale]}</span>
+									{/if}
 								{:else if !artwork.available}
 									<span class="status sold">{labels.sold[locale]}</span>
 								{/if}
@@ -444,6 +456,24 @@
 	.status.sold {
 		background: var(--bg-tertiary, #e5e5e5);
 		color: var(--text-secondary, #666);
+	}
+
+	.buy-link {
+		display: inline-block;
+		background: var(--color-accent, #d4af37);
+		color: #fff;
+		padding: var(--spacing-xs, 0.25rem) var(--spacing-sm, 0.5rem);
+		border-radius: var(--radius-sm, 0.25rem);
+		font-size: var(--text-xs, 0.75rem);
+		font-weight: 600;
+		text-decoration: none;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		transition: background 0.2s;
+	}
+
+	.buy-link:hover {
+		background: var(--color-accent-dark, #b8972f);
 	}
 
 	/* Series Navigation */

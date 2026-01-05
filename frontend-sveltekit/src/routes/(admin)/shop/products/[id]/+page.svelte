@@ -101,14 +101,26 @@
 			}
 
 			const result = await response.json();
-			if (result.type === 'success') {
-				message = 'Product saved successfully';
-				messageType = 'success';
-			} else {
+
+			// SvelteKit action responses can have different formats
+			// Success: { type: 'success', data: { success: true, ... } } OR just the data object
+			// Failure: { type: 'failure', status: 400, data: { error: '...' } }
+			if (result.type === 'failure') {
 				message = result.data?.error || 'Failed to save product';
 				messageType = 'error';
+			} else if (result.type === 'success' || result.data?.success || result.success) {
+				message = result.data?.message || result.message || 'Product saved successfully';
+				messageType = 'success';
+			} else if (result.data?.error) {
+				message = result.data.error;
+				messageType = 'error';
+			} else {
+				// Fallback - treat as success if no error
+				message = 'Product saved successfully';
+				messageType = 'success';
 			}
 		} catch (err) {
+			console.error('Save error:', err);
 			message = 'Error saving product';
 			messageType = 'error';
 		} finally {

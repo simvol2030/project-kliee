@@ -9,9 +9,26 @@
  */
 
 import { db } from '$lib/server/db/client';
-import { artworks, artworkImages, media, series } from '$lib/server/db/schema';
+import { artworks, artworkImages, media, series, shopProducts } from '$lib/server/db/schema';
 import { eq, and, desc, asc, inArray } from 'drizzle-orm';
 import type { ArtworkLocalized, LanguageCode } from '$lib/types/content.types';
+
+/**
+ * Build image URL from stored filename
+ * Handles both static images (/images/...) and uploaded images (/uploads/...)
+ */
+function buildImageUrl(storedFilename: string | null, folder: string | null): string | null {
+	if (!storedFilename) return null;
+
+	// If stored_filename starts with "/" - it's a full path (migrated from JSON or static)
+	if (storedFilename.startsWith('/')) {
+		return storedFilename;
+	}
+
+	// Otherwise it's an uploaded file - build /uploads/ path
+	const imageFolder = folder || 'products';
+	return `/uploads/${imageFolder}/${storedFilename}`;
+}
 
 /**
  * Map database artwork to localized format
@@ -21,7 +38,8 @@ function mapArtworkToLocalized(
 	locale: LanguageCode,
 	primaryImageFilename?: string | null,
 	primaryImageFolder?: string | null,
-	seriesSlug?: string | null
+	seriesSlug?: string | null,
+	shopSlug?: string | null
 ): ArtworkLocalized {
 	// Get title by locale
 	const title =
@@ -36,15 +54,16 @@ function mapArtworkToLocalized(
 	// Get technique - for now use the technique field as-is
 	const technique = artwork.technique || '';
 
-	// Build images array - use primary image if available
+	// Build images array - use helper to handle both static and uploaded images
 	const images: string[] = [];
-	if (primaryImageFilename) {
-		const folder = primaryImageFolder || 'products';
-		images.push(`/uploads/${folder}/${primaryImageFilename}`);
+	const imageUrl = buildImageUrl(primaryImageFilename || null, primaryImageFolder || null);
+	if (imageUrl) {
+		images.push(imageUrl);
 	}
 
 	return {
 		id: artwork.id,
+		slug: artwork.slug || artwork.id, // Use slug if available, fallback to id
 		title,
 		series: seriesSlug || '',
 		technique,
@@ -53,7 +72,8 @@ function mapArtworkToLocalized(
 		price: artwork.price,
 		currency: artwork.currency || 'EUR',
 		images,
-		available: artwork.is_for_sale === true
+		available: artwork.is_for_sale === true,
+		shop_slug: shopSlug || null // Slug for linked shop product
 	};
 }
 
@@ -68,7 +88,8 @@ export async function getAllArtworks(locale: LanguageCode = 'en'): Promise<Artwo
 			artwork: artworks,
 			seriesSlug: series.slug,
 			primaryImage: media.stored_filename,
-			primaryImageFolder: media.folder
+			primaryImageFolder: media.folder,
+			shopSlug: artworks.slug // Use artwork slug for shop (linked via artwork_id)
 		})
 		.from(artworks)
 		.leftJoin(series, eq(artworks.series_id, series.id))
@@ -80,8 +101,41 @@ export async function getAllArtworks(locale: LanguageCode = 'en'): Promise<Artwo
 		.where(eq(artworks.is_visible, true))
 		.orderBy(desc(artworks.year), asc(artworks.order_index));
 
+	// Get shop product slugs for artworks that have them
+	const artworkIds = result.map((r) => r.artwork.id);
+	const shopProductsMap = new Map<string, string>();
+
+	if (artworkIds.length > 0) {
+		const shopProductRows = await db
+			.select({
+				artwork_id: shopProducts.artwork_id,
+				slug: artworks.slug
+			})
+			.from(shopProducts)
+			.leftJoin(artworks, eq(shopProducts.artwork_id, artworks.id))
+			.where(
+				and(
+					inArray(shopProducts.artwork_id, artworkIds),
+					eq(shopProducts.is_visible, true)
+				)
+			);
+
+		for (const row of shopProductRows) {
+			if (row.artwork_id && row.slug) {
+				shopProductsMap.set(row.artwork_id, row.slug);
+			}
+		}
+	}
+
 	return result.map((row) =>
-		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug)
+		mapArtworkToLocalized(
+			row.artwork,
+			locale,
+			row.primaryImage,
+			row.primaryImageFolder,
+			row.seriesSlug,
+			shopProductsMap.get(row.artwork.id) || null
+		)
 	);
 }
 
@@ -123,8 +177,41 @@ export async function getArtworksBySeries(
 		.where(and(eq(artworks.series_id, seriesRecord.id), eq(artworks.is_visible, true)))
 		.orderBy(desc(artworks.year), asc(artworks.order_index));
 
+	// Get shop product slugs for artworks that have them
+	const artworkIds = result.map((r) => r.artwork.id);
+	const shopProductsMap = new Map<string, string>();
+
+	if (artworkIds.length > 0) {
+		const shopProductRows = await db
+			.select({
+				artwork_id: shopProducts.artwork_id,
+				slug: artworks.slug
+			})
+			.from(shopProducts)
+			.leftJoin(artworks, eq(shopProducts.artwork_id, artworks.id))
+			.where(
+				and(
+					inArray(shopProducts.artwork_id, artworkIds),
+					eq(shopProducts.is_visible, true)
+				)
+			);
+
+		for (const row of shopProductRows) {
+			if (row.artwork_id && row.slug) {
+				shopProductsMap.set(row.artwork_id, row.slug);
+			}
+		}
+	}
+
 	return result.map((row) =>
-		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug)
+		mapArtworkToLocalized(
+			row.artwork,
+			locale,
+			row.primaryImage,
+			row.primaryImageFolder,
+			row.seriesSlug,
+			shopProductsMap.get(row.artwork.id) || null
+		)
 	);
 }
 
@@ -160,7 +247,23 @@ export async function getArtworkById(
 	}
 
 	const row = result[0];
-	return mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug);
+
+	// Check if artwork has a linked shop product
+	const [shopProduct] = await db
+		.select({ slug: artworks.slug })
+		.from(shopProducts)
+		.leftJoin(artworks, eq(shopProducts.artwork_id, artworks.id))
+		.where(and(eq(shopProducts.artwork_id, id), eq(shopProducts.is_visible, true)))
+		.limit(1);
+
+	return mapArtworkToLocalized(
+		row.artwork,
+		locale,
+		row.primaryImage,
+		row.primaryImageFolder,
+		row.seriesSlug,
+		shopProduct?.slug || null
+	);
 }
 
 /**
@@ -191,7 +294,7 @@ export async function getArtworksByYear(
 		.orderBy(asc(artworks.order_index));
 
 	return result.map((row) =>
-		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug)
+		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug, null)
 	);
 }
 
@@ -218,8 +321,41 @@ export async function getAvailableArtworks(locale: LanguageCode = 'en'): Promise
 		.where(and(eq(artworks.is_for_sale, true), eq(artworks.is_visible, true)))
 		.orderBy(desc(artworks.year), asc(artworks.order_index));
 
+	// Get shop product slugs for available artworks
+	const artworkIds = result.map((r) => r.artwork.id);
+	const shopProductsMap = new Map<string, string>();
+
+	if (artworkIds.length > 0) {
+		const shopProductRows = await db
+			.select({
+				artwork_id: shopProducts.artwork_id,
+				slug: artworks.slug
+			})
+			.from(shopProducts)
+			.leftJoin(artworks, eq(shopProducts.artwork_id, artworks.id))
+			.where(
+				and(
+					inArray(shopProducts.artwork_id, artworkIds),
+					eq(shopProducts.is_visible, true)
+				)
+			);
+
+		for (const row of shopProductRows) {
+			if (row.artwork_id && row.slug) {
+				shopProductsMap.set(row.artwork_id, row.slug);
+			}
+		}
+	}
+
 	return result.map((row) =>
-		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug)
+		mapArtworkToLocalized(
+			row.artwork,
+			locale,
+			row.primaryImage,
+			row.primaryImageFolder,
+			row.seriesSlug,
+			shopProductsMap.get(row.artwork.id) || null
+		)
 	);
 }
 
@@ -252,7 +388,7 @@ export async function getFeaturedArtworks(
 		.limit(limit);
 
 	return result.map((row) =>
-		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug)
+		mapArtworkToLocalized(row.artwork, locale, row.primaryImage, row.primaryImageFolder, row.seriesSlug, null)
 	);
 }
 

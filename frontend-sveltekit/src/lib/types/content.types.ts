@@ -77,6 +77,7 @@ export interface Artwork {
  */
 export interface ArtworkLocalized {
 	id: string;
+	slug: string; // Artwork slug for URLs
 	title: string;
 	series: string;
 	technique: string;
@@ -86,6 +87,7 @@ export interface ArtworkLocalized {
 	currency: string | null;
 	images: string[];
 	available: boolean;
+	shop_slug: string | null; // Slug for linked shopProduct (if exists)
 }
 
 /**
