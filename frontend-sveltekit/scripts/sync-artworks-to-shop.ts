@@ -104,7 +104,7 @@ function main() {
 			// Create shopProduct
 			const result = insertShopProduct.run({
 				artwork_id: artwork.id,
-				sku: `ART-${artwork.id.substring(0, 8).toUpperCase()}`,
+				sku: null, // Let DB auto-generate or leave empty
 				title_en: artwork.title_en,
 				title_ru: artwork.title_ru,
 				title_es: artwork.title_es,
