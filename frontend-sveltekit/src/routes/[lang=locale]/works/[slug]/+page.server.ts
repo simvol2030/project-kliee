@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 	const localeCode = locale as LanguageCode;
 	const { slug } = params;
 
-	const series = getSeriesBySlug(slug, localeCode);
+	const series = await getSeriesBySlug(slug, localeCode);
 
 	if (!series) {
 		throw error(404, {
@@ -22,9 +22,9 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 		});
 	}
 
-	// Use DB provider (async) instead of JSON provider
+	// Use DB provider (async) for artworks
 	const artworks = await getArtworksBySeries(slug, localeCode);
-	const allSeries = getAllSeries(localeCode);
+	const allSeries = await getAllSeries(localeCode);
 
 	// Find adjacent series for navigation
 	const currentIndex = allSeries.findIndex((s) => s.slug === slug);

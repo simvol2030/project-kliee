@@ -528,3 +528,161 @@ export async function getArtworksCountBySeries(seriesSlug: string): Promise<numb
 
 	return result.length;
 }
+
+/**
+ * Extended artwork type with all images for multi-image modal
+ */
+export interface ArtworkWithAllImages extends ArtworkLocalized {
+	allImages: Array<{
+		id: number;
+		url: string;
+		alt: string | null;
+		isPrimary: boolean;
+		mimeType: string | null;
+		order: number;
+	}>;
+}
+
+/**
+ * Get artwork with all images for multi-image modal navigation
+ * @param id - Artwork ID
+ * @param locale - Language code
+ * @returns Artwork with all images or undefined
+ */
+export async function getArtworkWithAllImages(
+	id: string,
+	locale: LanguageCode = 'en'
+): Promise<ArtworkWithAllImages | undefined> {
+	// Get basic artwork data
+	const baseArtwork = await getArtworkById(id, locale);
+	if (!baseArtwork) return undefined;
+
+	// Get all images for this artwork
+	const imageResults = await db
+		.select({
+			id: artworkImages.id,
+			mediaId: artworkImages.media_id,
+			isPrimary: artworkImages.is_primary,
+			orderIndex: artworkImages.order_index,
+			storedFilename: media.stored_filename,
+			folder: media.folder,
+			mimeType: media.mime_type,
+			altEn: media.alt_en,
+			altRu: media.alt_ru,
+			altEs: media.alt_es,
+			altZh: media.alt_zh
+		})
+		.from(artworkImages)
+		.leftJoin(media, eq(artworkImages.media_id, media.id))
+		.where(eq(artworkImages.artwork_id, id))
+		.orderBy(asc(artworkImages.order_index));
+
+	// Build all images array
+	const allImages = imageResults.map((img) => {
+		const url = buildImageUrl(img.storedFilename || null, img.folder || null);
+
+		// Get localized alt text
+		let alt: string | null = null;
+		if (locale === 'ru') alt = img.altRu;
+		else if (locale === 'es') alt = img.altEs;
+		else if (locale === 'zh') alt = img.altZh;
+		else alt = img.altEn;
+
+		return {
+			id: img.id,
+			url: url || '/images/placeholder-artwork.jpg',
+			alt: alt || baseArtwork.title,
+			isPrimary: img.isPrimary ?? false,
+			mimeType: img.mimeType,
+			order: img.orderIndex ?? 0
+		};
+	});
+
+	// Update base artwork images array with all URLs
+	const allImageUrls = allImages.map((img) => img.url);
+
+	return {
+		...baseArtwork,
+		images: allImageUrls.length > 0 ? allImageUrls : baseArtwork.images,
+		allImages
+	};
+}
+
+/**
+ * Get all images for an artwork (API endpoint helper)
+ * @param artworkId - Artwork ID
+ * @param locale - Language code
+ * @returns Array of image objects
+ */
+export async function getArtworkImages(
+	artworkId: string,
+	locale: LanguageCode = 'en'
+): Promise<Array<{
+	id: number;
+	url: string;
+	alt: string | null;
+	isPrimary: boolean;
+	mimeType: string | null;
+	order: number;
+}>> {
+	// Get artwork title for fallback alt text
+	const [artworkRecord] = await db
+		.select({
+			titleEn: artworks.title_en,
+			titleRu: artworks.title_ru,
+			titleEs: artworks.title_es,
+			titleZh: artworks.title_zh
+		})
+		.from(artworks)
+		.where(eq(artworks.id, artworkId))
+		.limit(1);
+
+	const fallbackTitle =
+		locale === 'ru'
+			? artworkRecord?.titleRu
+			: locale === 'es'
+				? artworkRecord?.titleEs
+				: locale === 'zh'
+					? artworkRecord?.titleZh
+					: artworkRecord?.titleEn || 'Artwork';
+
+	// Get all images
+	const imageResults = await db
+		.select({
+			id: artworkImages.id,
+			mediaId: artworkImages.media_id,
+			isPrimary: artworkImages.is_primary,
+			orderIndex: artworkImages.order_index,
+			storedFilename: media.stored_filename,
+			folder: media.folder,
+			mimeType: media.mime_type,
+			altEn: media.alt_en,
+			altRu: media.alt_ru,
+			altEs: media.alt_es,
+			altZh: media.alt_zh
+		})
+		.from(artworkImages)
+		.leftJoin(media, eq(artworkImages.media_id, media.id))
+		.where(eq(artworkImages.artwork_id, artworkId))
+		.orderBy(asc(artworkImages.order_index));
+
+	return imageResults.map((img) => {
+		const url = buildImageUrl(img.storedFilename || null, img.folder || null);
+
+		// Get localized alt text
+		let alt: string | null = null;
+		if (locale === 'ru') alt = img.altRu;
+		else if (locale === 'es') alt = img.altEs;
+		else if (locale === 'zh') alt = img.altZh;
+		else alt = img.altEn;
+
+		return {
+			id: img.id,
+			url: url || '/images/placeholder-artwork.jpg',
+			alt: alt || fallbackTitle,
+			isPrimary: img.isPrimary ?? false,
+			mimeType: img.mimeType,
+			order: img.orderIndex ?? 0
+		};
+	});
+}

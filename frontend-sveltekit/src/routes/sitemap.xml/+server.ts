@@ -48,8 +48,8 @@ export const GET: RequestHandler = async () => {
 		{ loc: '/nft', priority: 0.7, changefreq: 'monthly' }
 	];
 
-	// Dynamic series pages
-	const series = getAllSeries('en');
+	// Dynamic series pages (async DB query)
+	const series = await getAllSeries('en');
 	const seriesPages: SitemapUrl[] = series.map((s) => ({
 		loc: `/works/${s.slug}`,
 		priority: 0.8,
