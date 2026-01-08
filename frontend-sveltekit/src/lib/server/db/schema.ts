@@ -63,6 +63,7 @@ export const media = sqliteTable('media', {
 	alt_es: text('alt_es'),
 	alt_zh: text('alt_zh'),
 	folder: text('folder').default('uploads'),
+	file_hash: text('file_hash'), // MD5 hash for duplicate detection
 	uploaded_at: text('uploaded_at').default(sql`CURRENT_TIMESTAMP`),
 	uploaded_by: integer('uploaded_by').references(() => admins.id)
 });
@@ -418,6 +419,9 @@ export const artworkImages = sqliteTable('artwork_images', {
  */
 export const exhibitions = sqliteTable('exhibitions', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
+	slug: text('slug').unique(),
+	type: text('type', { enum: ['solo', 'group', 'fair', 'biennale', 'other'] }).default('solo'),
+	year: integer('year'),
 	title_en: text('title_en').notNull(),
 	title_ru: text('title_ru').notNull(),
 	title_es: text('title_es').notNull(),
@@ -426,7 +430,10 @@ export const exhibitions = sqliteTable('exhibitions', {
 	description_ru: text('description_ru'),
 	description_es: text('description_es'),
 	description_zh: text('description_zh'),
-	venue: text('venue'),
+	venue_en: text('venue_en'),
+	venue_ru: text('venue_ru'),
+	venue_es: text('venue_es'),
+	venue_zh: text('venue_zh'),
 	city: text('city'),
 	country: text('country'),
 	address: text('address'),
@@ -436,6 +443,7 @@ export const exhibitions = sqliteTable('exhibitions', {
 	cover_image_id: integer('cover_image_id').references(() => media.id),
 	gallery_link: text('gallery_link'),
 	is_current: integer('is_current', { mode: 'boolean' }).default(false),
+	is_featured: integer('is_featured', { mode: 'boolean' }).default(false),
 	is_visible: integer('is_visible', { mode: 'boolean' }).default(true),
 	order_index: integer('order_index').default(0),
 	created_at: text('created_at').default(sql`CURRENT_TIMESTAMP`)
@@ -452,6 +460,24 @@ export const exhibitionArtworks = sqliteTable('exhibition_artworks', {
 	artwork_id: text('artwork_id')
 		.notNull()
 		.references(() => artworks.id),
+	order_index: integer('order_index').default(0)
+});
+
+/**
+ * Exhibition Images - изображения выставок (галерея)
+ */
+export const exhibitionImages = sqliteTable('exhibition_images', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	exhibition_id: integer('exhibition_id')
+		.notNull()
+		.references(() => exhibitions.id, { onDelete: 'cascade' }),
+	media_id: integer('media_id')
+		.notNull()
+		.references(() => media.id),
+	caption_en: text('caption_en'),
+	caption_ru: text('caption_ru'),
+	caption_es: text('caption_es'),
+	caption_zh: text('caption_zh'),
 	order_index: integer('order_index').default(0)
 });
 
@@ -678,6 +704,117 @@ export const shopProductImages = sqliteTable('shop_product_images', {
 });
 
 // ============================================
+// NFT MODULE
+// ============================================
+
+/**
+ * NFTs - цифровые произведения
+ */
+export const nfts = sqliteTable('nfts', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	slug: text('slug').notNull().unique(),
+	title_en: text('title_en').notNull(),
+	title_ru: text('title_ru').notNull(),
+	title_es: text('title_es').notNull(),
+	title_zh: text('title_zh').notNull(),
+	description_en: text('description_en').notNull(),
+	description_ru: text('description_ru').notNull(),
+	description_es: text('description_es').notNull(),
+	description_zh: text('description_zh').notNull(),
+	image_id: integer('image_id')
+		.notNull()
+		.references(() => media.id),
+	video_id: integer('video_id')
+		.notNull()
+		.references(() => media.id),
+	technique: text('technique'),
+	year: integer('year'),
+	price: text('price'), // String for crypto prices
+	currency: text('currency').default('ETH'),
+	opensea_url: text('opensea_url'),
+	blockchain: text('blockchain').default('Ethereum'),
+	is_featured: integer('is_featured', { mode: 'boolean' }).default(false),
+	is_visible: integer('is_visible', { mode: 'boolean' }).default(true),
+	order_index: integer('order_index').default(0),
+	created_at: text('created_at').default(sql`CURRENT_TIMESTAMP`)
+});
+
+// ============================================
+// ABOUT MODULE
+// ============================================
+
+/**
+ * About Artist - информация о художнике (singleton)
+ */
+export const aboutArtist = sqliteTable('about_artist', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	name: text('name').notNull(),
+	image_id: integer('image_id').references(() => media.id),
+	nationality: text('nationality'),
+	based_in: text('based_in'),
+	biography_en: text('biography_en'),
+	biography_ru: text('biography_ru'),
+	biography_es: text('biography_es'),
+	biography_zh: text('biography_zh'),
+	seo_title_en: text('seo_title_en'),
+	seo_title_ru: text('seo_title_ru'),
+	seo_title_es: text('seo_title_es'),
+	seo_title_zh: text('seo_title_zh'),
+	seo_description_en: text('seo_description_en'),
+	seo_description_ru: text('seo_description_ru'),
+	seo_description_es: text('seo_description_es'),
+	seo_description_zh: text('seo_description_zh'),
+	updated_at: text('updated_at').default(sql`CURRENT_TIMESTAMP`)
+});
+
+/**
+ * About Education - образование
+ */
+export const aboutEducation = sqliteTable('about_education', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	year: text('year'), // Text for ranges like "2015-2019"
+	degree_en: text('degree_en'),
+	degree_ru: text('degree_ru'),
+	degree_es: text('degree_es'),
+	degree_zh: text('degree_zh'),
+	institution_en: text('institution_en'),
+	institution_ru: text('institution_ru'),
+	institution_es: text('institution_es'),
+	institution_zh: text('institution_zh'),
+	order_index: integer('order_index').default(0)
+});
+
+/**
+ * About Awards - награды
+ */
+export const aboutAwards = sqliteTable('about_awards', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	year: text('year'),
+	title_en: text('title_en'),
+	title_ru: text('title_ru'),
+	title_es: text('title_es'),
+	title_zh: text('title_zh'),
+	organization_en: text('organization_en'),
+	organization_ru: text('organization_ru'),
+	organization_es: text('organization_es'),
+	organization_zh: text('organization_zh'),
+	order_index: integer('order_index').default(0)
+});
+
+/**
+ * About Residencies - резиденции
+ */
+export const aboutResidencies = sqliteTable('about_residencies', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	year: text('year'),
+	location_en: text('location_en'),
+	location_ru: text('location_ru'),
+	location_es: text('location_es'),
+	location_zh: text('location_zh'),
+	order_index: integer('order_index').default(0)
+});
+
+// ============================================
 // TypeScript Types
 // ============================================
 
@@ -772,3 +909,21 @@ export type ShopProduct = typeof shopProducts.$inferSelect;
 export type NewShopProduct = typeof shopProducts.$inferInsert;
 export type ShopProductImage = typeof shopProductImages.$inferSelect;
 export type NewShopProductImage = typeof shopProductImages.$inferInsert;
+
+// Exhibition Images
+export type ExhibitionImage = typeof exhibitionImages.$inferSelect;
+export type NewExhibitionImage = typeof exhibitionImages.$inferInsert;
+
+// NFT
+export type Nft = typeof nfts.$inferSelect;
+export type NewNft = typeof nfts.$inferInsert;
+
+// About
+export type AboutArtist = typeof aboutArtist.$inferSelect;
+export type NewAboutArtist = typeof aboutArtist.$inferInsert;
+export type AboutEducation = typeof aboutEducation.$inferSelect;
+export type NewAboutEducation = typeof aboutEducation.$inferInsert;
+export type AboutAward = typeof aboutAwards.$inferSelect;
+export type NewAboutAward = typeof aboutAwards.$inferInsert;
+export type AboutResidency = typeof aboutResidencies.$inferSelect;
+export type NewAboutResidency = typeof aboutResidencies.$inferInsert;
