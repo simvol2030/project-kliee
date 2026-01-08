@@ -448,7 +448,7 @@
 			<div class="media-grid">
 				{#each imageMedia as item}
 					<button type="button" class="media-item" class:selected={imageId === item.id} onclick={() => selectImage(item.id)}>
-						<img src={getMediaUrl(item)} alt={item.original_filename || 'Media'} />
+						<img src={getMediaUrl(item)} alt={item.filename || 'Media'} />
 					</button>
 				{/each}
 				{#if imageMedia.length === 0}

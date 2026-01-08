@@ -300,7 +300,7 @@
 						class:selected={imageId === item.id}
 						onclick={() => selectImage(item.id)}
 					>
-						<img src={getMediaUrl(item)} alt={item.original_filename || 'Media'} />
+						<img src={getMediaUrl(item)} alt={item.filename || 'Media'} />
 					</button>
 				{/each}
 				{#if imageMedia.length === 0}
@@ -328,7 +328,7 @@
 						onclick={() => selectVideo(item.id)}
 					>
 						<video src={getMediaUrl(item)}></video>
-						<span class="video-filename">{item.original_filename}</span>
+						<span class="video-filename">{item.filename}</span>
 					</button>
 				{/each}
 				{#if videoMedia.length === 0}
