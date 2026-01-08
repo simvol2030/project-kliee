@@ -28,8 +28,8 @@ export const load: PageServerLoad = async ({ parent, url }) => {
 	const page = parseInt(url.searchParams.get('page') || '1', 10);
 	const pageSize = 12;
 
-	// Get filter options
-	const allSeries = getAllSeries(localeCode);
+	// Get filter options (all async now)
+	const allSeries = await getAllSeries(localeCode);
 	const years = await getArtworkYears();
 	const techniques = await getArtworkTechniques(localeCode);
 

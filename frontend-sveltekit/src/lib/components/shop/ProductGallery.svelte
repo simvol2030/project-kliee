@@ -6,6 +6,7 @@
 		url: string;
 		alt?: string | null;
 		stored_filename?: string;
+		mime_type?: string | null;
 	}
 
 	interface Props {
@@ -37,6 +38,10 @@
 			return `/uploads/products/${img.stored_filename}`;
 		}
 		return '/images/placeholder-artwork.jpg';
+	}
+
+	function isVideo(img: ProductImage): boolean {
+		return img.mime_type?.startsWith('video/') ?? false;
 	}
 
 	function selectImage(index: number) {
@@ -111,19 +116,36 @@
 <svelte:window onkeydown={handleKeydown} />
 
 <div class="product-gallery">
-	<!-- Main Image -->
+	<!-- Main Image/Video -->
 	{#if currentImage}
-		<button type="button" class="main-image" onclick={openLightbox} aria-label="Open fullscreen view">
-			<img src={getImageUrl(currentImage)} alt={getImageAlt(currentImage)} />
-			<div class="zoom-hint">
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-					<circle cx="11" cy="11" r="8" />
-					<line x1="21" y1="21" x2="16.65" y2="16.65" />
-					<line x1="11" y1="8" x2="11" y2="14" />
-					<line x1="8" y1="11" x2="14" y2="11" />
-				</svg>
+		{#if isVideo(currentImage)}
+			<div class="main-image video-container">
+				<video
+					src={getImageUrl(currentImage)}
+					controls
+					autoplay
+					muted
+					loop
+					playsinline
+				>
+					<track kind="captions" />
+					Your browser does not support video playback.
+				</video>
+				<span class="video-badge">Video</span>
 			</div>
-		</button>
+		{:else}
+			<button type="button" class="main-image" onclick={openLightbox} aria-label="Open fullscreen view">
+				<img src={getImageUrl(currentImage)} alt={getImageAlt(currentImage)} />
+				<div class="zoom-hint">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+						<circle cx="11" cy="11" r="8" />
+						<line x1="21" y1="21" x2="16.65" y2="16.65" />
+						<line x1="11" y1="8" x2="11" y2="14" />
+						<line x1="8" y1="11" x2="14" y2="11" />
+					</svg>
+				</div>
+			</button>
+		{/if}
 	{:else}
 		<div class="main-image placeholder">
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
@@ -142,10 +164,18 @@
 					type="button"
 					class="thumbnail"
 					class:active={index === currentIndex}
+					class:video={isVideo(image)}
 					onclick={() => selectImage(index)}
-					aria-label="View image {index + 1}"
+					aria-label="View {isVideo(image) ? 'video' : 'image'} {index + 1}"
 				>
-					<img src={getImageUrl(image)} alt={getImageAlt(image)} />
+					{#if isVideo(image)}
+						<video src={getImageUrl(image)} muted>
+							<track kind="captions" />
+						</video>
+						<span class="thumb-video-badge">▶</span>
+					{:else}
+						<img src={getImageUrl(image)} alt={getImageAlt(image)} />
+					{/if}
 				</button>
 			{/each}
 		</div>
@@ -229,6 +259,29 @@
 		transform: scale(1.02);
 	}
 
+	.main-image.video-container {
+		cursor: default;
+	}
+
+	.main-image video {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		background: #000;
+	}
+
+	.video-badge {
+		position: absolute;
+		top: 0.75rem;
+		left: 0.75rem;
+		background: #dc2626;
+		color: white;
+		padding: 0.25rem 0.5rem;
+		border-radius: 0.25rem;
+		font-size: 0.75rem;
+		font-weight: 600;
+	}
+
 	.zoom-hint {
 		position: absolute;
 		bottom: 1rem;
@@ -285,10 +338,31 @@
 		border-color: #a5b4fc;
 	}
 
-	.thumbnail img {
+	.thumbnail img,
+	.thumbnail video {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+	}
+
+	.thumbnail.video {
+		position: relative;
+	}
+
+	.thumb-video-badge {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: rgba(0, 0, 0, 0.7);
+		color: white;
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 0.625rem;
 	}
 
 	/* Lightbox */
