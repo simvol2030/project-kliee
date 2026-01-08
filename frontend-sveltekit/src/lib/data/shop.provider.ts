@@ -236,6 +236,56 @@ export async function getProductImages(productId: number) {
 }
 
 /**
+ * Get all images for a product with full media data (including mime_type for video detection)
+ */
+export async function getProductImagesWithMedia(productId: number) {
+	const result = await db
+		.select({
+			id: shopProductImages.id,
+			media_id: shopProductImages.media_id,
+			is_primary: shopProductImages.is_primary,
+			order_index: shopProductImages.order_index,
+			filename: media.stored_filename,
+			folder: media.folder,
+			mime_type: media.mime_type,
+			width: media.width,
+			height: media.height,
+			alt_en: media.alt_en
+		})
+		.from(shopProductImages)
+		.leftJoin(media, eq(shopProductImages.media_id, media.id))
+		.where(eq(shopProductImages.product_id, productId))
+		.orderBy(asc(shopProductImages.order_index));
+
+	return result.map((row) => ({
+		id: row.id,
+		media_id: row.media_id,
+		is_primary: row.is_primary,
+		order_index: row.order_index,
+		url: buildShopImageUrl(row.filename, row.folder),
+		mime_type: row.mime_type,
+		width: row.width,
+		height: row.height,
+		alt: row.alt_en
+	}));
+}
+
+/**
+ * Reorder product images
+ */
+export async function reorderProductImages(
+	productId: number,
+	imageOrders: { id: number; order_index: number }[]
+): Promise<void> {
+	for (const item of imageOrders) {
+		await db
+			.update(shopProductImages)
+			.set({ order_index: item.order_index })
+			.where(and(eq(shopProductImages.id, item.id), eq(shopProductImages.product_id, productId)));
+	}
+}
+
+/**
  * Create a new shop product
  */
 export async function createShopProduct(data: NewShopProduct): Promise<ShopProduct> {

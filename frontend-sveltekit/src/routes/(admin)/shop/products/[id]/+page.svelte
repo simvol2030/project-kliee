@@ -40,6 +40,13 @@
 	let message = $state('');
 	let messageType = $state<'success' | 'error'>('success');
 
+	// Upload state
+	let uploading = $state(false);
+	let uploadProgress = $state(0);
+
+	// Drag and drop state
+	let draggedItem = $state<number | null>(null);
+
 	// Handle artwork selection - auto-fill data
 	function handleArtworkSelect(e: Event) {
 		const target = e.target as HTMLSelectElement;
@@ -177,6 +184,122 @@
 				is_primary: img.id === imageId
 			}));
 		}
+	}
+
+	// Handle file upload
+	async function handleFileUpload(e: Event) {
+		const input = e.target as HTMLInputElement;
+		const files = input.files;
+		if (!files || files.length === 0) return;
+
+		uploading = true;
+		uploadProgress = 0;
+		const totalFiles = files.length;
+		let completed = 0;
+
+		try {
+			for (const file of files) {
+				// Upload to media API
+				const formData = new FormData();
+				formData.append('file', file);
+				formData.append('folder', 'products');
+
+				const uploadResponse = await fetch('/api/media/upload', {
+					method: 'POST',
+					body: formData
+				});
+
+				if (!uploadResponse.ok) {
+					throw new Error(`Failed to upload ${file.name}`);
+				}
+
+				const result = await uploadResponse.json();
+
+				if (result.success && result.media) {
+					// Add image to product
+					const isPrimary = images.length === 0 && completed === 0;
+					await addImage(result.media.id, isPrimary);
+				}
+
+				completed++;
+				uploadProgress = Math.round((completed / totalFiles) * 100);
+			}
+
+			message = `${totalFiles} file(s) uploaded successfully`;
+			messageType = 'success';
+
+			// Reload to get updated images
+			window.location.reload();
+		} catch (err) {
+			console.error('Upload error:', err);
+			message = err instanceof Error ? err.message : 'Upload failed';
+			messageType = 'error';
+		} finally {
+			uploading = false;
+			uploadProgress = 0;
+			input.value = '';
+			setTimeout(() => (message = ''), 3000);
+		}
+	}
+
+	// Drag and drop handlers
+	function handleDragStart(e: DragEvent, index: number) {
+		draggedItem = index;
+		if (e.dataTransfer) {
+			e.dataTransfer.effectAllowed = 'move';
+		}
+	}
+
+	function handleDragOver(e: DragEvent) {
+		e.preventDefault();
+		if (e.dataTransfer) {
+			e.dataTransfer.dropEffect = 'move';
+		}
+	}
+
+	function handleDrop(e: DragEvent, targetIndex: number) {
+		e.preventDefault();
+		if (draggedItem === null || draggedItem === targetIndex) return;
+
+		// Reorder images array
+		const newImages = [...images];
+		const [draggedImage] = newImages.splice(draggedItem, 1);
+		newImages.splice(targetIndex, 0, draggedImage);
+
+		// Update order indices
+		images = newImages.map((img, idx) => ({ ...img, order_index: idx }));
+		draggedItem = null;
+
+		// Save new order to server
+		saveImageOrder();
+	}
+
+	function handleDragEnd() {
+		draggedItem = null;
+	}
+
+	async function saveImageOrder() {
+		const orderData = images.map((img, idx) => ({
+			id: img.id,
+			order_index: idx
+		}));
+
+		const formData = new FormData();
+		formData.append('order', JSON.stringify(orderData));
+
+		try {
+			await fetch('?/reorderImages', {
+				method: 'POST',
+				body: formData
+			});
+		} catch (err) {
+			console.error('Failed to save image order:', err);
+		}
+	}
+
+	// Helper to check if media is video
+	function isVideo(mimeType: string | null): boolean {
+		return mimeType?.startsWith('video/') ?? false;
 	}
 
 	// Get title by active tab
@@ -341,15 +464,45 @@
 				<!-- Images (only for existing products) -->
 				{#if !isNew}
 					<div class="card">
-						<h3>Images</h3>
+						<h3>Images & Videos</h3>
+						<p class="help-text" style="margin-bottom: 1rem;">Drag items to reorder. First image is shown as primary in listings.</p>
+
+						{#if uploading}
+							<div class="upload-progress">
+								<div class="progress-bar">
+									<div class="progress-fill" style="width: {uploadProgress}%"></div>
+								</div>
+								<span>Uploading... {uploadProgress}%</span>
+							</div>
+						{/if}
+
 						{#if images.length > 0}
 							<div class="images-grid">
-								{#each images as image}
-									<div class="image-item" class:primary={image.is_primary}>
+								{#each images as image, index}
+									<div
+										class="image-item"
+										class:primary={image.is_primary}
+										class:dragging={draggedItem === index}
+										draggable="true"
+										ondragstart={(e) => handleDragStart(e, index)}
+										ondragover={handleDragOver}
+										ondrop={(e) => handleDrop(e, index)}
+										ondragend={handleDragEnd}
+									>
+										<div class="drag-handle">⋮⋮</div>
 										{#if image.url}
-											<img src={image.url} alt="Product" />
+											{#if isVideo(image.mime_type)}
+												<video src={image.url} muted loop>
+													<track kind="captions" />
+												</video>
+											{:else}
+												<img src={image.url} alt="Product" />
+											{/if}
 										{:else}
 											<div class="no-image">No image</div>
+										{/if}
+										{#if isVideo(image.mime_type)}
+											<span class="video-badge">Video</span>
 										{/if}
 										<div class="image-actions">
 											{#if !image.is_primary}
@@ -374,9 +527,26 @@
 							<p class="empty-text">No images added yet</p>
 						{/if}
 
-						<button type="button" class="btn-secondary" onclick={() => (showMediaPicker = true)}>
-							+ Add Image
-						</button>
+						<div class="image-buttons">
+							<label class="btn-upload">
+								<input
+									type="file"
+									accept="image/*,video/mp4,video/webm"
+									multiple
+									onchange={handleFileUpload}
+									disabled={uploading}
+								/>
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+									<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+									<polyline points="17 8 12 3 7 8" />
+									<line x1="12" y1="3" x2="12" y2="15" />
+								</svg>
+								Upload Files
+							</label>
+							<button type="button" class="btn-secondary" onclick={() => (showMediaPicker = true)}>
+								+ Select from Media
+							</button>
+						</div>
 					</div>
 				{/if}
 			</div>
@@ -762,6 +932,106 @@
 		font-size: 0.875rem;
 		text-align: center;
 		padding: 1rem;
+	}
+
+	/* Upload and Drag-Drop Styles */
+	.image-buttons {
+		display: flex;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+
+	.btn-upload {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 0.75rem;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+		border-radius: 0.375rem;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: opacity 0.2s;
+	}
+
+	.btn-upload:hover {
+		opacity: 0.9;
+	}
+
+	.btn-upload input[type="file"] {
+		display: none;
+	}
+
+	.upload-progress {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 1rem;
+		padding: 0.75rem;
+		background: #f0f9ff;
+		border-radius: 0.375rem;
+	}
+
+	.progress-bar {
+		flex: 1;
+		height: 8px;
+		background: #e5e7eb;
+		border-radius: 4px;
+		overflow: hidden;
+	}
+
+	.progress-fill {
+		height: 100%;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		transition: width 0.3s ease;
+	}
+
+	.upload-progress span {
+		font-size: 0.75rem;
+		color: #6b7280;
+		white-space: nowrap;
+	}
+
+	.drag-handle {
+		position: absolute;
+		top: 0.25rem;
+		left: 0.25rem;
+		background: rgba(0, 0, 0, 0.5);
+		color: white;
+		padding: 0.125rem 0.25rem;
+		border-radius: 0.25rem;
+		font-size: 0.625rem;
+		cursor: grab;
+		opacity: 0;
+		transition: opacity 0.2s;
+	}
+
+	.image-item:hover .drag-handle {
+		opacity: 1;
+	}
+
+	.image-item.dragging {
+		opacity: 0.5;
+		border-style: dashed;
+	}
+
+	.image-item video {
+		width: 100%;
+		aspect-ratio: 1;
+		object-fit: cover;
+	}
+
+	.video-badge {
+		position: absolute;
+		top: 0.25rem;
+		right: 0.25rem;
+		background: #dc2626;
+		color: white;
+		padding: 0.125rem 0.375rem;
+		border-radius: 0.25rem;
+		font-size: 0.625rem;
+		font-weight: 600;
 	}
 
 	/* Modal */

@@ -1,12 +1,13 @@
 import type { PageServerLoad, Actions } from './$types';
 import {
 	getShopProductById,
-	getProductImages,
+	getProductImagesWithMedia,
 	createShopProduct,
 	updateShopProduct,
 	addProductImage,
 	removeProductImage,
 	setPrimaryImage,
+	reorderProductImages,
 	getAvailableArtworksForLinking
 } from '$lib/data/shop.provider';
 import { db } from '$lib/server/db/client';
@@ -42,7 +43,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw redirect(302, '/shop/products');
 	}
 
-	const images = await getProductImages(productId);
+	const images = await getProductImagesWithMedia(productId);
 
 	return {
 		isNew: false,
@@ -154,5 +155,28 @@ export const actions: Actions = {
 		await setPrimaryImage(productId, parseInt(imageId as string));
 
 		return { success: true };
+	},
+
+	reorderImages: async ({ request, params }) => {
+		if (params.id === 'new') {
+			return fail(400, { error: 'Cannot reorder images for new product' });
+		}
+
+		const formData = await request.formData();
+		const orderJson = formData.get('order') as string;
+
+		if (!orderJson) {
+			return fail(400, { error: 'Order data is required' });
+		}
+
+		try {
+			const imageOrders = JSON.parse(orderJson) as { id: number; order_index: number }[];
+			const productId = parseInt(params.id);
+			await reorderProductImages(productId, imageOrders);
+			return { success: true };
+		} catch (err) {
+			console.error('Error reordering images:', err);
+			return fail(500, { error: 'Failed to reorder images' });
+		}
 	}
 };

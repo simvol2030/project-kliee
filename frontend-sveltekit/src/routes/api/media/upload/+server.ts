@@ -2,13 +2,18 @@ import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
+import { createHash } from 'crypto';
 import sharp from 'sharp';
 import { v4 as uuid } from 'uuid';
 import { db } from '$lib/server/db/client';
 import { media, mediaThumbnails } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
 
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm'];
+const ALLOWED_TYPES = [...ALLOWED_IMAGE_TYPES, ...ALLOWED_VIDEO_TYPES];
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB for images
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB for videos
 
 const THUMBNAIL_SIZES = [
 	{ name: 'thumb', width: 150, height: 150 },
@@ -37,13 +42,54 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			throw error(400, `Invalid file type. Allowed: ${ALLOWED_TYPES.join(', ')}`);
 		}
 
+		// Determine if video or image
+		const isVideo = ALLOWED_VIDEO_TYPES.includes(file.type);
+		const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
+
 		// Validate file size
-		if (file.size > MAX_SIZE) {
-			throw error(400, `File too large. Max size: ${MAX_SIZE / 1024 / 1024}MB`);
+		if (file.size > maxSize) {
+			throw error(400, `File too large. Max size: ${maxSize / 1024 / 1024}MB`);
+		}
+
+		// Get file buffer and calculate hash for duplicate detection
+		const buffer = Buffer.from(await file.arrayBuffer());
+		const fileHash = createHash('md5').update(buffer).digest('hex');
+
+		// Check for duplicate by hash
+		const existing = await db
+			.select()
+			.from(media)
+			.where(eq(media.file_hash, fileHash))
+			.limit(1);
+
+		if (existing.length > 0) {
+			const existingMedia = existing[0];
+			// Get thumbnails for existing media
+			const existingThumbnails = await db
+				.select()
+				.from(mediaThumbnails)
+				.where(eq(mediaThumbnails.media_id, existingMedia.id));
+
+			return json({
+				success: true,
+				is_duplicate: true,
+				media: {
+					id: existingMedia.id,
+					filename: existingMedia.filename,
+					url: `/uploads/${existingMedia.folder}/${existingMedia.stored_filename}`,
+					width: existingMedia.width,
+					height: existingMedia.height,
+					mime_type: existingMedia.mime_type,
+					thumbnails: existingThumbnails.map((t) => ({
+						size: t.size_name,
+						url: `/uploads/${existingMedia.folder}/${t.stored_filename}`
+					}))
+				}
+			});
 		}
 
 		// Generate unique filename
-		const ext = file.name.split('.').pop() || 'jpg';
+		const ext = file.name.split('.').pop() || (isVideo ? 'mp4' : 'jpg');
 		const storedFilename = `${uuid()}.${ext}`;
 		const uploadDir = join(process.cwd(), 'static', 'uploads', folder);
 		const filePath = join(uploadDir, storedFilename);
@@ -52,14 +98,19 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		await mkdir(uploadDir, { recursive: true });
 
 		// Save original file
-		const buffer = Buffer.from(await file.arrayBuffer());
 		await writeFile(filePath, buffer);
 
-		// Get image metadata
-		const metadata = await sharp(buffer).metadata();
+		let metadata: { width?: number; height?: number } = {};
+		let thumbnails: Array<{ size_name: string; width: number; height: number; stored_filename: string }> = [];
 
-		// Create thumbnails
-		const thumbnails = await createThumbnails(buffer, uploadDir, storedFilename);
+		// Only process images with sharp (not videos)
+		if (!isVideo) {
+			// Get image metadata
+			metadata = await sharp(buffer).metadata();
+
+			// Create thumbnails
+			thumbnails = await createThumbnails(buffer, uploadDir, storedFilename);
+		}
 
 		// Save to database
 		const [mediaRecord] = await db
@@ -71,12 +122,13 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				size: file.size,
 				width: metadata.width || null,
 				height: metadata.height || null,
-				folder
+				folder,
+				file_hash: fileHash
 				// uploaded_by: locals.admin?.id || null
 			})
 			.returning();
 
-		// Save thumbnails to database
+		// Save thumbnails to database (only for images)
 		for (const thumb of thumbnails) {
 			await db.insert(mediaThumbnails).values({
 				media_id: mediaRecord.id,
@@ -89,12 +141,14 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 		return json({
 			success: true,
+			is_duplicate: false,
 			media: {
 				id: mediaRecord.id,
 				filename: mediaRecord.filename,
 				url: `/uploads/${folder}/${storedFilename}`,
 				width: mediaRecord.width,
 				height: mediaRecord.height,
+				mime_type: mediaRecord.mime_type,
 				thumbnails: thumbnails.map((t) => ({
 					size: t.size_name,
 					url: `/uploads/${folder}/${t.stored_filename}`
