@@ -6,7 +6,7 @@
 	let { data }: { data: PageData } = $props();
 
 	const locale = $derived(($page.data.locale as LanguageCode) || 'en');
-	const { exhibitions, artFairs, currentExhibitions, seo } = data;
+	const { pastExhibitions, artFairs, currentExhibitions, seo } = data;
 
 	// Current URL for canonical
 	const currentUrl = $derived($page.url.href);
@@ -49,8 +49,11 @@
 		zh: '艺术博览会'
 	};
 
-	// Filter past exhibitions (not current)
-	const pastExhibitions = $derived(exhibitions.filter((e) => !e.current));
+	// Helper function to format location
+	function formatLocation(city: string | null, country: string | null): string {
+		if (city && country) return `${city}, ${country}`;
+		return city || country || '';
+	}
 </script>
 
 <svelte:head>
@@ -87,16 +90,16 @@
 				<div class="exhibitions-grid featured">
 					{#each currentExhibitions as exhibition}
 						<article class="exhibition-card featured">
-							{#if exhibition.image}
+							{#if exhibition.coverImage}
 								<div class="exhibition-image">
-									<img src={exhibition.image} alt={exhibition.title} loading="eager" />
+									<img src={exhibition.coverImage} alt={exhibition.title} loading="eager" />
 								</div>
 							{/if}
 							<div class="exhibition-info">
 								<span class="year">{exhibition.year}</span>
 								<h3>{exhibition.title}</h3>
 								<p class="venue">{exhibition.venue}</p>
-								<p class="location">{exhibition.location}</p>
+								<p class="location">{formatLocation(exhibition.city, exhibition.country)}</p>
 								<span class="type-badge">{exhibition.type}</span>
 							</div>
 						</article>
@@ -117,7 +120,7 @@
 						<div class="content">
 							<h3>{exhibition.title}</h3>
 							<p class="venue">{exhibition.venue}</p>
-							<p class="location">{exhibition.location}</p>
+							<p class="location">{formatLocation(exhibition.city, exhibition.country)}</p>
 							<span class="type-badge">{exhibition.type}</span>
 						</div>
 					</article>
@@ -135,9 +138,9 @@
 					<article class="fair-card">
 						<span class="year">{fair.year}</span>
 						<h3>{fair.title}</h3>
-						<p class="location">{fair.location}</p>
-						{#if fair.gallery}
-							<p class="gallery">{fair.gallery}</p>
+						<p class="location">{formatLocation(fair.city, fair.country)}</p>
+						{#if fair.venue}
+							<p class="gallery">{fair.venue}</p>
 						{/if}
 					</article>
 				{/each}
