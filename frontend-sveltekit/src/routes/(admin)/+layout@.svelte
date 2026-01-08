@@ -83,6 +83,10 @@
 					<span class="icon">💎</span>
 					<span>NFT</span>
 				</a>
+				<a href="/about" class:active={$page.url.pathname.startsWith('/about')} onclick={closeMobileMenu}>
+					<span class="icon">👤</span>
+					<span>About</span>
+				</a>
 
 				<p class="nav-section">Layout</p>
 				<a href="/layout/menu" class:active={$page.url.pathname.startsWith('/layout/menu')} onclick={closeMobileMenu}>

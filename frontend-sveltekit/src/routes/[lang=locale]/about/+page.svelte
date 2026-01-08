@@ -35,7 +35,9 @@
 	<meta property="og:url" content={currentUrl} />
 	<meta property="og:title" content={about.seo.title} />
 	<meta property="og:description" content={about.seo.description} />
-	<meta property="og:image" content={`${baseUrl}${about.artist.image}`} />
+	{#if about.artist.imageUrl}
+		<meta property="og:image" content={`${baseUrl}${about.artist.imageUrl}`} />
+	{/if}
 
 	{@html `<script type="application/ld+json">${JSON.stringify({
 		'@context': 'https://schema.org',
@@ -43,7 +45,7 @@
 		name: about.artist.name,
 		jobTitle: 'Contemporary Artist',
 		description: about.biography,
-		image: `${baseUrl}${about.artist.image}`,
+		image: about.artist.imageUrl ? `${baseUrl}${about.artist.imageUrl}` : null,
 		nationality: about.artist.nationality,
 		workLocation: about.artist.basedIn
 	})}<\/script>`}
@@ -55,7 +57,13 @@
 		<div class="container">
 			<div class="hero-content">
 				<div class="hero-image">
-					<img src={about.artist.image} alt={about.artist.name} loading="eager" />
+					{#if about.artist.imageUrl}
+						<img src={about.artist.imageUrl} alt={about.artist.name} loading="eager" />
+					{:else}
+						<div class="no-image">
+							<span>{about.artist.name.charAt(0)}</span>
+						</div>
+					{/if}
 				</div>
 				<div class="hero-text">
 					<h1>{about.artist.name}</h1>
@@ -183,6 +191,18 @@
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+	}
+
+	.hero-image .no-image {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--bg-tertiary, #e5e7eb);
+		color: var(--text-secondary, #666);
+		font-size: var(--text-4xl, 3rem);
+		font-weight: 600;
 	}
 
 	.hero-text h1 {
