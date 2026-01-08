@@ -6,7 +6,6 @@
 	let { data }: { data: PageData } = $props();
 
 	const locale = $derived(($page.data.locale as LanguageCode) || 'en');
-	const { nft } = data;
 
 	// Current URL for canonical
 	const currentUrl = $derived($page.url.href);
@@ -22,8 +21,8 @@
 </script>
 
 <svelte:head>
-	<title>{nft.seo.title}</title>
-	<meta name="description" content={nft.seo.description} />
+	<title>{data.seo.title}</title>
+	<meta name="description" content={data.seo.description} />
 	<link rel="canonical" href={currentUrl} />
 	<link rel="alternate" href={alternateUrls.en} hreflang="en" />
 	<link rel="alternate" href={alternateUrls.ru} hreflang="ru" />
@@ -33,79 +32,83 @@
 
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content={currentUrl} />
-	<meta property="og:title" content={nft.seo.title} />
-	<meta property="og:description" content={nft.seo.description} />
+	<meta property="og:title" content={data.seo.title} />
+	<meta property="og:description" content={data.seo.description} />
 </svelte:head>
 
 <main class="nft-page">
 	<!-- Hero Section -->
 	<section class="nft-hero">
 		<div class="container">
-			<h1>{nft.page.hero.title}</h1>
-			<p class="subtitle">{nft.page.hero.subtitle}</p>
+			<h1>{data.page.hero.title}</h1>
+			<p class="subtitle">{data.page.hero.subtitle}</p>
 		</div>
 	</section>
 
 	<!-- Description Section -->
 	<section class="nft-description">
 		<div class="container">
-			<p>{nft.page.description}</p>
+			<p>{data.page.description}</p>
 		</div>
 	</section>
 
-	<!-- Featured NFTs -->
+	<!-- NFT Gallery -->
 	<section class="nft-gallery">
 		<div class="container">
 			<h2>
-				{#if locale === 'ru'}Избранные NFT
-				{:else if locale === 'es'}NFTs Destacados
-				{:else if locale === 'zh'}精选NFT
-				{:else}Featured NFTs{/if}
+				{#if locale === 'ru'}Коллекция NFT
+				{:else if locale === 'es'}Colección NFT
+				{:else if locale === 'zh'}NFT收藏
+				{:else}NFT Collection{/if}
 			</h2>
-			<div class="nft-grid">
-				{#each nft.featuredNfts as item}
-					<article class="nft-card">
-						<div class="nft-image">
-							<img src={item.image} alt={item.title} loading="lazy" />
-							{#if item.openSeaUrl}
-								<a
-									href={item.openSeaUrl}
-									target="_blank"
-									rel="noopener noreferrer"
-									class="view-link"
-									aria-label="View on OpenSea"
-								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="24"
-										height="24"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-									>
-										<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-										<polyline points="15 3 21 3 21 9" />
-										<line x1="10" y1="14" x2="21" y2="3" />
-									</svg>
-								</a>
-							{/if}
-						</div>
-						<div class="nft-info">
-							<h3>{item.title}</h3>
-							<p class="technique">{item.technique}</p>
-							<p class="year">{item.year}</p>
-							{#if item.price && item.currency}
-								<p class="price">
-									{item.price} {item.currency}
-								</p>
-							{/if}
-						</div>
-					</article>
-				{/each}
-			</div>
+			{#if data.nfts.length === 0}
+				<p class="no-nfts">
+					{#if locale === 'ru'}NFT пока не добавлены
+					{:else if locale === 'es'}No hay NFTs todavía
+					{:else if locale === 'zh'}暂无NFT
+					{:else}No NFTs available yet{/if}
+				</p>
+			{:else}
+				<div class="nft-grid">
+					{#each data.nfts as item}
+						<article class="nft-card">
+							<a href="/{locale}/nft/{item.slug}" class="nft-link">
+								<div class="nft-image">
+									{#if item.imageUrl}
+										<img src={item.imageUrl} alt={item.title} loading="lazy" />
+									{:else}
+										<div class="no-image">
+											<span>NFT</span>
+										</div>
+									{/if}
+									{#if item.isFeatured}
+										<span class="featured-badge">
+											{#if locale === 'ru'}Избранное
+											{:else if locale === 'es'}Destacado
+											{:else if locale === 'zh'}精选
+											{:else}Featured{/if}
+										</span>
+									{/if}
+								</div>
+								<div class="nft-info">
+									<h3>{item.title}</h3>
+									{#if item.technique}
+										<p class="technique">{item.technique}</p>
+									{/if}
+									{#if item.year}
+										<p class="year">{item.year}</p>
+									{/if}
+									{#if item.price && item.currency}
+										<p class="price">
+											{item.price} {item.currency}
+										</p>
+									{/if}
+								</div>
+							</a>
+						</article>
+					{/each}
+				</div>
+			{/if}
 		</div>
 	</section>
 
@@ -120,15 +123,15 @@
 					{:else}OpenSea Collection{/if}
 				</h2>
 				<p>
-					{nft.openSeaCollection.collectionName} · {nft.openSeaCollection.blockchain}
+					{data.openSeaCollection.collectionName} · {data.openSeaCollection.blockchain}
 				</p>
 				<a
-					href={nft.openSeaCollection.url}
+					href={data.openSeaCollection.url}
 					target="_blank"
 					rel="noopener noreferrer"
 					class="btn-primary"
 				>
-					{nft.cta.viewCollection}
+					{data.cta.viewCollection}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="20"
@@ -211,6 +214,13 @@
 		color: var(--text-primary, #1a1a1a);
 	}
 
+	.no-nfts {
+		text-align: center;
+		color: var(--text-secondary, #666);
+		font-size: var(--text-lg, 1.125rem);
+		padding: var(--spacing-2xl, 4rem) 0;
+	}
+
 	.nft-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -230,6 +240,12 @@
 		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 	}
 
+	.nft-link {
+		text-decoration: none;
+		color: inherit;
+		display: block;
+	}
+
 	.nft-image {
 		position: relative;
 		aspect-ratio: 1;
@@ -247,28 +263,27 @@
 		transform: scale(1.05);
 	}
 
-	.view-link {
-		position: absolute;
-		top: var(--spacing-md, 1rem);
-		right: var(--spacing-md, 1rem);
-		width: 40px;
-		height: 40px;
-		background: rgba(255, 255, 255, 0.9);
-		border-radius: 50%;
+	.no-image {
+		width: 100%;
+		height: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		color: var(--text-primary, #1a1a1a);
-		opacity: 0;
-		transition: opacity 0.3s;
+		background: var(--bg-tertiary, #e5e7eb);
+		color: var(--text-secondary, #666);
+		font-size: var(--text-xl, 1.25rem);
 	}
 
-	.nft-card:hover .view-link {
-		opacity: 1;
-	}
-
-	.view-link:hover {
-		background: #fff;
+	.featured-badge {
+		position: absolute;
+		top: var(--spacing-md, 1rem);
+		left: var(--spacing-md, 1rem);
+		padding: 0.25rem 0.75rem;
+		background: var(--color-accent, #d4af37);
+		color: var(--black, #000);
+		font-size: var(--text-xs, 0.75rem);
+		font-weight: 600;
+		border-radius: var(--radius-sm, 0.25rem);
 	}
 
 	.nft-info {
@@ -362,15 +377,6 @@
 	}
 
 	:global(.dark) .nft-card {
-		background: var(--bg-tertiary, #2c2c2e);
-	}
-
-	:global(.dark) .view-link {
-		background: rgba(44, 44, 46, 0.9);
-		color: #fff;
-	}
-
-	:global(.dark) .view-link:hover {
 		background: var(--bg-tertiary, #2c2c2e);
 	}
 
