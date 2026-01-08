@@ -1,8 +1,21 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import LanguageTabs from '$lib/components/admin/LanguageTabs.svelte';
 	import MediaPicker from '$lib/components/admin/MediaPicker.svelte';
 
 	let { data } = $props();
+
+	// Helper to get CSRF headers
+	function csrfHeaders(): Record<string, string> {
+		return {
+			'Content-Type': 'application/json',
+			'x-csrf-token': $page.data.csrfToken || ''
+		};
+	}
+
+	function csrfDeleteHeaders(): Record<string, string> {
+		return { 'x-csrf-token': $page.data.csrfToken || '' };
+	}
 
 	let activeSection = $state<'hero' | 'about' | 'news' | 'testimonials' | 'process'>('hero');
 	let isSaving = $state(false);
@@ -47,7 +60,7 @@
 		try {
 			await fetch('/api/homepage/hero', {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+				headers: csrfHeaders(),
 				body: JSON.stringify({ action: 'updateHero', ...hero })
 			});
 		} finally {
@@ -58,7 +71,7 @@
 	async function addSlide(mediaId: number) {
 		await fetch('/api/homepage/hero', {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+			headers: csrfHeaders(),
 			body: JSON.stringify({ action: 'addSlide', media_id: mediaId, order_index: slides.length })
 		});
 		await loadHero();
@@ -66,7 +79,7 @@
 
 	async function deleteSlide(id: number) {
 		if (!confirm('Delete this slide?')) return;
-		await fetch(`/api/homepage/hero/slide/${id}`, { method: 'DELETE' });
+		await fetch(`/api/homepage/hero/slide/${id}`, { method: 'DELETE', headers: csrfDeleteHeaders() });
 		await loadHero();
 	}
 
@@ -83,7 +96,7 @@
 		try {
 			await fetch('/api/homepage/about', {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+				headers: csrfHeaders(),
 				body: JSON.stringify(about)
 			});
 		} finally {
@@ -112,7 +125,7 @@
 		try {
 			const url = editingNews.id ? `/api/homepage/news/${editingNews.id}` : '/api/homepage/news';
 			const method = editingNews.id ? 'PATCH' : 'POST';
-			await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(editingNews) });
+			await fetch(url, { method, headers: csrfHeaders(), body: JSON.stringify(editingNews) });
 			await loadNews();
 			newsModalOpen = false;
 		} finally {
@@ -122,7 +135,7 @@
 
 	async function deleteNews(id: number) {
 		if (!confirm('Delete this news item?')) return;
-		await fetch(`/api/homepage/news/${id}`, { method: 'DELETE' });
+		await fetch(`/api/homepage/news/${id}`, { method: 'DELETE', headers: csrfDeleteHeaders() });
 		await loadNews();
 	}
 
@@ -147,7 +160,7 @@
 		try {
 			const url = editingTestimonial.id ? `/api/homepage/testimonials/${editingTestimonial.id}` : '/api/homepage/testimonials';
 			const method = editingTestimonial.id ? 'PATCH' : 'POST';
-			await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(editingTestimonial) });
+			await fetch(url, { method, headers: csrfHeaders(), body: JSON.stringify(editingTestimonial) });
 			await loadTestimonials();
 			testimonialModalOpen = false;
 		} finally {
@@ -157,7 +170,7 @@
 
 	async function deleteTestimonial(id: number) {
 		if (!confirm('Delete this testimonial?')) return;
-		await fetch(`/api/homepage/testimonials/${id}`, { method: 'DELETE' });
+		await fetch(`/api/homepage/testimonials/${id}`, { method: 'DELETE', headers: csrfDeleteHeaders() });
 		await loadTestimonials();
 	}
 
@@ -182,7 +195,7 @@
 		try {
 			const url = editingProcess.id ? `/api/homepage/process/${editingProcess.id}` : '/api/homepage/process';
 			const method = editingProcess.id ? 'PATCH' : 'POST';
-			await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(editingProcess) });
+			await fetch(url, { method, headers: csrfHeaders(), body: JSON.stringify(editingProcess) });
 			await loadProcess();
 			processModalOpen = false;
 		} finally {
@@ -192,7 +205,7 @@
 
 	async function deleteProcess(id: number) {
 		if (!confirm('Delete this process step?')) return;
-		await fetch(`/api/homepage/process/${id}`, { method: 'DELETE' });
+		await fetch(`/api/homepage/process/${id}`, { method: 'DELETE', headers: csrfDeleteHeaders() });
 		await loadProcess();
 	}
 

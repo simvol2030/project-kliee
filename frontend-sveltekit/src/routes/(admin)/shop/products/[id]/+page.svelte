@@ -75,6 +75,10 @@
 		saving = true;
 
 		const formData = new FormData();
+		// Include CSRF token
+		if (data.csrfToken) {
+			formData.append('csrf_token', data.csrfToken);
+		}
 		formData.append('sku', sku);
 		formData.append('artwork_id', artworkId);
 		formData.append('title_en', titleEn);
@@ -139,6 +143,9 @@
 	// Add image
 	async function addImage(mediaId: number, isPrimary: boolean = false) {
 		const formData = new FormData();
+		if (data.csrfToken) {
+			formData.append('csrf_token', data.csrfToken);
+		}
 		formData.append('media_id', mediaId.toString());
 		formData.append('is_primary', isPrimary.toString());
 
@@ -156,6 +163,9 @@
 	// Remove image
 	async function removeImage(imageId: number) {
 		const formData = new FormData();
+		if (data.csrfToken) {
+			formData.append('csrf_token', data.csrfToken);
+		}
 		formData.append('image_id', imageId.toString());
 
 		const response = await fetch('?/removeImage', {
@@ -171,6 +181,9 @@
 	// Set primary image
 	async function setAsPrimary(imageId: number) {
 		const formData = new FormData();
+		if (data.csrfToken) {
+			formData.append('csrf_token', data.csrfToken);
+		}
 		formData.append('image_id', imageId.toString());
 
 		const response = await fetch('?/setPrimary', {
@@ -201,6 +214,9 @@
 			for (const file of files) {
 				// Upload to media API
 				const formData = new FormData();
+				if (data.csrfToken) {
+					formData.append('csrf_token', data.csrfToken);
+				}
 				formData.append('file', file);
 				formData.append('folder', 'products');
 
@@ -285,6 +301,9 @@
 		}));
 
 		const formData = new FormData();
+		if (data.csrfToken) {
+			formData.append('csrf_token', data.csrfToken);
+		}
 		formData.append('order', JSON.stringify(orderData));
 
 		try {

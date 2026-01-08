@@ -73,7 +73,10 @@ const csrfProtection: Handle = async ({ event, resolve }) => {
 		if (!isLoginEndpoint) {
 			const headerToken = request.headers.get('x-csrf-token');
 			let formToken: string | null = null;
-			if (request.headers.get('content-type')?.includes('application/x-www-form-urlencoded')) {
+			const contentType = request.headers.get('content-type') || '';
+
+			// Check form data for CSRF token (both urlencoded and multipart)
+			if (contentType.includes('application/x-www-form-urlencoded') || contentType.includes('multipart/form-data')) {
 				try {
 					const formData = await request.clone().formData();
 					formToken = formData.get('csrf_token')?.toString() || null;

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import ConfirmDialog from '$lib/components/admin/ConfirmDialog.svelte';
 
@@ -62,6 +63,10 @@
 		try {
 			const formData = new FormData();
 			formData.append('id', deleteId.toString());
+			// Include CSRF token
+			if ($page.data.csrfToken) {
+				formData.append('csrf_token', $page.data.csrfToken);
+			}
 
 			const response = await fetch('?/delete', {
 				method: 'POST',

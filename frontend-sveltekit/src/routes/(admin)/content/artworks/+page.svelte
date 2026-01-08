@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import MediaPicker from '$lib/components/admin/MediaPicker.svelte';
 	import LanguageTabs from '$lib/components/admin/LanguageTabs.svelte';
 
@@ -149,7 +150,10 @@
 		try {
 			const res = await fetch(url, {
 				method,
-				headers: { 'Content-Type': 'application/json' },
+				headers: {
+					'Content-Type': 'application/json',
+					'x-csrf-token': $page.data.csrfToken || ''
+				},
 				body: JSON.stringify(payload)
 			});
 
@@ -166,7 +170,12 @@
 		if (!deleteId) return;
 
 		try {
-			const res = await fetch(`/api/content/artworks/${deleteId}`, { method: 'DELETE' });
+			const res = await fetch(`/api/content/artworks/${deleteId}`, {
+				method: 'DELETE',
+				headers: {
+					'x-csrf-token': $page.data.csrfToken || ''
+				}
+			});
 			if (res.ok) {
 				deleteId = null;
 				await loadData();
