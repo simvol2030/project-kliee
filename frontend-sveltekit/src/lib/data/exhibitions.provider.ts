@@ -529,12 +529,17 @@ export async function getExhibitionsByYear(
 }
 
 /**
+ * Exhibition type enum values
+ */
+type ExhibitionType = 'solo' | 'group' | 'fair' | 'biennale' | 'other';
+
+/**
  * Get exhibitions by type
  * @param type - Exhibition type
  * @param locale - Language code
  */
 export async function getExhibitionsByType(
-	type: string,
+	type: ExhibitionType,
 	locale: LanguageCode = 'en'
 ): Promise<ExhibitionLocalized[]> {
 	const suffix = getLocaleSuffix(locale);

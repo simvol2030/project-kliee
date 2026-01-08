@@ -11,9 +11,10 @@
 		values: MultilingualValues;
 		required?: boolean;
 		placeholder?: string;
+		multiline?: boolean;
 	}
 
-	let { label, values = $bindable(), required = false, placeholder = '' }: Props = $props();
+	let { label, values = $bindable(), required = false, placeholder = '', multiline = false }: Props = $props();
 
 	let activeTab = $state<'en' | 'ru' | 'es' | 'zh'>('en');
 </script>
@@ -29,14 +30,26 @@
 	</div>
 
 	<div class="inputs">
-		{#if activeTab === 'en'}
-			<input type="text" bind:value={values.en} {required} {placeholder} />
-		{:else if activeTab === 'ru'}
-			<input type="text" bind:value={values.ru} placeholder={placeholder} />
-		{:else if activeTab === 'es'}
-			<input type="text" bind:value={values.es} placeholder={placeholder} />
-		{:else if activeTab === 'zh'}
-			<input type="text" bind:value={values.zh} placeholder={placeholder} />
+		{#if multiline}
+			{#if activeTab === 'en'}
+				<textarea bind:value={values.en} {required} {placeholder} rows="4"></textarea>
+			{:else if activeTab === 'ru'}
+				<textarea bind:value={values.ru} placeholder={placeholder} rows="4"></textarea>
+			{:else if activeTab === 'es'}
+				<textarea bind:value={values.es} placeholder={placeholder} rows="4"></textarea>
+			{:else if activeTab === 'zh'}
+				<textarea bind:value={values.zh} placeholder={placeholder} rows="4"></textarea>
+			{/if}
+		{:else}
+			{#if activeTab === 'en'}
+				<input type="text" bind:value={values.en} {required} {placeholder} />
+			{:else if activeTab === 'ru'}
+				<input type="text" bind:value={values.ru} placeholder={placeholder} />
+			{:else if activeTab === 'es'}
+				<input type="text" bind:value={values.es} placeholder={placeholder} />
+			{:else if activeTab === 'zh'}
+				<input type="text" bind:value={values.zh} placeholder={placeholder} />
+			{/if}
 		{/if}
 	</div>
 </div>
@@ -82,15 +95,23 @@
 		color: white;
 	}
 
-	.inputs input {
+	.inputs input,
+	.inputs textarea {
 		width: 100%;
 		padding: 0.625rem 0.75rem;
 		border: 1px solid #e5e7eb;
 		border-radius: 0.375rem;
 		font-size: 0.875rem;
+		font-family: inherit;
 	}
 
-	.inputs input:focus {
+	.inputs textarea {
+		resize: vertical;
+		min-height: 100px;
+	}
+
+	.inputs input:focus,
+	.inputs textarea:focus {
 		outline: none;
 		border-color: #6366f1;
 		box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
