@@ -1,5 +1,13 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import LanguageTabs from '$lib/components/admin/LanguageTabs.svelte';
+
+	// CSRF helpers
+	const csrfHeaders = () => ({
+		'Content-Type': 'application/json',
+		'x-csrf-token': $page.data.csrfToken || ''
+	});
+	const csrfDeleteHeaders = () => ({ 'x-csrf-token': $page.data.csrfToken || '' });
 
 	interface MenuItem {
 		id: number;
@@ -79,7 +87,7 @@
 
 			const res = await fetch(url, {
 				method,
-				headers: { 'Content-Type': 'application/json' },
+				headers: csrfHeaders(),
 				body: JSON.stringify(formData)
 			});
 
@@ -95,7 +103,7 @@
 	async function deleteItem(id: number) {
 		if (!confirm('Delete this menu item and all its children?')) return;
 
-		await fetch(`/api/layout/menu/${id}`, { method: 'DELETE' });
+		await fetch(`/api/layout/menu/${id}`, { method: 'DELETE', headers: csrfDeleteHeaders() });
 		await loadMenu();
 	}
 

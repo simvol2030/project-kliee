@@ -1,5 +1,13 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import LanguageTabs from '$lib/components/admin/LanguageTabs.svelte';
+
+	// CSRF helpers
+	const csrfHeaders = () => ({
+		'Content-Type': 'application/json',
+		'x-csrf-token': $page.data.csrfToken || ''
+	});
+	const csrfDeleteHeaders = () => ({ 'x-csrf-token': $page.data.csrfToken || '' });
 
 	interface Brand {
 		id: number;
@@ -85,7 +93,7 @@
 		try {
 			const res = await fetch('/api/layout/footer', {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+				headers: csrfHeaders(),
 				body: JSON.stringify({ section: 'brand', ...brandForm })
 			});
 			if (res.ok) {
@@ -102,7 +110,7 @@
 		try {
 			const res = await fetch('/api/layout/footer', {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+				headers: csrfHeaders(),
 				body: JSON.stringify({ section: 'contact', ...contactForm })
 			});
 			if (res.ok) {
@@ -147,13 +155,13 @@
 			if (editingSocial) {
 				await fetch(`/api/layout/footer/social/${editingSocial.id}`, {
 					method: 'PATCH',
-					headers: { 'Content-Type': 'application/json' },
+					headers: csrfHeaders(),
 					body: JSON.stringify(socialForm)
 				});
 			} else {
 				await fetch('/api/layout/footer', {
 					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
+					headers: csrfHeaders(),
 					body: JSON.stringify({ section: 'social', ...socialForm })
 				});
 			}
@@ -166,7 +174,7 @@
 
 	async function deleteSocial(id: number) {
 		if (!confirm('Delete this social link?')) return;
-		await fetch(`/api/layout/footer/social/${id}`, { method: 'DELETE' });
+		await fetch(`/api/layout/footer/social/${id}`, { method: 'DELETE', headers: csrfDeleteHeaders() });
 		await loadFooter();
 	}
 

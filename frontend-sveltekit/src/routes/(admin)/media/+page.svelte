@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import LanguageTabs from '$lib/components/admin/LanguageTabs.svelte';
 
 	interface MediaItem {
@@ -46,6 +47,10 @@
 			const formData = new FormData();
 			formData.append('file', file);
 			formData.append('folder', activeFolder === 'all' ? 'uploads' : activeFolder);
+			// Include CSRF token
+			if ($page.data.csrfToken) {
+				formData.append('csrf_token', $page.data.csrfToken);
+			}
 
 			try {
 				await fetch('/api/media/upload', {
@@ -73,7 +78,10 @@
 		try {
 			await fetch(`/api/media/${selectedItem.id}`, {
 				method: 'PATCH',
-				headers: { 'Content-Type': 'application/json' },
+				headers: {
+					'Content-Type': 'application/json',
+					'x-csrf-token': $page.data.csrfToken || ''
+				},
 				body: JSON.stringify({
 					alt_en: selectedItem.alt_en,
 					alt_ru: selectedItem.alt_ru,
@@ -93,7 +101,12 @@
 		if (!confirm('Are you sure you want to delete this image?')) return;
 
 		try {
-			await fetch(`/api/media/${id}`, { method: 'DELETE' });
+			await fetch(`/api/media/${id}`, {
+				method: 'DELETE',
+				headers: {
+					'x-csrf-token': $page.data.csrfToken || ''
+				}
+			});
 			await loadMedia(activeFolder);
 			isEditModalOpen = false;
 		} catch (err) {
