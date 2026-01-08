@@ -1,4 +1,4 @@
-# Feedback v13 - Session-1 TypeScript Errors (Exhibitions)
+# Feedback v13 - Session-1 TypeScript Errors (Updated)
 
 **Date:** 2026-01-08
 **Environment:** Local (WSL)
@@ -17,10 +17,11 @@ Session-1 implementation complete with 5 changes:
 - changes-4-nft
 - changes-5-about
 
-After merge, TypeScript check found **15 errors** blocking build.
+After initial merge: **15 errors** found
+After Developer fix (012cc8c): **7 errors** remain
 
 **Command:** `npm run check`
-**Result:** 15 errors, 341 warnings
+**Current Result:** 7 errors, 341 warnings
 
 ---
 
@@ -28,120 +29,160 @@ After merge, TypeScript check found **15 errors** blocking build.
 
 - [x] Merge completed successfully (52 files, +11,832 lines)
 - [x] Dependencies installed
-- [x] Most providers compile correctly
+- [x] Exhibitions page type mismatch FIXED (012cc8c)
 
 ---
 
-## Bugs (score 6+)
+## Fixed (from original feedback)
 
-### Bug 1: Exhibitions Page Type Mismatch
+### Bug 1: Exhibitions Page Type Mismatch - FIXED
 
-**Score:** 9
-- Complexity: 3 (data structure mismatch)
-- Files: 2 (page.server.ts, page.svelte, types)
-- Risk: 2 (public page broken)
-- Time: 2 (>10 min)
+Fixed in commit 012cc8c:
+- Changed `exhibitions` to `pastExhibitions`
+- Changed `exhibition.image` to `exhibition.coverImage`
+- Added `formatLocation()` helper
+- Changed `fair.gallery` to `fair.venue`
+
+---
+
+## Remaining Bugs (7 errors)
+
+### Bug 2: Schema Mismatch - `venue` field
+
+**Score:** 8
+- Complexity: 2 (schema/DB mismatch)
+- Files: 2 (API endpoints)
+- Risk: 2 (admin API broken)
+- Time: 2 (schema + migration)
 
 **Where:**
-- `src/routes/[lang=locale]/exhibitions/+page.svelte`
-- `src/routes/[lang=locale]/exhibitions/+page.server.ts`
-- `src/lib/types/content.types.ts` (ExhibitionLocalized interface)
+1. `src/routes/api/content/exhibitions/+server.ts:53` - POST insert
+2. `src/routes/api/content/exhibitions/[id]/+server.ts:75` - PUT update
 
-**Error messages:**
+**Error:**
 ```
-Error: src/routes/[lang=locale]/exhibitions/+page.svelte:9:36
-Property 'exhibitions' does not exist on type '{ currentExhibitions: ExhibitionLocalized[]; pastExhibitions: ExhibitionLocalized[]; artFairs: ExhibitionLocalized[]; seo: { title: string; description: string; }; }'
-
-Error: src/routes/[lang=locale]/exhibitions/+page.svelte:26:43
-Property 'image' does not exist on type 'ExhibitionLocalized'
-
-Error: src/routes/[lang=locale]/exhibitions/+page.svelte:27:49
-Property 'location' does not exist on type 'ExhibitionLocalized'
-
-Error: src/routes/[lang=locale]/exhibitions/+page.svelte:28:47
-Property 'gallery' does not exist on type 'ExhibitionLocalized'
-
-Error: src/routes/[lang=locale]/exhibitions/+page.svelte:51:10
-Parameter 'e' implicitly has an 'any' type
+Object literal may only specify known properties, and 'venue' does not exist in type
 ```
 
 **Root cause:**
-
-1. **+page.server.ts returns:**
-```typescript
-return {
-  currentExhibitions,  // ExhibitionLocalized[]
-  pastExhibitions,     // ExhibitionLocalized[]
-  artFairs,            // ExhibitionLocalized[]
-  seo
-};
-```
-
-2. **+page.svelte expects:**
-```typescript
-const { exhibitions, artFairs, currentExhibitions, seo } = data;
-// ❌ 'exhibitions' doesn't exist - server returns 'pastExhibitions'
-```
-
-3. **ExhibitionLocalized interface missing fields:**
-   - `image: string`
-   - `location: string`
-   - `gallery: string`
-
-**Steps to reproduce:**
-1. `cd frontend-sveltekit`
-2. `npm run check`
-3. See TypeScript errors
-
-**Expected:**
-- `npm run check` passes with 0 errors
-- `npm run build` succeeds
-
-**Actual:**
-- 15 TypeScript errors
-- Build fails
+API endpoints use `venue` field, but `exhibitions` table schema doesn't have it.
 
 **Fix required:**
+Either:
+- **Option A:** Add `venue` column to exhibitions schema (`src/lib/server/db/schema.ts`)
+- **Option B:** Remove `venue` from API endpoints (use `city` instead?)
 
-**Option A (recommended):** Fix +page.svelte to use correct property names:
+Check schema for existing fields: `city`, `country`, `galleryLink` exist but not `venue`.
+
+---
+
+### Bug 3: Schema Mismatch - `original_filename` field
+
+**Score:** 6
+- Complexity: 2 (schema mismatch)
+- Files: 2 (admin pages)
+- Risk: 1 (admin only)
+- Time: 2
+
+**Where:**
+1. `src/routes/(admin)/about/+page.svelte:451`
+2. `src/routes/(admin)/nft/[id]/+page.svelte:303`
+3. `src/routes/(admin)/nft/[id]/+page.svelte:331`
+
+**Error:**
+```
+Property 'original_filename' does not exist on type '{ id: number; filename: string; stored_filename: string; ... }'
+```
+
+**Root cause:**
+Admin components expect `original_filename` on media records, but media schema only has:
+- `filename`
+- `stored_filename`
+
+**Fix required:**
+Either:
+- **Option A:** Add `original_filename` to media schema
+- **Option B:** Use `filename` instead of `original_filename` in components
+
+---
+
+### Bug 4: Drizzle eq() Type Mismatch
+
+**Score:** 6
+- Complexity: 2 (type casting)
+- Files: 1
+- Risk: 2 (provider broken)
+- Time: 1
+
+**Where:**
+`src/lib/data/exhibitions.provider.ts:548`
+
+**Error:**
+```
+No overload matches this call.
+Argument of type 'string' is not assignable to parameter of type 'SQLWrapper | "solo" | "group" | "fair" | "biennale" | "other"'
+```
+
+**Root cause:**
+`exhibitions.type` column has enum type, but function parameter is `string`.
+
+**Fix required:**
+Cast the parameter to the enum type:
 ```typescript
 // Change from:
-const { exhibitions, artFairs, currentExhibitions, seo } = data;
+eq(exhibitions.type, type)
 
 // Change to:
-const { pastExhibitions, artFairs, currentExhibitions, seo } = data;
-// Then rename 'exhibitions' to 'pastExhibitions' in template
+eq(exhibitions.type, type as 'solo' | 'group' | 'fair' | 'biennale' | 'other')
 ```
 
-**Option B:** Fix +page.server.ts to return expected property names:
-```typescript
-return {
-  exhibitions: pastExhibitions,  // alias
-  currentExhibitions,
-  artFairs,
-  seo
-};
+Or define the function parameter with the correct type.
+
+---
+
+### Bug 5: Unknown `multiline` prop
+
+**Score:** 4
+- Complexity: 1 (prop typo or missing)
+- Files: 1
+- Risk: 1 (admin only)
+- Time: 1
+
+**Where:**
+`src/routes/(admin)/exhibitions/[id]/+page.svelte:217`
+
+**Error:**
+```
+Object literal may only specify known properties, and '"multiline"' does not exist in type 'Props'
 ```
 
-**Also fix ExhibitionLocalized type** (`src/lib/types/content.types.ts`):
-```typescript
-export interface ExhibitionLocalized {
-  id: string;
-  // ... existing fields ...
-  image: string;      // ADD
-  location: string;   // ADD
-  gallery: string;    // ADD
-}
-```
+**Root cause:**
+Component using `multiline` prop that doesn't exist in the target component's Props interface.
 
-**Also fix parameter type** (line 51):
-```typescript
-// Change from:
-(e) => ...
+**Fix required:**
+Either:
+- Remove `multiline` prop if not needed
+- Add `multiline` to the component's Props interface
+- Check component import (might be using wrong component)
 
-// Change to:
-(e: ExhibitionLocalized) => ...
-```
+---
+
+## Files to Modify
+
+**Schema fixes:**
+1. `src/lib/server/db/schema.ts` - add `venue` to exhibitions OR `original_filename` to media
+
+**API fixes:**
+2. `src/routes/api/content/exhibitions/+server.ts` - remove or fix `venue`
+3. `src/routes/api/content/exhibitions/[id]/+server.ts` - remove or fix `venue`
+
+**Provider fixes:**
+4. `src/lib/data/exhibitions.provider.ts:548` - type cast for enum
+
+**Admin page fixes:**
+5. `src/routes/(admin)/about/+page.svelte` - use `filename` instead of `original_filename`
+6. `src/routes/(admin)/nft/[id]/+page.svelte` - use `filename` instead of `original_filename`
+7. `src/routes/(admin)/exhibitions/[id]/+page.svelte` - fix `multiline` prop
 
 ---
 
@@ -152,22 +193,14 @@ After fix:
 - [ ] `npm run check` returns 0 errors
 - [ ] `npm run build` completes successfully
 - [ ] Exhibitions page loads at `/en/exhibitions`
-- [ ] Current exhibitions section displays correctly
-- [ ] Past exhibitions section displays correctly
-- [ ] Art fairs section displays correctly
-- [ ] Images load (no 404)
-- [ ] All 4 languages work (EN/RU/ES/ZH)
-
----
-
-## Files to Modify
-
-1. `src/routes/[lang=locale]/exhibitions/+page.svelte` - fix property names, add types
-2. `src/lib/types/content.types.ts` - add missing fields to ExhibitionLocalized
-3. Possibly `src/lib/data/exhibitions.provider.ts` - ensure returned data has all fields
+- [ ] Admin /about page loads without JS errors
+- [ ] Admin /nft/[id] page loads without JS errors
+- [ ] Admin /exhibitions/[id] page loads without JS errors
+- [ ] CRUD operations work for exhibitions
 
 ---
 
 *Integrator: Claude Code CLI*
 *Ready for: Claude Code Web Developer*
 *Priority: BLOCKING - must fix before build/deploy*
+*Updated: 2026-01-08 after partial fix (012cc8c)*
