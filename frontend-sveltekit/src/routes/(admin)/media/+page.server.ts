@@ -6,16 +6,19 @@ import { desc, eq } from 'drizzle-orm';
 // Helper function to construct media URL
 // Handles cases where stored_filename might already include path
 function buildMediaUrl(folder: string | null, storedFilename: string): string {
-	// If storedFilename starts with '/' or contains path separators, it might be a full path
+	// Old images: stored_filename starts with /images/ - use directly (served by nginx /images/ location)
+	if (storedFilename.startsWith('/images/')) {
+		return storedFilename;
+	}
+	// Legacy: other paths starting with /
 	if (storedFilename.startsWith('/')) {
-		// Full path stored - use /uploads prefix only
 		return `/uploads${storedFilename}`;
 	}
+	// Modern: relative paths that contain /
 	if (storedFilename.includes('/')) {
-		// Contains path - might be relative path without leading slash
 		return `/uploads/${storedFilename}`;
 	}
-	// Just filename - combine with folder
+	// Simple filename - combine with folder
 	return `/uploads/${folder || 'uploads'}/${storedFilename}`;
 }
 
