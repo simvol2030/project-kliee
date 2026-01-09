@@ -74,8 +74,15 @@
 		coverImageRemoved = true;
 	}
 
-	function getMediaUrl(item: { folder?: string; stored_filename?: string }): string {
-		return `/uploads/${item.folder || 'uploads'}/${item.stored_filename}`;
+	function getMediaUrl(item: { folder?: string; stored_filename?: string; url?: string }): string {
+		// Use pre-computed URL if available
+		if (item.url) return item.url;
+		// Fallback: compute URL (handles /images/ paths)
+		const filename = item.stored_filename || '';
+		if (filename.startsWith('/images/')) return filename;
+		if (filename.startsWith('/')) return `/uploads${filename}`;
+		if (filename.includes('/')) return `/uploads/${filename}`;
+		return `/uploads/${item.folder || 'uploads'}/${filename}`;
 	}
 
 	const exhibitionTypes = [

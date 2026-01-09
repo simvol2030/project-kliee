@@ -105,6 +105,16 @@ function getLocaleSuffix(locale: LanguageCode): string {
 
 function buildMediaUrl(folder: string | null, filename: string | null): string | null {
 	if (!filename) return null;
+	// Old images: stored_filename starts with /images/ - use directly
+	if (filename.startsWith('/images/')) {
+		return filename;
+	}
+	if (filename.startsWith('/')) {
+		return `/uploads${filename}`;
+	}
+	if (filename.includes('/')) {
+		return `/uploads/${filename}`;
+	}
 	return `/uploads/${folder || 'uploads'}/${filename}`;
 }
 

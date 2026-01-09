@@ -4,11 +4,31 @@ import { exhibitions, exhibitionImages, media } from '$lib/server/db/schema';
 import { eq, asc } from 'drizzle-orm';
 import { fail, redirect, error } from '@sveltejs/kit';
 
+// Helper function to construct media URL
+function buildMediaUrl(folder: string | null, storedFilename: string | null): string | null {
+	if (!storedFilename) return null;
+	// Old images: stored_filename starts with /images/ - use directly
+	if (storedFilename.startsWith('/images/')) {
+		return storedFilename;
+	}
+	if (storedFilename.startsWith('/')) {
+		return `/uploads${storedFilename}`;
+	}
+	if (storedFilename.includes('/')) {
+		return `/uploads/${storedFilename}`;
+	}
+	return `/uploads/${folder || 'uploads'}/${storedFilename}`;
+}
+
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
 
 	// Get all media for image picker
-	const allMedia = await db.select().from(media).orderBy(media.uploaded_at);
+	const allMediaRaw = await db.select().from(media).orderBy(media.uploaded_at);
+	const allMedia = allMediaRaw.map(m => ({
+		...m,
+		url: buildMediaUrl(m.folder, m.stored_filename)
+	}));
 
 	if (id === 'new') {
 		return {
@@ -63,9 +83,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		item: exhibition,
 		galleryImages: galleryImages.map((img) => ({
 			...img,
-			url: img.stored_filename
-				? `/uploads/${img.folder || 'uploads'}/${img.stored_filename}`
-				: null
+			url: buildMediaUrl(img.folder, img.stored_filename)
 		})),
 		allMedia
 	};

@@ -6,6 +6,10 @@ import { fail, redirect, error } from '@sveltejs/kit';
 
 // Helper function to construct media URL
 function buildMediaUrl(folder: string | null, storedFilename: string): string {
+	// Old images: stored_filename starts with /images/ - use directly
+	if (storedFilename.startsWith('/images/')) {
+		return storedFilename;
+	}
 	if (storedFilename.startsWith('/')) {
 		return `/uploads${storedFilename}`;
 	}
