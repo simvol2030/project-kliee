@@ -1,14 +1,38 @@
 import type { PageServerLoad, Actions } from './$types';
 import { db } from '$lib/server/db/client';
-import { series } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { series, media } from '$lib/server/db/schema';
+import { eq, desc } from 'drizzle-orm';
 import { fail, redirect, error } from '@sveltejs/kit';
+
+// Helper function to construct media URL
+function buildMediaUrl(folder: string | null, storedFilename: string): string {
+	if (storedFilename.startsWith('/')) {
+		return `/uploads${storedFilename}`;
+	}
+	if (storedFilename.includes('/')) {
+		return `/uploads/${storedFilename}`;
+	}
+	return `/uploads/${folder || 'uploads'}/${storedFilename}`;
+}
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
 
+	// Load all image media for the picker
+	const allMediaItems = await db
+		.select()
+		.from(media)
+		.orderBy(desc(media.uploaded_at));
+
+	const allMedia = allMediaItems
+		.filter(m => m.mime_type?.startsWith('image/'))
+		.map(m => ({
+			...m,
+			url: buildMediaUrl(m.folder, m.stored_filename)
+		}));
+
 	if (id === 'new') {
-		return { item: null, isNew: true };
+		return { item: null, isNew: true, allMedia };
 	}
 
 	// id is TEXT in schema, no parseInt needed
@@ -18,7 +42,16 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw error(404, 'Series not found');
 	}
 
-	return { item, isNew: false };
+	// Find cover image URL if set
+	let coverImageUrl: string | null = null;
+	if (item.cover_image_id) {
+		const coverMedia = allMediaItems.find(m => m.id === item.cover_image_id);
+		if (coverMedia) {
+			coverImageUrl = buildMediaUrl(coverMedia.folder, coverMedia.stored_filename);
+		}
+	}
+
+	return { item: { ...item, coverImageUrl }, isNew: false, allMedia };
 };
 
 export const actions: Actions = {

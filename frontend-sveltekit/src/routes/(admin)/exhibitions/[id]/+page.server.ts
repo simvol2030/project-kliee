@@ -19,18 +19,27 @@ export const load: PageServerLoad = async ({ params }) => {
 		};
 	}
 
+	// Try to find exhibition by numeric ID first, then by slug
 	const numericId = parseInt(id);
-	if (isNaN(numericId)) {
-		throw error(400, 'Invalid exhibition ID');
+	let exhibition;
+
+	if (!isNaN(numericId)) {
+		// Lookup by numeric ID
+		const [result] = await db.select().from(exhibitions).where(eq(exhibitions.id, numericId));
+		exhibition = result;
 	}
 
-	const [exhibition] = await db.select().from(exhibitions).where(eq(exhibitions.id, numericId));
+	if (!exhibition) {
+		// Lookup by slug
+		const [result] = await db.select().from(exhibitions).where(eq(exhibitions.slug, id));
+		exhibition = result;
+	}
 
 	if (!exhibition) {
 		throw redirect(302, '/exhibitions');
 	}
 
-	// Get gallery images
+	// Get gallery images using the found exhibition's ID
 	const galleryImages = await db
 		.select({
 			id: exhibitionImages.id,
@@ -46,7 +55,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		})
 		.from(exhibitionImages)
 		.leftJoin(media, eq(exhibitionImages.media_id, media.id))
-		.where(eq(exhibitionImages.exhibition_id, numericId))
+		.where(eq(exhibitionImages.exhibition_id, exhibition.id))
 		.orderBy(asc(exhibitionImages.order_index));
 
 	return {
@@ -70,6 +79,21 @@ function generateSlug(title: string): string {
 		.replace(/\s+/g, '-')
 		.replace(/-+/g, '-')
 		.trim();
+}
+
+// Helper function to get exhibition ID from numeric ID or slug
+async function getExhibitionId(idOrSlug: string): Promise<number | null> {
+	const numericId = parseInt(idOrSlug);
+
+	if (!isNaN(numericId)) {
+		// Try numeric ID first
+		const [result] = await db.select({ id: exhibitions.id }).from(exhibitions).where(eq(exhibitions.id, numericId));
+		if (result) return result.id;
+	}
+
+	// Try slug
+	const [result] = await db.select({ id: exhibitions.id }).from(exhibitions).where(eq(exhibitions.slug, idOrSlug));
+	return result?.id ?? null;
 }
 
 export const actions: Actions = {
@@ -157,11 +181,12 @@ export const actions: Actions = {
 				const newId = result[0]?.id;
 				throw redirect(302, `/exhibitions/${newId}`);
 			} else {
-				const numericId = parseInt(params.id);
-				if (isNaN(numericId)) {
-					return fail(400, { error: 'Invalid exhibition ID' });
+				// Get exhibition ID (supports both numeric ID and slug)
+				const exhibitionId = await getExhibitionId(params.id);
+				if (!exhibitionId) {
+					return fail(400, { error: 'Exhibition not found' });
 				}
-				await db.update(exhibitions).set(data).where(eq(exhibitions.id, numericId));
+				await db.update(exhibitions).set(data).where(eq(exhibitions.id, exhibitionId));
 				return { success: true, message: 'Exhibition saved successfully' };
 			}
 		} catch (e) {
@@ -183,7 +208,11 @@ export const actions: Actions = {
 			return fail(400, { error: 'Media ID is required' });
 		}
 
-		const exhibitionId = parseInt(params.id);
+		// Get exhibition ID (supports both numeric ID and slug)
+		const exhibitionId = await getExhibitionId(params.id);
+		if (!exhibitionId) {
+			return fail(400, { error: 'Exhibition not found' });
+		}
 
 		// Get current max order_index
 		const existing = await db

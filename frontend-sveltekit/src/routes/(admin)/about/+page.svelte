@@ -1,11 +1,59 @@
 <script lang="ts">
 	import type { PageData, ActionData } from './$types';
 	import { enhance } from '$app/forms';
+	import LanguageTabs from '$lib/components/admin/LanguageTabs.svelte';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	// Active tab
 	let activeTab = $state<'artist' | 'education' | 'awards' | 'residencies' | 'seo'>('artist');
+
+	// Language tabs state for biography
+	let activeBioLang = $state('en');
+
+	// Biography fields interface
+	interface BioFields {
+		biography_en: string;
+		biography_ru: string;
+		biography_es: string;
+		biography_zh: string;
+		[key: string]: string;
+	}
+
+	// Biography state for LanguageTabs binding
+	let bioFields = $state<BioFields>({
+		biography_en: data.artist?.biography_en || '',
+		biography_ru: data.artist?.biography_ru || '',
+		biography_es: data.artist?.biography_es || '',
+		biography_zh: data.artist?.biography_zh || ''
+	});
+
+	// Education add form language tabs
+	let activeEduLang = $state('en');
+
+	// Education fields for adding new entry
+	interface EduAddFields {
+		degree_en: string;
+		degree_ru: string;
+		degree_es: string;
+		degree_zh: string;
+		institution_en: string;
+		institution_ru: string;
+		institution_es: string;
+		institution_zh: string;
+		[key: string]: string;
+	}
+
+	let eduAddFields = $state<EduAddFields>({
+		degree_en: '',
+		degree_ru: '',
+		degree_es: '',
+		degree_zh: '',
+		institution_en: '',
+		institution_ru: '',
+		institution_es: '',
+		institution_zh: ''
+	});
 
 	// Media picker
 	let showMediaPicker = $state(false);
@@ -123,25 +171,26 @@
 			<div class="form-section">
 				<h2>Biography</h2>
 
-				<div class="form-group">
-					<label for="biographyEn">English</label>
-					<textarea id="biographyEn" name="biographyEn" rows="4">{data.artist?.biography_en || ''}</textarea>
-				</div>
-
-				<div class="form-group">
-					<label for="biographyRu">Russian</label>
-					<textarea id="biographyRu" name="biographyRu" rows="4">{data.artist?.biography_ru || ''}</textarea>
-				</div>
-
-				<div class="form-group">
-					<label for="biographyEs">Spanish</label>
-					<textarea id="biographyEs" name="biographyEs" rows="4">{data.artist?.biography_es || ''}</textarea>
-				</div>
-
-				<div class="form-group">
-					<label for="biographyZh">Chinese</label>
-					<textarea id="biographyZh" name="biographyZh" rows="4">{data.artist?.biography_zh || ''}</textarea>
-				</div>
+				<LanguageTabs bind:active={activeBioLang}>
+					{#snippet children(lang)}
+						<div class="form-group">
+							<label for="biography_{lang}">
+								Biography ({lang === 'en' ? 'English' : lang === 'ru' ? 'Russian' : lang === 'es' ? 'Spanish' : 'Chinese'})
+							</label>
+							<textarea
+								id="biography_{lang}"
+								rows="6"
+								bind:value={bioFields[`biography_${lang}`]}
+								placeholder="Biography in {lang === 'en' ? 'English' : lang === 'ru' ? 'Russian' : lang === 'es' ? 'Spanish' : 'Chinese'}"
+							></textarea>
+						</div>
+					{/snippet}
+				</LanguageTabs>
+				<!-- Hidden fields for form submission -->
+				<input type="hidden" name="biographyEn" value={bioFields.biography_en} />
+				<input type="hidden" name="biographyRu" value={bioFields.biography_ru} />
+				<input type="hidden" name="biographyEs" value={bioFields.biography_es} />
+				<input type="hidden" name="biographyZh" value={bioFields.biography_zh} />
 			</div>
 
 			<!-- Hidden SEO fields (managed in SEO tab but saved together) -->
@@ -169,7 +218,7 @@
 				<h2>Education ({data.education.length})</h2>
 			</div>
 
-			<!-- Add form -->
+			<!-- Add form with Language Tabs -->
 			<form
 				method="POST"
 				action="?/addEducation"
@@ -178,16 +227,49 @@
 					saving = true;
 					return async ({ update }) => {
 						await update();
+						// Reset fields after successful add
+						eduAddFields = {
+							degree_en: '', degree_ru: '', degree_es: '', degree_zh: '',
+							institution_en: '', institution_ru: '', institution_es: '', institution_zh: ''
+						};
 						saving = false;
 					};
 				}}
 			>
 				<div class="form-grid-compact">
 					<input type="text" name="year" placeholder="Year (e.g., 2015-2019)" />
-					<input type="text" name="degreeEn" placeholder="Degree (EN)" />
-					<input type="text" name="institutionEn" placeholder="Institution (EN)" />
 					<input type="number" name="orderIndex" placeholder="Order" value="0" class="order-input" />
-					<button type="submit" class="btn-primary" disabled={saving}>Add</button>
+				</div>
+
+				<LanguageTabs bind:active={activeEduLang}>
+					{#snippet children(lang)}
+						<div class="form-grid-compact">
+							<input
+								type="text"
+								bind:value={eduAddFields[`degree_${lang}`]}
+								placeholder="Degree ({lang.toUpperCase()})"
+							/>
+							<input
+								type="text"
+								bind:value={eduAddFields[`institution_${lang}`]}
+								placeholder="Institution ({lang.toUpperCase()})"
+							/>
+						</div>
+					{/snippet}
+				</LanguageTabs>
+
+				<!-- Hidden fields for form submission -->
+				<input type="hidden" name="degreeEn" value={eduAddFields.degree_en} />
+				<input type="hidden" name="degreeRu" value={eduAddFields.degree_ru} />
+				<input type="hidden" name="degreeEs" value={eduAddFields.degree_es} />
+				<input type="hidden" name="degreeZh" value={eduAddFields.degree_zh} />
+				<input type="hidden" name="institutionEn" value={eduAddFields.institution_en} />
+				<input type="hidden" name="institutionRu" value={eduAddFields.institution_ru} />
+				<input type="hidden" name="institutionEs" value={eduAddFields.institution_es} />
+				<input type="hidden" name="institutionZh" value={eduAddFields.institution_zh} />
+
+				<div class="form-actions-inline">
+					<button type="submit" class="btn-primary" disabled={saving}>Add Education</button>
 				</div>
 			</form>
 
@@ -597,6 +679,10 @@
 		margin-top: 1.5rem;
 		padding-top: 1rem;
 		border-top: 1px solid #e5e7eb;
+	}
+
+	.form-actions-inline {
+		margin-top: 1rem;
 	}
 
 	.btn-primary {
