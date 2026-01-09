@@ -1,19 +1,41 @@
 <script lang="ts">
 	import type { PageData, ActionData } from './$types';
 	import { enhance } from '$app/forms';
+	import LanguageTabs from '$lib/components/admin/LanguageTabs.svelte';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
+	// Language tabs state
+	let activeTitleLang = $state('en');
+	let activeDescLang = $state('en');
+
+	// Multilingual field interface
+	interface MultiLangFields {
+		title_en: string;
+		title_ru: string;
+		title_es: string;
+		title_zh: string;
+		description_en: string;
+		description_ru: string;
+		description_es: string;
+		description_zh: string;
+		[key: string]: string;
+	}
+
+	// Multilingual fields state object for dynamic binding
+	let multiLang = $state<MultiLangFields>({
+		title_en: data.item?.title_en || '',
+		title_ru: data.item?.title_ru || '',
+		title_es: data.item?.title_es || '',
+		title_zh: data.item?.title_zh || '',
+		description_en: data.item?.description_en || '',
+		description_ru: data.item?.description_ru || '',
+		description_es: data.item?.description_es || '',
+		description_zh: data.item?.description_zh || ''
+	});
+
 	// Form state
 	let slug = $state(data.item?.slug || '');
-	let titleEn = $state(data.item?.title_en || '');
-	let titleRu = $state(data.item?.title_ru || '');
-	let titleEs = $state(data.item?.title_es || '');
-	let titleZh = $state(data.item?.title_zh || '');
-	let descriptionEn = $state(data.item?.description_en || '');
-	let descriptionRu = $state(data.item?.description_ru || '');
-	let descriptionEs = $state(data.item?.description_es || '');
-	let descriptionZh = $state(data.item?.description_zh || '');
 	let technique = $state(data.item?.technique || '');
 	let year = $state(data.item?.year?.toString() || '');
 	let price = $state(data.item?.price || '');
@@ -39,8 +61,8 @@
 	let saving = $state(false);
 
 	function generateSlug() {
-		if (titleEn) {
-			slug = titleEn
+		if (multiLang.title_en) {
+			slug = multiLang.title_en
 				.toLowerCase()
 				.replace(/[^\w\s-]/g, '')
 				.replace(/\s+/g, '-')
@@ -109,25 +131,25 @@
 					</div>
 				</div>
 
-				<!-- Titles -->
+				<!-- Titles with Language Tabs -->
 				<div class="form-group">
-					<label for="titleEn">Title (English) <span class="required">*</span></label>
-					<input type="text" id="titleEn" name="titleEn" bind:value={titleEn} required />
-				</div>
-
-				<div class="form-group">
-					<label for="titleRu">Title (Russian)</label>
-					<input type="text" id="titleRu" name="titleRu" bind:value={titleRu} />
-				</div>
-
-				<div class="form-group">
-					<label for="titleEs">Title (Spanish)</label>
-					<input type="text" id="titleEs" name="titleEs" bind:value={titleEs} />
-				</div>
-
-				<div class="form-group">
-					<label for="titleZh">Title (Chinese)</label>
-					<input type="text" id="titleZh" name="titleZh" bind:value={titleZh} />
+					<label>Title <span class="required">*</span></label>
+					<LanguageTabs bind:active={activeTitleLang}>
+						{#snippet children(lang)}
+							<input
+								type="text"
+								id="title_{lang}"
+								bind:value={multiLang[`title_${lang}`]}
+								placeholder="Title in {lang === 'en' ? 'English' : lang === 'ru' ? 'Russian' : lang === 'es' ? 'Spanish' : 'Chinese'}"
+								required={lang === 'en'}
+							/>
+						{/snippet}
+					</LanguageTabs>
+					<!-- Hidden fields for form submission -->
+					<input type="hidden" name="titleEn" value={multiLang.title_en} />
+					<input type="hidden" name="titleRu" value={multiLang.title_ru} />
+					<input type="hidden" name="titleEs" value={multiLang.title_es} />
+					<input type="hidden" name="titleZh" value={multiLang.title_zh} />
 				</div>
 
 				<!-- Details -->
@@ -175,29 +197,32 @@
 				</div>
 			</div>
 
-			<!-- Descriptions -->
+			<!-- Descriptions with Language Tabs -->
 			<div class="form-section">
 				<h2>Descriptions <span class="required">*</span></h2>
 
-				<div class="form-group">
-					<label for="descriptionEn">Description (English) <span class="required">*</span></label>
-					<textarea id="descriptionEn" name="descriptionEn" rows="4" bind:value={descriptionEn} required></textarea>
-				</div>
-
-				<div class="form-group">
-					<label for="descriptionRu">Description (Russian) <span class="required">*</span></label>
-					<textarea id="descriptionRu" name="descriptionRu" rows="4" bind:value={descriptionRu} required></textarea>
-				</div>
-
-				<div class="form-group">
-					<label for="descriptionEs">Description (Spanish) <span class="required">*</span></label>
-					<textarea id="descriptionEs" name="descriptionEs" rows="4" bind:value={descriptionEs} required></textarea>
-				</div>
-
-				<div class="form-group">
-					<label for="descriptionZh">Description (Chinese) <span class="required">*</span></label>
-					<textarea id="descriptionZh" name="descriptionZh" rows="4" bind:value={descriptionZh} required></textarea>
-				</div>
+				<LanguageTabs bind:active={activeDescLang}>
+					{#snippet children(lang)}
+						<div class="form-group">
+							<label for="description_{lang}">
+								Description ({lang === 'en' ? 'English' : lang === 'ru' ? 'Russian' : lang === 'es' ? 'Spanish' : 'Chinese'})
+								{#if lang === 'en'}<span class="required">*</span>{/if}
+							</label>
+							<textarea
+								id="description_{lang}"
+								rows="6"
+								bind:value={multiLang[`description_${lang}`]}
+								placeholder="Description in {lang === 'en' ? 'English' : lang === 'ru' ? 'Russian' : lang === 'es' ? 'Spanish' : 'Chinese'}"
+								required={lang === 'en'}
+							></textarea>
+						</div>
+					{/snippet}
+				</LanguageTabs>
+				<!-- Hidden fields for form submission -->
+				<input type="hidden" name="descriptionEn" value={multiLang.description_en} />
+				<input type="hidden" name="descriptionRu" value={multiLang.description_ru} />
+				<input type="hidden" name="descriptionEs" value={multiLang.description_es} />
+				<input type="hidden" name="descriptionZh" value={multiLang.description_zh} />
 			</div>
 		</div>
 

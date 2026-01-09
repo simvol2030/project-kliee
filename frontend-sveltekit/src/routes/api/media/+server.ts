@@ -4,6 +4,18 @@ import { db } from '$lib/server/db/client';
 import { media, mediaThumbnails } from '$lib/server/db/schema';
 import { eq, desc, like, and } from 'drizzle-orm';
 
+// Helper function to construct media URL
+// Handles cases where stored_filename might already include path
+function buildMediaUrl(folder: string | null, storedFilename: string): string {
+	if (storedFilename.startsWith('/')) {
+		return `/uploads${storedFilename}`;
+	}
+	if (storedFilename.includes('/')) {
+		return `/uploads/${storedFilename}`;
+	}
+	return `/uploads/${folder || 'uploads'}/${storedFilename}`;
+}
+
 export const GET: RequestHandler = async ({ url }) => {
 	const folder = url.searchParams.get('folder');
 	const search = url.searchParams.get('search');
@@ -35,10 +47,10 @@ export const GET: RequestHandler = async ({ url }) => {
 
 				return {
 					...item,
-					url: `/uploads/${item.folder}/${item.stored_filename}`,
+					url: buildMediaUrl(item.folder, item.stored_filename),
 					thumbnails: thumbs.map((t: typeof mediaThumbnails.$inferSelect) => ({
 						size: t.size_name,
-						url: `/uploads/${item.folder}/${t.stored_filename}`,
+						url: buildMediaUrl(item.folder, t.stored_filename),
 						width: t.width,
 						height: t.height
 					}))

@@ -28,7 +28,8 @@
 	const tableData = $derived(
 		data.exhibitions.map((e) => ({
 			...e,
-			startYear: e.start_date ? new Date(e.start_date).getFullYear() : '—',
+			startYear: e.year || (e.start_date ? new Date(e.start_date).getFullYear() : '—'),
+			venue: e.venue_en || '—',
 			location: [e.city, e.country].filter(Boolean).join(', ') || '—',
 			isCurrent: e.is_current ? 'Yes' : '—'
 		}))

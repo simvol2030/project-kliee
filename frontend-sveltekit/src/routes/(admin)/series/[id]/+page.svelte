@@ -23,11 +23,23 @@
 	});
 
 	let slug = $state(data.item?.slug || '');
-	let coverImageId = $state(data.item?.cover_image_id?.toString() || '');
+	let coverImageId = $state<number | null>(data.item?.cover_image_id || null);
 	let orderIndex = $state(data.item?.order_index?.toString() || '0');
 	let isVisible = $state(data.item?.is_visible ?? true);
 	let isFeatured = $state(data.item?.is_featured ?? false);
 	let showInShop = $state(data.item?.show_in_shop ?? false);
+
+	// Media picker state
+	let showMediaPicker = $state(false);
+	let coverImageRemoved = $state(false);  // Track if user explicitly removed the image
+
+	// Selected image from media
+	let selectedImage = $derived(data.allMedia?.find((m) => m.id === coverImageId));
+
+	function removeImage() {
+		coverImageId = null;
+		coverImageRemoved = true;
+	}
 
 	let toastVisible = $state(false);
 	let toastMessage = $state('');
@@ -53,6 +65,12 @@
 				.replace(/[^a-z0-9]+/g, '-')
 				.replace(/^-|-$/g, '');
 		}
+	}
+
+	function selectImage(id: number) {
+		coverImageId = id;
+		coverImageRemoved = false;  // Reset the removed flag when selecting new image
+		showMediaPicker = false;
 	}
 </script>
 
@@ -106,8 +124,29 @@
 			</div>
 
 			<div class="form-field">
-				<label for="cover_image_id">Cover Image ID</label>
-				<input type="number" id="cover_image_id" name="cover_image_id" bind:value={coverImageId} placeholder="Media ID" />
+				<label>Cover Image</label>
+				<input type="hidden" name="cover_image_id" value={coverImageId || ''} />
+				{#if selectedImage}
+					<div class="image-preview">
+						<img src={selectedImage.url} alt="Cover" />
+						<div class="image-actions">
+							<button type="button" class="btn-secondary" onclick={() => (showMediaPicker = true)}>Change</button>
+							<button type="button" class="btn-secondary" onclick={removeImage}>Remove</button>
+						</div>
+					</div>
+				{:else if !coverImageRemoved && data.item?.coverImageUrl}
+					<div class="image-preview">
+						<img src={data.item.coverImageUrl} alt="Cover" />
+						<div class="image-actions">
+							<button type="button" class="btn-secondary" onclick={() => (showMediaPicker = true)}>Change</button>
+							<button type="button" class="btn-secondary" onclick={removeImage}>Remove</button>
+						</div>
+					</div>
+				{:else}
+					<button type="button" class="btn-media-select" onclick={() => (showMediaPicker = true)}>
+						Select Cover Image
+					</button>
+				{/if}
 			</div>
 		</div>
 
@@ -149,6 +188,33 @@
 </form>
 
 <Toast bind:visible={toastVisible} message={toastMessage} type={toastType} />
+
+<!-- Media Picker Modal -->
+{#if showMediaPicker}
+	<div class="modal-overlay" onclick={() => (showMediaPicker = false)} role="button" tabindex="-1" onkeydown={(e) => e.key === 'Escape' && (showMediaPicker = false)}>
+		<div class="modal-content" onclick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+			<div class="modal-header">
+				<h3>Select Cover Image</h3>
+				<button type="button" class="btn-close" onclick={() => (showMediaPicker = false)}>&times;</button>
+			</div>
+			<div class="media-grid">
+				{#each data.allMedia || [] as item}
+					<button
+						type="button"
+						class="media-item"
+						class:selected={coverImageId === item.id}
+						onclick={() => selectImage(item.id)}
+					>
+						<img src={item.url} alt={item.filename || 'Media'} />
+					</button>
+				{/each}
+				{#if !data.allMedia || data.allMedia.length === 0}
+					<p class="no-media">No images available. Upload images in Media section first.</p>
+				{/if}
+			</div>
+		</div>
+	</div>
+{/if}
 
 <style>
 	.page-header {
@@ -405,5 +471,204 @@
 	:global(.dark) .checkbox-label.highlight {
 		background: #064e3b;
 		border-color: #059669;
+	}
+
+	/* Image preview styles */
+	.image-preview {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		max-width: 200px;
+	}
+
+	.image-preview img {
+		width: 100%;
+		border-radius: 0.375rem;
+		border: 1px solid #e5e7eb;
+	}
+
+	.image-actions {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.btn-secondary {
+		padding: 0.375rem 0.75rem;
+		background: #f3f4f6;
+		border: 1px solid #e5e7eb;
+		border-radius: 0.25rem;
+		font-size: 0.75rem;
+		color: #374151;
+		cursor: pointer;
+	}
+
+	.btn-secondary:hover {
+		background: #e5e7eb;
+	}
+
+	.btn-media-select {
+		padding: 2rem;
+		background: #f9fafb;
+		border: 2px dashed #d1d5db;
+		border-radius: 0.5rem;
+		color: #6b7280;
+		cursor: pointer;
+		width: 100%;
+		font-size: 0.875rem;
+	}
+
+	.btn-media-select:hover {
+		background: #f3f4f6;
+		border-color: #9ca3af;
+	}
+
+	/* Modal styles */
+	.modal-overlay {
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.5);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1000;
+		padding: 1rem;
+	}
+
+	.modal-content {
+		background: white;
+		border-radius: 0.5rem;
+		width: 100%;
+		max-width: 700px;
+		max-height: 80vh;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.modal-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1rem;
+		border-bottom: 1px solid #e5e7eb;
+	}
+
+	.modal-header h3 {
+		margin: 0;
+		font-size: 1rem;
+		font-weight: 600;
+	}
+
+	.btn-close {
+		background: none;
+		border: none;
+		font-size: 1.5rem;
+		cursor: pointer;
+		color: #6b7280;
+	}
+
+	.btn-close:hover {
+		color: #374151;
+	}
+
+	.media-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+		gap: 0.75rem;
+		padding: 1rem;
+		overflow-y: auto;
+		max-height: 60vh;
+	}
+
+	.media-item {
+		aspect-ratio: 1;
+		border: 2px solid #e5e7eb;
+		border-radius: 0.375rem;
+		overflow: hidden;
+		cursor: pointer;
+		padding: 0;
+		background: #f9fafb;
+	}
+
+	.media-item:hover {
+		border-color: #6366f1;
+	}
+
+	.media-item.selected {
+		border-color: #6366f1;
+		box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+	}
+
+	.media-item img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.no-media {
+		grid-column: 1 / -1;
+		text-align: center;
+		color: #6b7280;
+		padding: 2rem;
+	}
+
+	/* Dark theme for new elements */
+	:global(.dark) .image-preview img {
+		border-color: #4b5563;
+	}
+
+	:global(.dark) .btn-secondary {
+		background: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .btn-secondary:hover {
+		background: #4b5563;
+	}
+
+	:global(.dark) .btn-media-select {
+		background: #1f2937;
+		border-color: #4b5563;
+		color: #9ca3af;
+	}
+
+	:global(.dark) .btn-media-select:hover {
+		background: #374151;
+		border-color: #6b7280;
+	}
+
+	:global(.dark) .modal-content {
+		background: #1f2937;
+	}
+
+	:global(.dark) .modal-header {
+		border-color: #374151;
+	}
+
+	:global(.dark) .modal-header h3 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .btn-close {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .btn-close:hover {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .media-item {
+		border-color: #4b5563;
+		background: #374151;
+	}
+
+	:global(.dark) .media-item:hover {
+		border-color: #818cf8;
+	}
+
+	:global(.dark) .media-item.selected {
+		border-color: #818cf8;
+		box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.3);
 	}
 </style>

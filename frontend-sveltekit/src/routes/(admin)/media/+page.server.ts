@@ -3,6 +3,22 @@ import { db } from '$lib/server/db/client';
 import { media, mediaThumbnails } from '$lib/server/db/schema';
 import { desc, eq } from 'drizzle-orm';
 
+// Helper function to construct media URL
+// Handles cases where stored_filename might already include path
+function buildMediaUrl(folder: string | null, storedFilename: string): string {
+	// If storedFilename starts with '/' or contains path separators, it might be a full path
+	if (storedFilename.startsWith('/')) {
+		// Full path stored - use /uploads prefix only
+		return `/uploads${storedFilename}`;
+	}
+	if (storedFilename.includes('/')) {
+		// Contains path - might be relative path without leading slash
+		return `/uploads/${storedFilename}`;
+	}
+	// Just filename - combine with folder
+	return `/uploads/${folder || 'uploads'}/${storedFilename}`;
+}
+
 export const load: PageServerLoad = async () => {
 	const items = await db
 		.select()
@@ -19,10 +35,10 @@ export const load: PageServerLoad = async () => {
 
 			return {
 				...item,
-				url: `/uploads/${item.folder}/${item.stored_filename}`,
+				url: buildMediaUrl(item.folder, item.stored_filename),
 				thumbnails: thumbnails.map((t: typeof mediaThumbnails.$inferSelect) => ({
 					size: t.size_name,
-					url: `/uploads/${item.folder}/${t.stored_filename}`
+					url: buildMediaUrl(item.folder, t.stored_filename)
 				}))
 			};
 		})
