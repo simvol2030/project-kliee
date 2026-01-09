@@ -37,7 +37,7 @@
 	let endDate = $state(data.item?.end_date?.split('T')[0] || '');
 	let openingHours = $state(data.item?.opening_hours || '');
 	let galleryLink = $state(data.item?.gallery_link || '');
-	let coverImageId = $state(data.item?.cover_image_id?.toString() || '');
+	let coverImageId = $state<number | null>(data.item?.cover_image_id || null);
 
 	// New fields
 	let type = $state(data.item?.type || 'solo');
@@ -56,6 +56,27 @@
 	// Gallery images management
 	let galleryImages = $state(data.galleryImages || []);
 	let showMediaPicker = $state(false);
+
+	// Cover image picker
+	let showCoverPicker = $state(false);
+	let coverImageRemoved = $state(false);
+	let imageMedia = $derived(data.allMedia.filter((m: { mime_type?: string }) => m.mime_type?.startsWith('image/')));
+	let selectedCoverImage = $derived(imageMedia.find((m: { id: number }) => m.id === coverImageId));
+
+	function selectCoverImage(id: number) {
+		coverImageId = id;
+		coverImageRemoved = false;
+		showCoverPicker = false;
+	}
+
+	function removeCoverImage() {
+		coverImageId = null;
+		coverImageRemoved = true;
+	}
+
+	function getMediaUrl(item: { folder?: string; stored_filename?: string }): string {
+		return `/uploads/${item.folder || 'uploads'}/${item.stored_filename}`;
+	}
 
 	const exhibitionTypes = [
 		{ value: 'solo', label: 'Solo Exhibition' },
@@ -225,9 +246,30 @@
 			<h2>Media & Links</h2>
 
 			<div class="form-row">
-				<div class="form-field">
-					<label for="coverImageId">Cover Image ID</label>
-					<input type="number" id="coverImageId" name="coverImageId" bind:value={coverImageId} placeholder="Media ID" />
+				<div class="form-field cover-image-field">
+					<label>Cover Image</label>
+					<input type="hidden" name="coverImageId" value={coverImageId || ''} />
+					{#if selectedCoverImage}
+						<div class="cover-preview">
+							<img src={getMediaUrl(selectedCoverImage)} alt="Cover" />
+							<div class="cover-actions">
+								<button type="button" class="btn-change" onclick={() => (showCoverPicker = true)}>Change</button>
+								<button type="button" class="btn-remove" onclick={removeCoverImage}>Remove</button>
+							</div>
+						</div>
+					{:else if !coverImageRemoved && data.item?.cover_image_id}
+						<div class="cover-preview">
+							<img src="/uploads/exhibitions/{data.item.cover_image_id}" alt="Cover" />
+							<div class="cover-actions">
+								<button type="button" class="btn-change" onclick={() => (showCoverPicker = true)}>Change</button>
+								<button type="button" class="btn-remove" onclick={removeCoverImage}>Remove</button>
+							</div>
+						</div>
+					{:else}
+						<button type="button" class="btn-select-cover" onclick={() => (showCoverPicker = true)}>
+							Select Cover Image
+						</button>
+					{/if}
 				</div>
 
 				<div class="form-field">
@@ -301,6 +343,33 @@
 </form>
 
 <Toast bind:visible={toastVisible} message={toastMessage} type={toastType} />
+
+<!-- Cover Image Picker Modal -->
+{#if showCoverPicker}
+	<div class="modal-overlay" onclick={() => (showCoverPicker = false)} role="button" tabindex="-1" onkeydown={(e) => e.key === 'Escape' && (showCoverPicker = false)}>
+		<div class="modal-content" onclick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+			<div class="modal-header">
+				<h3>Select Cover Image</h3>
+				<button type="button" class="btn-modal-close" onclick={() => (showCoverPicker = false)}>&times;</button>
+			</div>
+			<div class="cover-picker-grid">
+				{#each imageMedia as item}
+					<button
+						type="button"
+						class="cover-picker-item"
+						class:selected={coverImageId === item.id}
+						onclick={() => selectCoverImage(item.id)}
+					>
+						<img src={getMediaUrl(item)} alt={item.filename || 'Media'} />
+					</button>
+				{/each}
+				{#if imageMedia.length === 0}
+					<p class="no-media-msg">No images available. Upload images in Media section first.</p>
+				{/if}
+			</div>
+		</div>
+	</div>
+{/if}
 
 <style>
 	.page-header {
@@ -634,4 +703,227 @@
 	:global(.dark) .gallery-item { background: #374151; }
 	:global(.dark) .no-images { color: #6b7280; }
 	:global(.dark) .media-picker { background: #374151; }
+
+	/* Cover Image Picker Styles */
+	.cover-image-field {
+		flex: 2;
+	}
+
+	.cover-preview {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		max-width: 200px;
+	}
+
+	.cover-preview img {
+		width: 100%;
+		height: auto;
+		border-radius: 0.375rem;
+		border: 1px solid #e5e7eb;
+	}
+
+	.cover-actions {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.btn-change,
+	.btn-remove {
+		padding: 0.375rem 0.75rem;
+		font-size: 0.75rem;
+		border: 1px solid #e5e7eb;
+		border-radius: 0.25rem;
+		cursor: pointer;
+	}
+
+	.btn-change {
+		background: #f3f4f6;
+		color: #374151;
+	}
+
+	.btn-change:hover {
+		background: #e5e7eb;
+	}
+
+	.btn-remove {
+		background: #fef2f2;
+		color: #dc2626;
+		border-color: #fecaca;
+	}
+
+	.btn-remove:hover {
+		background: #fee2e2;
+	}
+
+	.btn-select-cover {
+		padding: 1.5rem 2rem;
+		background: #f9fafb;
+		border: 2px dashed #d1d5db;
+		border-radius: 0.5rem;
+		color: #6b7280;
+		cursor: pointer;
+		font-size: 0.875rem;
+	}
+
+	.btn-select-cover:hover {
+		background: #f3f4f6;
+		border-color: #9ca3af;
+	}
+
+	/* Cover Picker Modal */
+	.modal-overlay {
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.5);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1000;
+		padding: 1rem;
+	}
+
+	.modal-content {
+		background: white;
+		border-radius: 0.5rem;
+		width: 100%;
+		max-width: 700px;
+		max-height: 80vh;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.modal-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1rem;
+		border-bottom: 1px solid #e5e7eb;
+	}
+
+	.modal-header h3 {
+		margin: 0;
+		font-size: 1rem;
+		font-weight: 600;
+	}
+
+	.btn-modal-close {
+		background: none;
+		border: none;
+		font-size: 1.5rem;
+		cursor: pointer;
+		color: #6b7280;
+	}
+
+	.btn-modal-close:hover {
+		color: #374151;
+	}
+
+	.cover-picker-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+		gap: 0.75rem;
+		padding: 1rem;
+		overflow-y: auto;
+		max-height: 60vh;
+	}
+
+	.cover-picker-item {
+		aspect-ratio: 1;
+		border: 2px solid #e5e7eb;
+		border-radius: 0.375rem;
+		overflow: hidden;
+		cursor: pointer;
+		padding: 0;
+		background: #f9fafb;
+	}
+
+	.cover-picker-item:hover {
+		border-color: #6366f1;
+	}
+
+	.cover-picker-item.selected {
+		border-color: #6366f1;
+		box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+	}
+
+	.cover-picker-item img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.no-media-msg {
+		grid-column: 1 / -1;
+		text-align: center;
+		color: #6b7280;
+		padding: 2rem;
+	}
+
+	/* Dark theme for cover picker */
+	:global(.dark) .cover-preview img {
+		border-color: #4b5563;
+	}
+
+	:global(.dark) .btn-change {
+		background: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .btn-change:hover {
+		background: #4b5563;
+	}
+
+	:global(.dark) .btn-remove {
+		background: #7f1d1d;
+		border-color: #991b1b;
+		color: #fecaca;
+	}
+
+	:global(.dark) .btn-select-cover {
+		background: #1f2937;
+		border-color: #4b5563;
+		color: #9ca3af;
+	}
+
+	:global(.dark) .btn-select-cover:hover {
+		background: #374151;
+		border-color: #6b7280;
+	}
+
+	:global(.dark) .modal-content {
+		background: #1f2937;
+	}
+
+	:global(.dark) .modal-header {
+		border-color: #374151;
+	}
+
+	:global(.dark) .modal-header h3 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .btn-modal-close {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .btn-modal-close:hover {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .cover-picker-item {
+		border-color: #4b5563;
+		background: #374151;
+	}
+
+	:global(.dark) .cover-picker-item:hover {
+		border-color: #818cf8;
+	}
+
+	:global(.dark) .cover-picker-item.selected {
+		border-color: #818cf8;
+		box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.3);
+	}
 </style>
