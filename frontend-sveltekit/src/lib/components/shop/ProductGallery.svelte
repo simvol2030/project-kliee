@@ -37,7 +37,7 @@
 		if (img.stored_filename) {
 			return `/uploads/products/${img.stored_filename}`;
 		}
-		return '/images/placeholder-artwork.jpg';
+		return '/images/placeholder-artwork.svg';
 	}
 
 	function isVideo(img: ProductImage): boolean {

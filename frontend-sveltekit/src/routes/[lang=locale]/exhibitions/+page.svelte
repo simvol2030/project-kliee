@@ -89,20 +89,22 @@
 				</h2>
 				<div class="exhibitions-grid featured">
 					{#each currentExhibitions as exhibition}
-						<article class="exhibition-card featured">
-							{#if exhibition.coverImage}
-								<div class="exhibition-image">
-									<img src={exhibition.coverImage} alt={exhibition.title} loading="eager" />
+						<a href="/{locale}/exhibitions/{exhibition.slug}" class="exhibition-link">
+							<article class="exhibition-card featured">
+								{#if exhibition.coverImage}
+									<div class="exhibition-image">
+										<img src={exhibition.coverImage} alt={exhibition.title} loading="eager" />
+									</div>
+								{/if}
+								<div class="exhibition-info">
+									<span class="year">{exhibition.year}</span>
+									<h3>{exhibition.title}</h3>
+									<p class="venue">{exhibition.venue}</p>
+									<p class="location">{formatLocation(exhibition.city, exhibition.country)}</p>
+									<span class="type-badge">{exhibition.type}</span>
 								</div>
-							{/if}
-							<div class="exhibition-info">
-								<span class="year">{exhibition.year}</span>
-								<h3>{exhibition.title}</h3>
-								<p class="venue">{exhibition.venue}</p>
-								<p class="location">{formatLocation(exhibition.city, exhibition.country)}</p>
-								<span class="type-badge">{exhibition.type}</span>
-							</div>
-						</article>
+							</article>
+						</a>
 					{/each}
 				</div>
 			</div>
@@ -113,17 +115,28 @@
 	<section class="past-exhibitions">
 		<div class="container">
 			<h2>{pastLabel[locale]}</h2>
-			<div class="exhibitions-timeline">
+			<div class="exhibitions-grid">
 				{#each pastExhibitions as exhibition}
-					<article class="exhibition-item">
-						<span class="year">{exhibition.year}</span>
-						<div class="content">
-							<h3>{exhibition.title}</h3>
-							<p class="venue">{exhibition.venue}</p>
-							<p class="location">{formatLocation(exhibition.city, exhibition.country)}</p>
-							<span class="type-badge">{exhibition.type}</span>
-						</div>
-					</article>
+					<a href="/{locale}/exhibitions/{exhibition.slug}" class="exhibition-link">
+						<article class="exhibition-card">
+							{#if exhibition.coverImage}
+								<div class="exhibition-image">
+									<img src={exhibition.coverImage} alt={exhibition.title} loading="lazy" />
+								</div>
+							{:else}
+								<div class="exhibition-image placeholder">
+									<span class="placeholder-text">{exhibition.year}</span>
+								</div>
+							{/if}
+							<div class="exhibition-info">
+								<span class="year">{exhibition.year}</span>
+								<h3>{exhibition.title}</h3>
+								<p class="venue">{exhibition.venue}</p>
+								<p class="location">{formatLocation(exhibition.city, exhibition.country)}</p>
+								<span class="type-badge">{exhibition.type}</span>
+							</div>
+						</article>
+					</a>
 				{/each}
 			</div>
 		</div>
@@ -135,14 +148,23 @@
 			<h2>{artFairsLabel[locale]}</h2>
 			<div class="fairs-grid">
 				{#each artFairs as fair}
-					<article class="fair-card">
-						<span class="year">{fair.year}</span>
-						<h3>{fair.title}</h3>
-						<p class="location">{formatLocation(fair.city, fair.country)}</p>
-						{#if fair.venue}
-							<p class="gallery">{fair.venue}</p>
-						{/if}
-					</article>
+					<a href="/{locale}/exhibitions/{fair.slug}" class="exhibition-link">
+						<article class="fair-card">
+							{#if fair.coverImage}
+								<div class="fair-image">
+									<img src={fair.coverImage} alt={fair.title} loading="lazy" />
+								</div>
+							{/if}
+							<div class="fair-info">
+								<span class="year">{fair.year}</span>
+								<h3>{fair.title}</h3>
+								<p class="location">{formatLocation(fair.city, fair.country)}</p>
+								{#if fair.venue}
+									<p class="gallery">{fair.venue}</p>
+								{/if}
+							</div>
+						</article>
+					</a>
 				{/each}
 			</div>
 		</div>
@@ -158,6 +180,23 @@
 		max-width: 1200px;
 		margin: 0 auto;
 		padding: 0 var(--spacing-lg, 2rem);
+	}
+
+	/* Links */
+	.exhibition-link {
+		text-decoration: none;
+		color: inherit;
+		display: block;
+	}
+
+	.exhibition-link:hover .exhibition-card,
+	.exhibition-link:hover .fair-card {
+		transform: translateY(-4px);
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+	}
+
+	.exhibition-link:hover .exhibition-image img {
+		transform: scale(1.05);
 	}
 
 	/* Hero */
@@ -202,31 +241,59 @@
 		margin-left: var(--spacing-sm, 0.5rem);
 	}
 
-	.exhibitions-grid.featured {
+	/* Exhibitions Grid */
+	.exhibitions-grid {
 		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: var(--spacing-xl, 2rem);
+	}
+
+	.exhibitions-grid.featured {
 		grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 		gap: var(--spacing-xl, 3rem);
 	}
 
-	.exhibition-card.featured {
+	/* Exhibition Cards */
+	.exhibition-card {
 		background: var(--bg-secondary, #f5f5f5);
 		border-radius: var(--radius-lg, 1rem);
 		overflow: hidden;
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+	}
+
+	.exhibition-card.featured {
+		background: var(--bg-secondary, #f5f5f5);
 	}
 
 	.exhibition-image {
 		aspect-ratio: 16/9;
 		overflow: hidden;
+		background: var(--bg-tertiary, #e5e5e5);
 	}
 
 	.exhibition-image img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.exhibition-image.placeholder {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, var(--bg-tertiary, #e5e5e5), var(--bg-secondary, #f5f5f5));
+	}
+
+	.placeholder-text {
+		font-size: var(--text-3xl, 2rem);
+		font-weight: 300;
+		color: var(--text-secondary, #666);
+		opacity: 0.5;
 	}
 
 	.exhibition-info {
-		padding: var(--spacing-lg, 2rem);
+		padding: var(--spacing-lg, 1.5rem);
 	}
 
 	.exhibition-info .year {
@@ -237,14 +304,20 @@
 	}
 
 	.exhibition-info h3 {
-		font-size: var(--text-xl, 1.5rem);
+		font-size: var(--text-lg, 1.25rem);
 		margin-bottom: var(--spacing-sm, 0.5rem);
 		color: var(--text-primary, #1a1a1a);
+		line-height: 1.3;
+	}
+
+	.exhibition-card.featured .exhibition-info h3 {
+		font-size: var(--text-xl, 1.5rem);
 	}
 
 	.venue {
 		font-weight: 500;
 		color: var(--text-secondary, #333);
+		margin-bottom: var(--spacing-xs, 0.25rem);
 	}
 
 	.location {
@@ -264,34 +337,9 @@
 		border-radius: var(--radius-sm, 0.25rem);
 	}
 
-	/* Past Exhibitions Timeline */
+	/* Past Exhibitions */
 	.past-exhibitions {
 		background: var(--bg-secondary, #f5f5f5);
-	}
-
-	.exhibitions-timeline {
-		display: flex;
-		flex-direction: column;
-		gap: var(--spacing-lg, 2rem);
-	}
-
-	.exhibition-item {
-		display: grid;
-		grid-template-columns: 80px 1fr;
-		gap: var(--spacing-lg, 2rem);
-		padding-left: var(--spacing-lg, 2rem);
-		border-left: 2px solid var(--color-accent, #d4af37);
-	}
-
-	.exhibition-item .year {
-		font-weight: 600;
-		color: var(--color-accent, #d4af37);
-	}
-
-	.exhibition-item h3 {
-		font-size: var(--text-lg, 1.125rem);
-		margin-bottom: var(--spacing-xs, 0.25rem);
-		color: var(--text-primary, #1a1a1a);
 	}
 
 	/* Art Fairs */
@@ -306,11 +354,29 @@
 	}
 
 	.fair-card {
-		padding: var(--spacing-lg, 2rem);
 		background: var(--bg-secondary, #f5f5f5);
 		border-radius: var(--radius-md, 0.5rem);
+		overflow: hidden;
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
 	}
 
+	.fair-image {
+		aspect-ratio: 16/9;
+		overflow: hidden;
+	}
+
+	.fair-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.fair-info {
+		padding: var(--spacing-lg, 1.5rem);
+	}
+
+	.fair-info .year,
 	.fair-card .year {
 		display: block;
 		font-weight: 600;
@@ -318,16 +384,25 @@
 		margin-bottom: var(--spacing-xs, 0.25rem);
 	}
 
+	.fair-info h3,
 	.fair-card h3 {
 		font-size: var(--text-lg, 1.125rem);
 		margin-bottom: var(--spacing-sm, 0.5rem);
 		color: var(--text-primary, #1a1a1a);
 	}
 
+	.fair-info .location,
+	.fair-card .location {
+		color: var(--text-secondary, #666);
+		font-size: var(--text-sm, 0.875rem);
+	}
+
+	.fair-info .gallery,
 	.fair-card .gallery {
 		font-size: var(--text-sm, 0.875rem);
 		color: var(--text-secondary, #666);
 		font-style: italic;
+		margin-top: var(--spacing-xs, 0.25rem);
 	}
 
 	/* Responsive */
@@ -336,13 +411,13 @@
 			font-size: var(--text-3xl, 2.25rem);
 		}
 
+		.exhibitions-grid,
 		.exhibitions-grid.featured {
 			grid-template-columns: 1fr;
 		}
 
-		.exhibition-item {
-			grid-template-columns: 60px 1fr;
-			gap: var(--spacing-md, 1rem);
+		.fairs-grid {
+			grid-template-columns: 1fr;
 		}
 	}
 
@@ -352,12 +427,21 @@
 		background: var(--bg-secondary, #1c1c1e);
 	}
 
-	:global(.dark) .exhibition-card.featured,
+	:global(.dark) .exhibition-card,
 	:global(.dark) .fair-card {
 		background: var(--bg-tertiary, #2c2c2e);
 	}
 
+	:global(.dark) .exhibition-image.placeholder {
+		background: linear-gradient(135deg, var(--bg-tertiary, #2c2c2e), var(--bg-secondary, #1c1c1e));
+	}
+
 	:global(.dark) .type-badge {
 		background: var(--bg-secondary, #1c1c1e);
+	}
+
+	:global(.dark) .exhibition-link:hover .exhibition-card,
+	:global(.dark) .exhibition-link:hover .fair-card {
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 	}
 </style>
