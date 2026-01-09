@@ -74,7 +74,7 @@
 	const imageUrl = $derived(
 		product.primary_image
 			? product.primary_image.url
-			: '/images/placeholder-artwork.jpg'
+			: '/images/placeholder-artwork.svg'
 	);
 
 	function handleAddToCart(e: Event) {

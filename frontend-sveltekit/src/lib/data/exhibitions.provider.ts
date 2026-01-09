@@ -93,11 +93,23 @@ function getLocaleSuffix(locale: LanguageCode): 'en' | 'ru' | 'es' | 'zh' {
 
 /**
  * Build image URL from media record
+ * Handles both new uploads (/uploads/...) and old images (/images/...)
  */
 function buildImageUrl(mediaRecord: { folder: string | null; stored_filename: string } | null): string | null {
 	if (!mediaRecord) return null;
+	const filename = mediaRecord.stored_filename;
+	// Old images: stored_filename starts with /images/ - use directly
+	if (filename.startsWith('/images/')) {
+		return filename;
+	}
+	if (filename.startsWith('/')) {
+		return `/uploads${filename}`;
+	}
+	if (filename.includes('/')) {
+		return `/uploads/${filename}`;
+	}
 	const folder = mediaRecord.folder || 'uploads';
-	return `/uploads/${folder}/${mediaRecord.stored_filename}`;
+	return `/uploads/${folder}/${filename}`;
 }
 
 /**
@@ -455,7 +467,7 @@ export async function getExhibitionImages(
 
 		return {
 			id: img.id,
-			url: url || '/images/placeholder-artwork.jpg',
+			url: url || '/images/placeholder-artwork.svg',
 			caption: captionMap[suffix] || img.captionEn,
 			order: img.orderIndex ?? 0,
 			mimeType: img.mimeType

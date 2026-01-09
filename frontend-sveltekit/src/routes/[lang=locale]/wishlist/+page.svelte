@@ -112,7 +112,7 @@
 
 	// Get image URL
 	function getImageUrl(product: PublicShopProduct): string {
-		return product.primary_image?.url || '/images/placeholder-artwork.jpg';
+		return product.primary_image?.url || '/images/placeholder-artwork.svg';
 	}
 
 	// Get image alt

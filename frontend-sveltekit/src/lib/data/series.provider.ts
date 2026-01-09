@@ -67,9 +67,20 @@ function getLocaleSuffix(locale: LanguageCode): 'en' | 'ru' | 'es' | 'zh' {
  * Build image URL from media record
  */
 function buildImageUrl(mediaRecord: { folder: string | null; stored_filename: string } | null): string {
-	if (!mediaRecord) return '/images/placeholder-artwork.jpg';
+	if (!mediaRecord) return '/images/placeholder-artwork.svg';
+	const filename = mediaRecord.stored_filename;
+	// Old images: stored_filename starts with /images/ - use directly
+	if (filename.startsWith('/images/')) {
+		return filename;
+	}
+	if (filename.startsWith('/')) {
+		return `/uploads${filename}`;
+	}
+	if (filename.includes('/')) {
+		return `/uploads/${filename}`;
+	}
 	const folder = mediaRecord.folder || 'uploads';
-	return `/uploads/${folder}/${mediaRecord.stored_filename}`;
+	return `/uploads/${folder}/${filename}`;
 }
 
 /**
@@ -118,7 +129,7 @@ export async function getAllSeries(locale: LanguageCode = 'en'): Promise<SeriesL
 
 	for (const s of allSeries) {
 		// Get cover image
-		let coverImageUrl = '/images/placeholder-artwork.jpg';
+		let coverImageUrl = '/images/placeholder-artwork.svg';
 		if (s.cover_image_id) {
 			const mediaRecord = await db
 				.select({ folder: media.folder, stored_filename: media.stored_filename })
@@ -233,7 +244,7 @@ export async function getSeriesBySlug(
 	if (!s.is_visible) return undefined;
 
 	// Get cover image
-	let coverImageUrl = '/images/placeholder-artwork.jpg';
+	let coverImageUrl = '/images/placeholder-artwork.svg';
 	if (s.cover_image_id) {
 		const mediaRecord = await db
 			.select({ folder: media.folder, stored_filename: media.stored_filename })
@@ -287,7 +298,7 @@ export async function getSeriesById(
 	const s = seriesRecord[0];
 
 	// Get cover image
-	let coverImageUrl = '/images/placeholder-artwork.jpg';
+	let coverImageUrl = '/images/placeholder-artwork.svg';
 	if (s.cover_image_id) {
 		const mediaRecord = await db
 			.select({ folder: media.folder, stored_filename: media.stored_filename })
@@ -421,7 +432,7 @@ export async function getFeaturedSeries(
 		if (!s.is_visible) continue;
 
 		// Get cover image
-		let coverImageUrl = '/images/placeholder-artwork.jpg';
+		let coverImageUrl = '/images/placeholder-artwork.svg';
 		if (s.cover_image_id) {
 			const mediaRecord = await db
 				.select({ folder: media.folder, stored_filename: media.stored_filename })

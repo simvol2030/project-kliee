@@ -590,7 +590,7 @@ export async function getArtworkWithAllImages(
 
 		return {
 			id: img.id,
-			url: url || '/images/placeholder-artwork.jpg',
+			url: url || '/images/placeholder-artwork.svg',
 			alt: alt || baseArtwork.title,
 			isPrimary: img.isPrimary ?? false,
 			mimeType: img.mimeType,
@@ -678,7 +678,7 @@ export async function getArtworkImages(
 
 		return {
 			id: img.id,
-			url: url || '/images/placeholder-artwork.jpg',
+			url: url || '/images/placeholder-artwork.svg',
 			alt: alt || fallbackTitle,
 			isPrimary: img.isPrimary ?? false,
 			mimeType: img.mimeType,
