@@ -74,7 +74,7 @@
 		coverImageRemoved = true;
 	}
 
-	function getMediaUrl(item: { folder?: string; stored_filename?: string; url?: string }): string {
+	function getMediaUrl(item: { folder?: string | null; stored_filename?: string; url?: string | null }): string {
 		// Use pre-computed URL if available
 		if (item.url) return item.url;
 		// Fallback: compute URL (handles /images/ paths)
