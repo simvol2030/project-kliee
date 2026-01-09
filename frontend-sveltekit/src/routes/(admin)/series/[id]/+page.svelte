@@ -31,9 +31,15 @@
 
 	// Media picker state
 	let showMediaPicker = $state(false);
+	let coverImageRemoved = $state(false);  // Track if user explicitly removed the image
 
 	// Selected image from media
 	let selectedImage = $derived(data.allMedia?.find((m) => m.id === coverImageId));
+
+	function removeImage() {
+		coverImageId = null;
+		coverImageRemoved = true;
+	}
 
 	let toastVisible = $state(false);
 	let toastMessage = $state('');
@@ -63,6 +69,7 @@
 
 	function selectImage(id: number) {
 		coverImageId = id;
+		coverImageRemoved = false;  // Reset the removed flag when selecting new image
 		showMediaPicker = false;
 	}
 </script>
@@ -124,13 +131,16 @@
 						<img src={selectedImage.url} alt="Cover" />
 						<div class="image-actions">
 							<button type="button" class="btn-secondary" onclick={() => (showMediaPicker = true)}>Change</button>
-							<button type="button" class="btn-secondary" onclick={() => (coverImageId = null)}>Remove</button>
+							<button type="button" class="btn-secondary" onclick={removeImage}>Remove</button>
 						</div>
 					</div>
-				{:else if data.item?.coverImageUrl}
+				{:else if !coverImageRemoved && data.item?.coverImageUrl}
 					<div class="image-preview">
 						<img src={data.item.coverImageUrl} alt="Cover" />
-						<button type="button" class="btn-secondary" onclick={() => (showMediaPicker = true)}>Change</button>
+						<div class="image-actions">
+							<button type="button" class="btn-secondary" onclick={() => (showMediaPicker = true)}>Change</button>
+							<button type="button" class="btn-secondary" onclick={removeImage}>Remove</button>
+						</div>
 					</div>
 				{:else}
 					<button type="button" class="btn-media-select" onclick={() => (showMediaPicker = true)}>

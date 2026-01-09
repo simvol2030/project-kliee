@@ -139,7 +139,6 @@
 							<input
 								type="text"
 								id="title_{lang}"
-								name="title{lang.charAt(0).toUpperCase() + lang.slice(1)}"
 								bind:value={multiLang[`title_${lang}`]}
 								placeholder="Title in {lang === 'en' ? 'English' : lang === 'ru' ? 'Russian' : lang === 'es' ? 'Spanish' : 'Chinese'}"
 								required={lang === 'en'}
@@ -211,7 +210,6 @@
 							</label>
 							<textarea
 								id="description_{lang}"
-								name="description{lang.charAt(0).toUpperCase() + lang.slice(1)}"
 								rows="6"
 								bind:value={multiLang[`description_${lang}`]}
 								placeholder="Description in {lang === 'en' ? 'English' : lang === 'ru' ? 'Russian' : lang === 'es' ? 'Spanish' : 'Chinese'}"

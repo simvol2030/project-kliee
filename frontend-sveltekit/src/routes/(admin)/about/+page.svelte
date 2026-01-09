@@ -28,6 +28,36 @@
 		biography_zh: data.artist?.biography_zh || ''
 	});
 
+	// SEO fields interface (reactive state shared between Artist and SEO tabs)
+	interface SeoFields {
+		seo_title_en: string;
+		seo_title_ru: string;
+		seo_title_es: string;
+		seo_title_zh: string;
+		seo_description_en: string;
+		seo_description_ru: string;
+		seo_description_es: string;
+		seo_description_zh: string;
+		[key: string]: string;
+	}
+
+	// SEO state - used in both Artist hidden fields and SEO tab visible fields
+	let seoFields = $state<SeoFields>({
+		seo_title_en: data.artist?.seo_title_en || '',
+		seo_title_ru: data.artist?.seo_title_ru || '',
+		seo_title_es: data.artist?.seo_title_es || '',
+		seo_title_zh: data.artist?.seo_title_zh || '',
+		seo_description_en: data.artist?.seo_description_en || '',
+		seo_description_ru: data.artist?.seo_description_ru || '',
+		seo_description_es: data.artist?.seo_description_es || '',
+		seo_description_zh: data.artist?.seo_description_zh || ''
+	});
+
+	// Artist basic info (reactive state shared across tabs)
+	let artistName = $state(data.artist?.name || '');
+	let artistNationality = $state(data.artist?.nationality || '');
+	let artistBasedIn = $state(data.artist?.based_in || '');
+
 	// Education add form language tabs
 	let activeEduLang = $state('en');
 
@@ -53,6 +83,52 @@
 		institution_ru: '',
 		institution_es: '',
 		institution_zh: ''
+	});
+
+	// Awards add form language tabs
+	let activeAwardLang = $state('en');
+
+	// Awards fields for adding new entry
+	interface AwardAddFields {
+		title_en: string;
+		title_ru: string;
+		title_es: string;
+		title_zh: string;
+		organization_en: string;
+		organization_ru: string;
+		organization_es: string;
+		organization_zh: string;
+		[key: string]: string;
+	}
+
+	let awardAddFields = $state<AwardAddFields>({
+		title_en: '',
+		title_ru: '',
+		title_es: '',
+		title_zh: '',
+		organization_en: '',
+		organization_ru: '',
+		organization_es: '',
+		organization_zh: ''
+	});
+
+	// Residencies add form language tabs
+	let activeResLang = $state('en');
+
+	// Residencies fields for adding new entry
+	interface ResAddFields {
+		location_en: string;
+		location_ru: string;
+		location_es: string;
+		location_zh: string;
+		[key: string]: string;
+	}
+
+	let resAddFields = $state<ResAddFields>({
+		location_en: '',
+		location_ru: '',
+		location_es: '',
+		location_zh: ''
 	});
 
 	// Media picker
@@ -131,17 +207,17 @@
 				<div class="form-grid">
 					<div class="form-group">
 						<label for="name">Name *</label>
-						<input type="text" id="name" name="name" value={data.artist?.name || ''} required />
+						<input type="text" id="name" name="name" bind:value={artistName} required />
 					</div>
 
 					<div class="form-group">
 						<label for="nationality">Nationality</label>
-						<input type="text" id="nationality" name="nationality" value={data.artist?.nationality || ''} />
+						<input type="text" id="nationality" name="nationality" bind:value={artistNationality} />
 					</div>
 
 					<div class="form-group">
 						<label for="basedIn">Based In</label>
-						<input type="text" id="basedIn" name="basedIn" value={data.artist?.based_in || ''} />
+						<input type="text" id="basedIn" name="basedIn" bind:value={artistBasedIn} />
 					</div>
 				</div>
 
@@ -194,14 +270,14 @@
 			</div>
 
 			<!-- Hidden SEO fields (managed in SEO tab but saved together) -->
-			<input type="hidden" name="seoTitleEn" value={data.artist?.seo_title_en || ''} />
-			<input type="hidden" name="seoTitleRu" value={data.artist?.seo_title_ru || ''} />
-			<input type="hidden" name="seoTitleEs" value={data.artist?.seo_title_es || ''} />
-			<input type="hidden" name="seoTitleZh" value={data.artist?.seo_title_zh || ''} />
-			<input type="hidden" name="seoDescriptionEn" value={data.artist?.seo_description_en || ''} />
-			<input type="hidden" name="seoDescriptionRu" value={data.artist?.seo_description_ru || ''} />
-			<input type="hidden" name="seoDescriptionEs" value={data.artist?.seo_description_es || ''} />
-			<input type="hidden" name="seoDescriptionZh" value={data.artist?.seo_description_zh || ''} />
+			<input type="hidden" name="seoTitleEn" value={seoFields.seo_title_en} />
+			<input type="hidden" name="seoTitleRu" value={seoFields.seo_title_ru} />
+			<input type="hidden" name="seoTitleEs" value={seoFields.seo_title_es} />
+			<input type="hidden" name="seoTitleZh" value={seoFields.seo_title_zh} />
+			<input type="hidden" name="seoDescriptionEn" value={seoFields.seo_description_en} />
+			<input type="hidden" name="seoDescriptionRu" value={seoFields.seo_description_ru} />
+			<input type="hidden" name="seoDescriptionEs" value={seoFields.seo_description_es} />
+			<input type="hidden" name="seoDescriptionZh" value={seoFields.seo_description_zh} />
 
 			<div class="form-actions">
 				<button type="submit" class="btn-primary" disabled={saving}>
@@ -342,13 +418,58 @@
 				<h2>Awards ({data.awards.length})</h2>
 			</div>
 
-			<form method="POST" action="?/addAward" class="add-form" use:enhance>
+			<!-- Add form with Language Tabs -->
+			<form
+				method="POST"
+				action="?/addAward"
+				class="add-form"
+				use:enhance={() => {
+					saving = true;
+					return async ({ update }) => {
+						await update();
+						// Reset fields after successful add
+						awardAddFields = {
+							title_en: '', title_ru: '', title_es: '', title_zh: '',
+							organization_en: '', organization_ru: '', organization_es: '', organization_zh: ''
+						};
+						saving = false;
+					};
+				}}
+			>
 				<div class="form-grid-compact">
 					<input type="text" name="year" placeholder="Year" />
-					<input type="text" name="titleEn" placeholder="Title (EN)" />
-					<input type="text" name="organizationEn" placeholder="Organization (EN)" />
 					<input type="number" name="orderIndex" placeholder="Order" value="0" class="order-input" />
-					<button type="submit" class="btn-primary">Add</button>
+				</div>
+
+				<LanguageTabs bind:active={activeAwardLang}>
+					{#snippet children(lang)}
+						<div class="form-grid-compact">
+							<input
+								type="text"
+								bind:value={awardAddFields[`title_${lang}`]}
+								placeholder="Title ({lang.toUpperCase()})"
+							/>
+							<input
+								type="text"
+								bind:value={awardAddFields[`organization_${lang}`]}
+								placeholder="Organization ({lang.toUpperCase()})"
+							/>
+						</div>
+					{/snippet}
+				</LanguageTabs>
+
+				<!-- Hidden fields for form submission -->
+				<input type="hidden" name="titleEn" value={awardAddFields.title_en} />
+				<input type="hidden" name="titleRu" value={awardAddFields.title_ru} />
+				<input type="hidden" name="titleEs" value={awardAddFields.title_es} />
+				<input type="hidden" name="titleZh" value={awardAddFields.title_zh} />
+				<input type="hidden" name="organizationEn" value={awardAddFields.organization_en} />
+				<input type="hidden" name="organizationRu" value={awardAddFields.organization_ru} />
+				<input type="hidden" name="organizationEs" value={awardAddFields.organization_es} />
+				<input type="hidden" name="organizationZh" value={awardAddFields.organization_zh} />
+
+				<div class="form-actions-inline">
+					<button type="submit" class="btn-primary" disabled={saving}>Add Award</button>
 				</div>
 			</form>
 
@@ -408,12 +529,48 @@
 				<h2>Residencies ({data.residencies.length})</h2>
 			</div>
 
-			<form method="POST" action="?/addResidency" class="add-form" use:enhance>
+			<!-- Add form with Language Tabs -->
+			<form
+				method="POST"
+				action="?/addResidency"
+				class="add-form"
+				use:enhance={() => {
+					saving = true;
+					return async ({ update }) => {
+						await update();
+						// Reset fields after successful add
+						resAddFields = {
+							location_en: '', location_ru: '', location_es: '', location_zh: ''
+						};
+						saving = false;
+					};
+				}}
+			>
 				<div class="form-grid-compact">
 					<input type="text" name="year" placeholder="Year" />
-					<input type="text" name="locationEn" placeholder="Location (EN)" />
 					<input type="number" name="orderIndex" placeholder="Order" value="0" class="order-input" />
-					<button type="submit" class="btn-primary">Add</button>
+				</div>
+
+				<LanguageTabs bind:active={activeResLang}>
+					{#snippet children(lang)}
+						<div class="form-grid-compact">
+							<input
+								type="text"
+								bind:value={resAddFields[`location_${lang}`]}
+								placeholder="Location ({lang.toUpperCase()})"
+							/>
+						</div>
+					{/snippet}
+				</LanguageTabs>
+
+				<!-- Hidden fields for form submission -->
+				<input type="hidden" name="locationEn" value={resAddFields.location_en} />
+				<input type="hidden" name="locationRu" value={resAddFields.location_ru} />
+				<input type="hidden" name="locationEs" value={resAddFields.location_es} />
+				<input type="hidden" name="locationZh" value={resAddFields.location_zh} />
+
+				<div class="form-actions-inline">
+					<button type="submit" class="btn-primary" disabled={saving}>Add Residency</button>
 				</div>
 			</form>
 
@@ -460,15 +617,15 @@
 	<!-- SEO Tab -->
 	{#if activeTab === 'seo'}
 		<form method="POST" action="?/saveArtist" use:enhance>
-			<!-- Hidden artist fields -->
-			<input type="hidden" name="name" value={data.artist?.name || 'Artist'} />
-			<input type="hidden" name="imageId" value={data.artist?.image_id || ''} />
-			<input type="hidden" name="nationality" value={data.artist?.nationality || ''} />
-			<input type="hidden" name="basedIn" value={data.artist?.based_in || ''} />
-			<input type="hidden" name="biographyEn" value={data.artist?.biography_en || ''} />
-			<input type="hidden" name="biographyRu" value={data.artist?.biography_ru || ''} />
-			<input type="hidden" name="biographyEs" value={data.artist?.biography_es || ''} />
-			<input type="hidden" name="biographyZh" value={data.artist?.biography_zh || ''} />
+			<!-- Hidden artist fields (use reactive state to sync with Artist tab) -->
+			<input type="hidden" name="name" value={artistName || 'Artist'} />
+			<input type="hidden" name="imageId" value={imageId || ''} />
+			<input type="hidden" name="nationality" value={artistNationality} />
+			<input type="hidden" name="basedIn" value={artistBasedIn} />
+			<input type="hidden" name="biographyEn" value={bioFields.biography_en} />
+			<input type="hidden" name="biographyRu" value={bioFields.biography_ru} />
+			<input type="hidden" name="biographyEs" value={bioFields.biography_es} />
+			<input type="hidden" name="biographyZh" value={bioFields.biography_zh} />
 
 			<div class="form-section">
 				<h2>SEO Settings</h2>
@@ -477,38 +634,38 @@
 				<div class="form-grid">
 					<div class="form-group">
 						<label for="seoTitleEn">English</label>
-						<input type="text" id="seoTitleEn" name="seoTitleEn" value={data.artist?.seo_title_en || ''} />
+						<input type="text" id="seoTitleEn" name="seoTitleEn" bind:value={seoFields.seo_title_en} />
 					</div>
 					<div class="form-group">
 						<label for="seoTitleRu">Russian</label>
-						<input type="text" id="seoTitleRu" name="seoTitleRu" value={data.artist?.seo_title_ru || ''} />
+						<input type="text" id="seoTitleRu" name="seoTitleRu" bind:value={seoFields.seo_title_ru} />
 					</div>
 					<div class="form-group">
 						<label for="seoTitleEs">Spanish</label>
-						<input type="text" id="seoTitleEs" name="seoTitleEs" value={data.artist?.seo_title_es || ''} />
+						<input type="text" id="seoTitleEs" name="seoTitleEs" bind:value={seoFields.seo_title_es} />
 					</div>
 					<div class="form-group">
 						<label for="seoTitleZh">Chinese</label>
-						<input type="text" id="seoTitleZh" name="seoTitleZh" value={data.artist?.seo_title_zh || ''} />
+						<input type="text" id="seoTitleZh" name="seoTitleZh" bind:value={seoFields.seo_title_zh} />
 					</div>
 				</div>
 
 				<h3>Meta Description</h3>
 				<div class="form-group">
 					<label for="seoDescriptionEn">English</label>
-					<textarea id="seoDescriptionEn" name="seoDescriptionEn" rows="2">{data.artist?.seo_description_en || ''}</textarea>
+					<textarea id="seoDescriptionEn" name="seoDescriptionEn" rows="2" bind:value={seoFields.seo_description_en}></textarea>
 				</div>
 				<div class="form-group">
 					<label for="seoDescriptionRu">Russian</label>
-					<textarea id="seoDescriptionRu" name="seoDescriptionRu" rows="2">{data.artist?.seo_description_ru || ''}</textarea>
+					<textarea id="seoDescriptionRu" name="seoDescriptionRu" rows="2" bind:value={seoFields.seo_description_ru}></textarea>
 				</div>
 				<div class="form-group">
 					<label for="seoDescriptionEs">Spanish</label>
-					<textarea id="seoDescriptionEs" name="seoDescriptionEs" rows="2">{data.artist?.seo_description_es || ''}</textarea>
+					<textarea id="seoDescriptionEs" name="seoDescriptionEs" rows="2" bind:value={seoFields.seo_description_es}></textarea>
 				</div>
 				<div class="form-group">
 					<label for="seoDescriptionZh">Chinese</label>
-					<textarea id="seoDescriptionZh" name="seoDescriptionZh" rows="2">{data.artist?.seo_description_zh || ''}</textarea>
+					<textarea id="seoDescriptionZh" name="seoDescriptionZh" rows="2" bind:value={seoFields.seo_description_zh}></textarea>
 				</div>
 			</div>
 
