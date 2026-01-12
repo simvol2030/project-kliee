@@ -7,7 +7,7 @@
 
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import Jimp from 'jimp';
+import { Jimp } from 'jimp';
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
@@ -73,22 +73,24 @@ export const POST: RequestHandler = async ({ request }) => {
 			Math.round(crop.height)
 		);
 
-		// Apply resize if specified
+		// Apply resize if specified (Jimp v1 API)
 		if (resize) {
 			if (resize.width && resize.height) {
-				// Both dimensions specified - use scaleToFit for 'inside' behavior
+				// Both dimensions specified
 				if (resize.fit === 'cover') {
-					image.cover(resize.width, resize.height);
+					image.cover({ w: resize.width, h: resize.height });
 				} else if (resize.fit === 'contain') {
-					image.contain(resize.width, resize.height);
+					image.contain({ w: resize.width, h: resize.height });
 				} else {
 					// Default: 'inside' - scale to fit within bounds
-					image.scaleToFit(resize.width, resize.height);
+					image.scaleToFit({ w: resize.width, h: resize.height });
 				}
 			} else if (resize.width) {
-				image.resize(resize.width, Jimp.AUTO);
+				// Only width specified - auto height
+				image.resize({ w: resize.width });
 			} else if (resize.height) {
-				image.resize(Jimp.AUTO, resize.height);
+				// Only height specified - auto width
+				image.resize({ h: resize.height });
 			}
 		}
 

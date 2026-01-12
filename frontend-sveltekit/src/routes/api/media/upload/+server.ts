@@ -3,7 +3,7 @@ import type { RequestHandler } from './$types';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { createHash } from 'crypto';
-import Jimp from 'jimp';
+import { Jimp } from 'jimp';
 import { v4 as uuid } from 'uuid';
 import { db } from '$lib/server/db/client';
 import { media, mediaThumbnails } from '$lib/server/db/schema';
@@ -194,9 +194,8 @@ async function createThumbnails(
 			// Read image from buffer
 			const image = await Jimp.read(buffer);
 
-			// Resize to fit within bounds (like sharp's 'inside' fit)
-			// scaleToFit scales down to fit within the given dimensions
-			image.scaleToFit(size.width, size.height);
+			// Resize to fit within bounds (Jimp v1 API)
+			image.scaleToFit({ w: size.width, h: size.height });
 
 			// Set JPEG quality
 			image.quality(80);
