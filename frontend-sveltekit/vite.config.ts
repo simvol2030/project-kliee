@@ -12,12 +12,6 @@ export default defineConfig({
 			brotliSize: true
 		})
 	],
-	// SSR configuration - exclude native modules from bundling
-	ssr: {
-		// Sharp and its platform-specific binaries must be loaded from node_modules at runtime
-		// They cannot be bundled by Rollup due to native .node binaries
-		external: ['sharp', '@img/sharp-linux-x64', '@img/sharp-darwin-arm64', '@img/sharp-win32-x64']
-	},
 	build: {
 		// Optimize chunk splitting
 		rollupOptions: {
@@ -28,8 +22,6 @@ export default defineConfig({
 						if (id.includes('svelte')) return 'vendor-svelte';
 						if (id.includes('drizzle')) return 'vendor-drizzle';
 						if (id.includes('better-sqlite3') || id.includes('pg')) return 'vendor-db';
-						// Don't chunk sharp - it's externalized
-						if (id.includes('sharp') || id.includes('@img/sharp')) return undefined;
 						return 'vendor';
 					}
 					// Separate admin routes into their own chunk
@@ -43,10 +35,5 @@ export default defineConfig({
 		minify: 'esbuild',
 		// Target modern browsers
 		target: 'es2020'
-	},
-	// Optimize dependencies
-	optimizeDeps: {
-		// Exclude native modules from pre-bundling
-		exclude: ['sharp', '@img/sharp-linux-x64', '@img/sharp-darwin-arm64', '@img/sharp-win32-x64']
 	}
 });
