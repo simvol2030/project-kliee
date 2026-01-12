@@ -1,14 +1,14 @@
 /**
  * Image Cropping API Endpoint
  *
- * Processes image cropping using sharp library.
+ * Processes image cropping using Jimp library.
  * Supports cropping, resizing, and format conversion.
  */
 
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import sharp from 'sharp';
-import { readFile, writeFile, mkdir } from 'fs/promises';
+import Jimp from 'jimp';
+import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
 import { v4 as uuid } from 'uuid';
@@ -62,45 +62,48 @@ export const POST: RequestHandler = async ({ request }) => {
 			throw error(404, 'File not found on disk');
 		}
 
-		// Read and process image
-		const imageBuffer = await readFile(inputPath);
-		let pipeline = sharp(imageBuffer);
+		// Read and process image with Jimp
+		const image = await Jimp.read(inputPath);
 
 		// Apply crop
-		pipeline = pipeline.extract({
-			left: Math.round(crop.x),
-			top: Math.round(crop.y),
-			width: Math.round(crop.width),
-			height: Math.round(crop.height)
-		});
+		image.crop(
+			Math.round(crop.x),
+			Math.round(crop.y),
+			Math.round(crop.width),
+			Math.round(crop.height)
+		);
 
 		// Apply resize if specified
 		if (resize) {
-			pipeline = pipeline.resize({
-				width: resize.width,
-				height: resize.height,
-				fit: resize.fit || 'inside',
-				withoutEnlargement: true
-			});
+			if (resize.width && resize.height) {
+				// Both dimensions specified - use scaleToFit for 'inside' behavior
+				if (resize.fit === 'cover') {
+					image.cover(resize.width, resize.height);
+				} else if (resize.fit === 'contain') {
+					image.contain(resize.width, resize.height);
+				} else {
+					// Default: 'inside' - scale to fit within bounds
+					image.scaleToFit(resize.width, resize.height);
+				}
+			} else if (resize.width) {
+				image.resize(resize.width, Jimp.AUTO);
+			} else if (resize.height) {
+				image.resize(Jimp.AUTO, resize.height);
+			}
 		}
 
-		// Apply format conversion
-		const outputFormat = format || getFormatFromFilename(storedFilename);
-		switch (outputFormat) {
-			case 'jpeg':
-				pipeline = pipeline.jpeg({ quality });
-				break;
-			case 'png':
-				pipeline = pipeline.png({ quality });
-				break;
-			case 'webp':
-				pipeline = pipeline.webp({ quality });
-				break;
+		// Determine output format (webp not supported by Jimp, use jpeg instead)
+		let outputFormat = format || getFormatFromFilename(storedFilename);
+		if (outputFormat === 'webp') {
+			outputFormat = 'jpeg'; // Fallback since Jimp doesn't support webp
 		}
 
-		// Get processed buffer
-		const outputBuffer = await pipeline.toBuffer();
-		const metadata = await sharp(outputBuffer).metadata();
+		// Set quality
+		image.quality(quality);
+
+		// Get dimensions
+		const outputWidth = image.getWidth();
+		const outputHeight = image.getHeight();
 
 		// Generate output filename
 		let outputFilename: string;
@@ -108,9 +111,11 @@ export const POST: RequestHandler = async ({ request }) => {
 		let newMediaId = mediaId;
 
 		if (replaceOriginal) {
-			// Replace original file
-			outputFilename = storedFilename;
-			outputPath = inputPath;
+			// Replace original file - change extension if format changed
+			const baseName = path.basename(storedFilename, path.extname(storedFilename));
+			const ext = outputFormat === 'jpeg' ? 'jpg' : outputFormat;
+			outputFilename = `${baseName}.${ext}`;
+			outputPath = path.join(UPLOADS_DIR, folder, outputFilename);
 		} else {
 			// Create new file with cropped suffix
 			const ext = outputFormat === 'jpeg' ? 'jpg' : outputFormat;
@@ -126,7 +131,13 @@ export const POST: RequestHandler = async ({ request }) => {
 		}
 
 		// Write output file
-		await writeFile(outputPath, outputBuffer);
+		await image.writeAsync(outputPath);
+
+		// Get file size
+		const outputBuffer = await image.getBufferAsync(
+			outputFormat === 'png' ? Jimp.MIME_PNG : Jimp.MIME_JPEG
+		);
+		const fileSize = outputBuffer.length;
 
 		// Update or create media record
 		if (replaceOriginal) {
@@ -134,9 +145,10 @@ export const POST: RequestHandler = async ({ request }) => {
 			await db
 				.update(media)
 				.set({
-					width: metadata.width,
-					height: metadata.height,
-					size: outputBuffer.length
+					width: outputWidth,
+					height: outputHeight,
+					size: fileSize,
+					stored_filename: outputFilename
 				})
 				.where(eq(media.id, mediaId));
 		} else {
@@ -152,9 +164,9 @@ export const POST: RequestHandler = async ({ request }) => {
 					filename: originalFilename,
 					stored_filename: outputFilename,
 					mime_type: `image/${outputFormat}`,
-					size: outputBuffer.length,
-					width: metadata.width,
-					height: metadata.height,
+					size: fileSize,
+					width: outputWidth,
+					height: outputHeight,
 					folder,
 					alt_en: mediaRecord.alt_en ? `${mediaRecord.alt_en} (cropped)` : null,
 					alt_ru: mediaRecord.alt_ru,
