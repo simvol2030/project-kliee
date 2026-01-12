@@ -12,6 +12,10 @@ export default defineConfig({
 			brotliSize: true
 		})
 	],
+	ssr: {
+		// Sharp is a native module - must be loaded from node_modules at runtime
+		external: ['sharp']
+	},
 	build: {
 		// Optimize chunk splitting
 		rollupOptions: {
