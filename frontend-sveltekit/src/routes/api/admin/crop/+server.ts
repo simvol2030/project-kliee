@@ -34,7 +34,7 @@ interface CropRequest {
 	replaceOriginal?: boolean;
 }
 
-const UPLOADS_DIR = path.join(process.cwd(), 'static', 'uploads');
+const UPLOADS_DIR = '/opt/websites/k-liee.com/static-images/uploads';
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {

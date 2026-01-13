@@ -46,7 +46,7 @@
 		for (const file of files) {
 			const formData = new FormData();
 			formData.append('file', file);
-			formData.append('folder', activeFolder === 'all' ? 'uploads' : activeFolder);
+			formData.append('folder', activeFolder === 'all' ? 'general' : activeFolder);
 			// Include CSRF token
 			if ($page.data.csrfToken) {
 				formData.append('csrf_token', $page.data.csrfToken);

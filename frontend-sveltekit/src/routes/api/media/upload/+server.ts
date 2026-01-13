@@ -91,7 +91,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		// Generate unique filename
 		const ext = file.name.split('.').pop() || (isVideo ? 'mp4' : 'jpg');
 		const storedFilename = `${uuid()}.${ext}`;
-		const uploadDir = join(process.cwd(), 'static', 'uploads', folder);
+		const uploadDir = join('/opt/websites/k-liee.com/static-images/uploads', folder);
 		const filePath = join(uploadDir, storedFilename);
 
 		// Create directory if not exists
