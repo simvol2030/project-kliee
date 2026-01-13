@@ -3,7 +3,7 @@ import type { RequestHandler } from './$types';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { createHash } from 'crypto';
-import sharp from 'sharp';
+import Jimp from 'jimp';
 import { v4 as uuid } from 'uuid';
 import { db } from '$lib/server/db/client';
 import { media, mediaThumbnails } from '$lib/server/db/schema';
@@ -103,13 +103,22 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		let metadata: { width?: number; height?: number } = {};
 		let thumbnails: Array<{ size_name: string; width: number; height: number; stored_filename: string }> = [];
 
-		// Only process images with sharp (not videos)
+		// Only process images with Jimp (not videos)
 		if (!isVideo) {
-			// Get image metadata
-			metadata = await sharp(buffer).metadata();
+			try {
+				// Get image metadata using Jimp
+				const image = await Jimp.read(buffer);
+				metadata = {
+					width: image.getWidth(),
+					height: image.getHeight()
+				};
 
-			// Create thumbnails
-			thumbnails = await createThumbnails(buffer, uploadDir, storedFilename);
+				// Create thumbnails
+				thumbnails = await createThumbnails(buffer, uploadDir, storedFilename);
+			} catch (imgErr) {
+				console.error('Image processing error:', imgErr);
+				// Continue without thumbnails if image processing fails
+			}
 		}
 
 		// Save to database
@@ -164,6 +173,10 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	}
 };
 
+/**
+ * Create thumbnails using Jimp (pure JavaScript image processing)
+ * Note: Jimp outputs JPG instead of WebP (WebP requires native modules)
+ */
 async function createThumbnails(
 	buffer: Buffer,
 	dir: string,
@@ -173,24 +186,28 @@ async function createThumbnails(
 	const baseName = filename.replace(/\.[^.]+$/, '');
 
 	for (const size of THUMBNAIL_SIZES) {
-		const thumbFilename = `${baseName}_${size.name}.webp`;
+		// Use .jpg instead of .webp (Jimp doesn't support webp without native modules)
+		const thumbFilename = `${baseName}_${size.name}.jpg`;
 		const thumbPath = join(dir, thumbFilename);
 
 		try {
-			await sharp(buffer)
-				.resize(size.width, size.height, {
-					fit: 'inside',
-					withoutEnlargement: true
-				})
-				.webp({ quality: 80 })
-				.toFile(thumbPath);
+			// Read image from buffer
+			const image = await Jimp.read(buffer);
 
-			const meta = await sharp(thumbPath).metadata();
+			// Resize to fit within bounds (like sharp's 'inside' fit)
+			// scaleToFit scales down to fit within the given dimensions
+			image.scaleToFit(size.width, size.height);
+
+			// Set JPEG quality
+			image.quality(80);
+
+			// Write to file
+			await image.writeAsync(thumbPath);
 
 			thumbnails.push({
 				size_name: size.name,
-				width: meta.width || size.width,
-				height: meta.height || size.height,
+				width: image.getWidth(),
+				height: image.getHeight(),
 				stored_filename: thumbFilename
 			});
 		} catch (err) {
