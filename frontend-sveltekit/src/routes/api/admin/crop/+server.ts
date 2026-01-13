@@ -104,8 +104,8 @@ export const POST: RequestHandler = async ({ request }) => {
 		image.quality(quality);
 
 		// Get dimensions
-		const outputWidth = image.getWidth();
-		const outputHeight = image.getHeight();
+		const outputWidth = image.width;
+		const outputHeight = image.height;
 
 		// Generate output filename
 		let outputFilename: string;

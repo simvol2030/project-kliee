@@ -31,7 +31,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	try {
 		const formData = await request.formData();
 		const file = formData.get('file') as File | null;
-		const folder = (formData.get('folder') as string) || 'uploads';
+		const folder = (formData.get('folder') as string) || 'general';
 
 		if (!file) {
 			throw error(400, 'No file provided');
@@ -109,8 +109,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				// Get image metadata using Jimp
 				const image = await Jimp.read(buffer);
 				metadata = {
-					width: image.getWidth(),
-					height: image.getHeight()
+					width: image.width,
+					height: image.height
 				};
 
 				// Create thumbnails
@@ -205,8 +205,8 @@ async function createThumbnails(
 
 			thumbnails.push({
 				size_name: size.name,
-				width: image.getWidth(),
-				height: image.getHeight(),
+				width: image.width,
+				height: image.height,
 				stored_filename: thumbFilename
 			});
 		} catch (err) {
