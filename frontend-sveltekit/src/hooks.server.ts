@@ -87,7 +87,7 @@ const csrfProtection: Handle = async ({ event, resolve }) => {
 
 			const submittedToken = headerToken || formToken;
 			if (!cookieToken || !submittedToken || cookieToken !== submittedToken) {
-				const publicEndpoints = ['/api/health'];
+				const publicEndpoints = ['/api/health', '/api/chat'];
 				const isShopApi = event.url.pathname.startsWith('/api/shop/');
 				if (!publicEndpoints.includes(event.url.pathname) && !isShopApi) {
 					console.warn(`CSRF token mismatch for ${request.method} ${event.url.pathname}`);
