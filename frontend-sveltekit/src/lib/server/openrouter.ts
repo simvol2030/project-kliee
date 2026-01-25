@@ -4,7 +4,7 @@
  * Handles communication with OpenRouter API for AI chat functionality
  */
 
-import { OPENROUTER_API_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 interface ChatMessage {
 	role: 'system' | 'user' | 'assistant';
@@ -42,7 +42,7 @@ export async function queryOpenRouter(
 	settings: OpenRouterSettings
 ): Promise<{ content: string; tokensUsed: number }> {
 	// Use API key from settings, fallback to env variable
-	const apiKey = settings.apiKey || OPENROUTER_API_KEY;
+	const apiKey = settings.apiKey || env.OPENROUTER_API_KEY;
 
 	if (!apiKey) {
 		throw new Error('OpenRouter API key is not configured. Set it in Admin → Chatbot Settings or in .env file.');

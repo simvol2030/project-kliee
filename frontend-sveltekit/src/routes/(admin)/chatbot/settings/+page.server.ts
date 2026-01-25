@@ -3,6 +3,7 @@ import { chatbotSettings } from '$lib/server/db/schema';
 import { fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { DEFAULT_SYSTEM_PROMPT, AVAILABLE_MODELS } from '$lib/server/openrouter';
+import { eq } from 'drizzle-orm';
 
 export const load: PageServerLoad = async () => {
 	// Get settings (or create default)
@@ -71,7 +72,7 @@ export const actions: Actions = {
 						is_enabled,
 						updated_at: new Date().toISOString()
 					})
-					.where(() => true); // Update all (singleton)
+					.where(eq(chatbotSettings.id, existing.id));
 			} else {
 				await db.insert(chatbotSettings).values({
 					api_key: api_key || null,
