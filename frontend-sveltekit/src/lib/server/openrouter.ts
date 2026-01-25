@@ -15,6 +15,7 @@ interface OpenRouterSettings {
 	model: string;
 	temperature: number;
 	maxTokens: number;
+	apiKey?: string; // Optional: override env key
 }
 
 interface OpenRouterResponse {
@@ -40,14 +41,17 @@ export async function queryOpenRouter(
 	messages: ChatMessage[],
 	settings: OpenRouterSettings
 ): Promise<{ content: string; tokensUsed: number }> {
-	if (!OPENROUTER_API_KEY) {
-		throw new Error('OPENROUTER_API_KEY is not configured');
+	// Use API key from settings, fallback to env variable
+	const apiKey = settings.apiKey || OPENROUTER_API_KEY;
+
+	if (!apiKey) {
+		throw new Error('OpenRouter API key is not configured. Set it in Admin → Chatbot Settings or in .env file.');
 	}
 
 	const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
 		method: 'POST',
 		headers: {
-			Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+			Authorization: `Bearer ${apiKey}`,
 			'Content-Type': 'application/json',
 			'HTTP-Referer': 'https://k-liee.com',
 			'X-Title': 'K-LIEE Art Consultant Melena'

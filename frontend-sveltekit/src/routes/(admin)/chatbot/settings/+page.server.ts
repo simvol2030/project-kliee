@@ -36,6 +36,7 @@ export const actions: Actions = {
 	save: async ({ request }) => {
 		const formData = await request.formData();
 
+		const api_key = formData.get('api_key') as string;
 		const system_prompt = formData.get('system_prompt') as string;
 		const model = formData.get('model') as string;
 		const temperature = formData.get('temperature') as string;
@@ -58,6 +59,7 @@ export const actions: Actions = {
 				await db
 					.update(chatbotSettings)
 					.set({
+						api_key: api_key || null,
 						system_prompt,
 						model,
 						temperature,
@@ -72,6 +74,7 @@ export const actions: Actions = {
 					.where(() => true); // Update all (singleton)
 			} else {
 				await db.insert(chatbotSettings).values({
+					api_key: api_key || null,
 					system_prompt,
 					model,
 					temperature,

@@ -823,6 +823,7 @@ export const aboutResidencies = sqliteTable('about_residencies', {
  */
 export const chatbotSettings = sqliteTable('chatbot_settings', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
+	api_key: text('api_key'), // OpenRouter API key (overrides env)
 	system_prompt: text('system_prompt').notNull(),
 	model: text('model').notNull().default('anthropic/claude-3-haiku'),
 	temperature: text('temperature').default('0.7'),

@@ -51,6 +51,22 @@
 			</div>
 
 			<div class="form-group">
+				<label for="api_key">OpenRouter API Key</label>
+				<input
+					type="password"
+					name="api_key"
+					id="api_key"
+					value={data.settings.api_key || ''}
+					placeholder="sk-or-v1-..."
+					autocomplete="off"
+				/>
+				<p class="help-text">
+					Get your API key at <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai/keys</a>.
+					Leave empty to use .env file.
+				</p>
+			</div>
+
+			<div class="form-group">
 				<label for="model">AI Model</label>
 				<select name="model" id="model" required>
 					{#each data.availableModels as model}
@@ -289,6 +305,15 @@
 		font-size: 12px;
 		color: var(--text-tertiary);
 		margin: 4px 0 0;
+	}
+
+	.help-text a {
+		color: var(--accent);
+		text-decoration: none;
+	}
+
+	.help-text a:hover {
+		text-decoration: underline;
 	}
 
 	.form-row {

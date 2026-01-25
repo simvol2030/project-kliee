@@ -228,7 +228,8 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
 		const { content: aiResponse, tokensUsed } = await queryOpenRouter(aiMessages, {
 			model: settings.model,
 			temperature: parseFloat(settings.temperature || '0.7'),
-			maxTokens: settings.max_tokens || 1024
+			maxTokens: settings.max_tokens || 1024,
+			apiKey: settings.api_key || undefined
 		});
 
 		// Save AI response
