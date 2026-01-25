@@ -116,6 +116,20 @@
 					<span>Shop Settings</span>
 				</a>
 
+				<p class="nav-section">Chatbot</p>
+				<a href="/chatbot/settings" class:active={$page.url.pathname.startsWith('/chatbot/settings')} onclick={closeMobileMenu}>
+					<span class="icon">🤖</span>
+					<span>Settings</span>
+				</a>
+				<a href="/chatbot/faq" class:active={$page.url.pathname.startsWith('/chatbot/faq')} onclick={closeMobileMenu}>
+					<span class="icon">📚</span>
+					<span>FAQ</span>
+				</a>
+				<a href="/chatbot/history" class:active={$page.url.pathname.startsWith('/chatbot/history')} onclick={closeMobileMenu}>
+					<span class="icon">💬</span>
+					<span>History</span>
+				</a>
+
 				<p class="nav-section">System</p>
 				<a href="/users" class:active={$page.url.pathname.startsWith('/users')} onclick={closeMobileMenu}>
 					<span class="icon">👥</span>
