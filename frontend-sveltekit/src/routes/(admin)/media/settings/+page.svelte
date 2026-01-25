@@ -39,6 +39,7 @@
 			};
 		}}
 	>
+		<input type="hidden" name="csrf_token" value={data.csrfToken} />
 		<div class="form-section">
 			<h2>Watermark</h2>
 			<p class="section-description">
