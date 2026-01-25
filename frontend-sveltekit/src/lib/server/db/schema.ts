@@ -815,6 +815,74 @@ export const aboutResidencies = sqliteTable('about_residencies', {
 });
 
 // ============================================
+// CHATBOT MODULE (AI Consultant "Melena")
+// ============================================
+
+/**
+ * Chatbot Settings - настройки AI-консультанта (singleton)
+ */
+export const chatbotSettings = sqliteTable('chatbot_settings', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	system_prompt: text('system_prompt').notNull(),
+	model: text('model').notNull().default('anthropic/claude-3-haiku'),
+	temperature: text('temperature').default('0.7'),
+	max_tokens: integer('max_tokens').default(1024),
+	greeting_en: text('greeting_en'),
+	greeting_ru: text('greeting_ru'),
+	greeting_es: text('greeting_es'),
+	greeting_zh: text('greeting_zh'),
+	is_enabled: integer('is_enabled', { mode: 'boolean' }).default(true),
+	updated_at: text('updated_at').default(sql`CURRENT_TIMESTAMP`)
+});
+
+/**
+ * Chat FAQ - база знаний для grounding
+ */
+export const chatFaq = sqliteTable('chat_faq', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	question_en: text('question_en').notNull(),
+	question_ru: text('question_ru'),
+	question_es: text('question_es'),
+	question_zh: text('question_zh'),
+	answer_en: text('answer_en').notNull(),
+	answer_ru: text('answer_ru'),
+	answer_es: text('answer_es'),
+	answer_zh: text('answer_zh'),
+	keywords: text('keywords'), // JSON array for search
+	is_active: integer('is_active', { mode: 'boolean' }).default(true),
+	order_index: integer('order_index').default(0),
+	created_at: text('created_at').default(sql`CURRENT_TIMESTAMP`)
+});
+
+/**
+ * Chatbot Sessions - сессии чата с посетителями
+ */
+export const chatbotSessions = sqliteTable('chatbot_sessions', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	session_id: text('session_id').notNull().unique(),
+	visitor_id: text('visitor_id'),
+	lang: text('lang').default('en'),
+	started_at: text('started_at').default(sql`CURRENT_TIMESTAMP`),
+	last_message_at: text('last_message_at'),
+	is_saved: integer('is_saved', { mode: 'boolean' }).default(false),
+	admin_note: text('admin_note')
+});
+
+/**
+ * Chatbot Messages - сообщения в чате
+ */
+export const chatbotMessages = sqliteTable('chatbot_messages', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	session_id: text('session_id')
+		.notNull()
+		.references(() => chatbotSessions.session_id, { onDelete: 'cascade' }),
+	role: text('role', { enum: ['user', 'assistant', 'system'] }).notNull(),
+	content: text('content').notNull(),
+	tokens_used: integer('tokens_used'),
+	created_at: text('created_at').default(sql`CURRENT_TIMESTAMP`)
+});
+
+// ============================================
 // TypeScript Types
 // ============================================
 
@@ -927,3 +995,13 @@ export type AboutAward = typeof aboutAwards.$inferSelect;
 export type NewAboutAward = typeof aboutAwards.$inferInsert;
 export type AboutResidency = typeof aboutResidencies.$inferSelect;
 export type NewAboutResidency = typeof aboutResidencies.$inferInsert;
+
+// Chatbot
+export type ChatbotSettings = typeof chatbotSettings.$inferSelect;
+export type NewChatbotSettings = typeof chatbotSettings.$inferInsert;
+export type ChatFaq = typeof chatFaq.$inferSelect;
+export type NewChatFaq = typeof chatFaq.$inferInsert;
+export type ChatbotSession = typeof chatbotSessions.$inferSelect;
+export type NewChatbotSession = typeof chatbotSessions.$inferInsert;
+export type ChatbotMessage = typeof chatbotMessages.$inferSelect;
+export type NewChatbotMessage = typeof chatbotMessages.$inferInsert;
