@@ -85,7 +85,7 @@
 										type="submit"
 										class="btn-icon danger"
 										title="Delete"
-										onclick="return confirm('Delete this session?')"
+										onclick={(e) => { if (!confirm('Delete this session?')) e.preventDefault(); }}
 									>
 										✕
 									</button>

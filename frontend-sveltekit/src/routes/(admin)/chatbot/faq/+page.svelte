@@ -141,7 +141,7 @@
 						</a>
 						<form method="POST" action="?/delete" use:enhance>
 							<input type="hidden" name="id" value={faq.id} />
-							<button type="submit" class="btn-icon danger" title="Delete" onclick="return confirm('Delete this FAQ?')">
+							<button type="submit" class="btn-icon danger" title="Delete" onclick={(e) => { if (!confirm('Delete this FAQ?')) e.preventDefault(); }}>
 								✕
 							</button>
 						</form>
