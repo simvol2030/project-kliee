@@ -3,24 +3,22 @@ import type { RequestHandler } from './$types';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { createHash } from 'crypto';
-import { Jimp } from 'jimp';
 import { v4 as uuid } from 'uuid';
 import { db } from '$lib/server/db/client';
 import { media, mediaThumbnails } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
+import {
+	processImage,
+	createThumbnails,
+	getMediaSettings,
+	getImageDimensions
+} from '$lib/server/image-processor';
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm'];
 const ALLOWED_TYPES = [...ALLOWED_IMAGE_TYPES, ...ALLOWED_VIDEO_TYPES];
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB for images
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB for videos
-
-const THUMBNAIL_SIZES = [
-	{ name: 'thumb', width: 150, height: 150 },
-	{ name: 'small', width: 300, height: 300 },
-	{ name: 'medium', width: 600, height: 600 },
-	{ name: 'large', width: 1200, height: 1200 }
-];
 
 export const POST: RequestHandler = async ({ request, locals }) => {
 	// Check authorization (simplified - should check session)
@@ -89,36 +87,69 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		}
 
 		// Generate unique filename
-		const ext = file.name.split('.').pop() || (isVideo ? 'mp4' : 'jpg');
-		const storedFilename = `${uuid()}.${ext}`;
+		const baseName = uuid();
 		const uploadDir = join('/opt/websites/k-liee.com/static-images/uploads', folder);
-		const filePath = join(uploadDir, storedFilename);
 
 		// Create directory if not exists
 		await mkdir(uploadDir, { recursive: true });
 
-		// Save original file
-		await writeFile(filePath, buffer);
-
+		let storedFilename: string;
 		let metadata: { width?: number; height?: number } = {};
 		let thumbnails: Array<{ size_name: string; width: number; height: number; stored_filename: string }> = [];
 
-		// Only process images with Jimp (not videos)
+		// Process images with Sharp (WebP + watermark)
 		if (!isVideo) {
 			try {
-				// Get image metadata using Jimp
-				const image = await Jimp.read(buffer);
+				// Get media settings from database
+				const mediaSettings = await getMediaSettings();
+
+				// Process original image (WebP + watermark)
+				const processed = await processImage(buffer, mediaSettings);
+				storedFilename = `${baseName}.webp`;
+				const filePath = join(uploadDir, storedFilename);
+				await writeFile(filePath, processed.buffer);
+
 				metadata = {
-					width: image.width,
-					height: image.height
+					width: processed.width,
+					height: processed.height
 				};
 
-				// Create thumbnails
-				thumbnails = await createThumbnails(buffer, uploadDir, storedFilename);
+				// Create thumbnails (also WebP + watermark)
+				const thumbResults = await createThumbnails(buffer, baseName, mediaSettings);
+
+				for (const thumb of thumbResults) {
+					const thumbPath = join(uploadDir, thumb.stored_filename);
+					await writeFile(thumbPath, thumb.buffer);
+
+					thumbnails.push({
+						size_name: thumb.size_name,
+						width: thumb.width,
+						height: thumb.height,
+						stored_filename: thumb.stored_filename
+					});
+				}
 			} catch (imgErr) {
 				console.error('Image processing error:', imgErr);
-				// Continue without thumbnails if image processing fails
+				// Fallback: save original without processing
+				const ext = file.name.split('.').pop() || 'jpg';
+				storedFilename = `${baseName}.${ext}`;
+				const filePath = join(uploadDir, storedFilename);
+				await writeFile(filePath, buffer);
+
+				// Try to get dimensions
+				try {
+					const dims = await getImageDimensions(buffer);
+					metadata = dims;
+				} catch {
+					// Continue without dimensions
+				}
 			}
+		} else {
+			// Video: save as-is
+			const ext = file.name.split('.').pop() || 'mp4';
+			storedFilename = `${baseName}.${ext}`;
+			const filePath = join(uploadDir, storedFilename);
+			await writeFile(filePath, buffer);
 		}
 
 		// Save to database
@@ -127,7 +158,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			.values({
 				filename: file.name,
 				stored_filename: storedFilename,
-				mime_type: file.type,
+				mime_type: isVideo ? file.type : 'image/webp', // Updated mime type for processed images
 				size: file.size,
 				width: metadata.width || null,
 				height: metadata.height || null,
@@ -172,47 +203,3 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		throw error(500, 'Failed to upload file');
 	}
 };
-
-/**
- * Create thumbnails using Jimp (pure JavaScript image processing)
- * Note: Jimp outputs JPG instead of WebP (WebP requires native modules)
- */
-async function createThumbnails(
-	buffer: Buffer,
-	dir: string,
-	filename: string
-): Promise<Array<{ size_name: string; width: number; height: number; stored_filename: string }>> {
-	const thumbnails = [];
-	const baseName = filename.replace(/\.[^.]+$/, '');
-
-	for (const size of THUMBNAIL_SIZES) {
-		// Use .jpg instead of .webp (Jimp doesn't support webp without native modules)
-		const thumbFilename = `${baseName}_${size.name}.jpg`;
-		const thumbPath = join(dir, thumbFilename);
-
-		try {
-			// Read image from buffer
-			const image = await Jimp.read(buffer);
-
-			// Resize to fit within bounds (Jimp v1 API)
-			image.scaleToFit({ w: size.width, h: size.height });
-
-			// Set JPEG quality
-			image.quality(80);
-
-			// Write to file
-			await image.writeAsync(thumbPath);
-
-			thumbnails.push({
-				size_name: size.name,
-				width: image.width,
-				height: image.height,
-				stored_filename: thumbFilename
-			});
-		} catch (err) {
-			console.error(`Failed to create ${size.name} thumbnail:`, err);
-		}
-	}
-
-	return thumbnails;
-}

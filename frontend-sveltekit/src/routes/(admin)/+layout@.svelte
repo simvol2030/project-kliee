@@ -63,9 +63,13 @@
 				</a>
 
 				<p class="nav-section">Content</p>
-				<a href="/media" class:active={$page.url.pathname.startsWith('/media')} onclick={closeMobileMenu}>
+				<a href="/media" class:active={$page.url.pathname === '/media'} onclick={closeMobileMenu}>
 					<span class="icon">📷</span>
 					<span>Media</span>
+				</a>
+				<a href="/media/settings" class:active={$page.url.pathname === '/media/settings'} onclick={closeMobileMenu}>
+					<span class="icon">🖼️</span>
+					<span>Media Settings</span>
 				</a>
 				<a href="/artworks" class:active={$page.url.pathname.startsWith('/artworks')} onclick={closeMobileMenu}>
 					<span class="icon">🖼️</span>
