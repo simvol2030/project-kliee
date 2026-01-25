@@ -5,6 +5,7 @@
 	import Header from '$lib/components/layout/Header.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import MobileMenu from '$lib/components/layout/MobileMenu.svelte';
+	import ChatWidget from '$lib/components/chat/ChatWidget.svelte';
 	import { initI18n, currentLanguage } from '$lib/i18n';
 	import '../app.css';
 
@@ -31,7 +32,8 @@
 		$page.url.pathname.startsWith('/media') ||
 		$page.url.pathname.startsWith('/layout') ||
 		$page.url.pathname.startsWith('/homepage') ||
-		$page.url.pathname.startsWith('/shop')
+		$page.url.pathname.startsWith('/shop') ||
+		$page.url.pathname.startsWith('/chatbot')
 	);
 
 	// Mobile menu state
@@ -87,6 +89,9 @@
 	{#if mobileMenuOpen}
 		<MobileMenu {closeMobileMenu} />
 	{/if}
+
+	<!-- AI Chat Widget (Melena) -->
+	<ChatWidget />
 {/if}
 
 <style>
