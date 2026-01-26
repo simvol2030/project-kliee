@@ -52,7 +52,7 @@
 			}
 
 			const result = await response.json();
-			avatarUrl = result.url;
+			avatarUrl = result.media.url;
 		} catch (err) {
 			avatarError = 'Failed to upload image';
 			console.error('Avatar upload error:', err);
