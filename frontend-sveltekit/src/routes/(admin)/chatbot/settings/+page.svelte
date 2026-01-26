@@ -5,6 +5,18 @@
 	let { data, form } = $props();
 
 	let saving = $state(false);
+
+	// Local form state (Svelte 5 requires explicit state for two-way binding)
+	let apiKey = $state(data.settings.api_key || '');
+	let model = $state(data.settings.model || 'anthropic/claude-3-haiku');
+	let temperature = $state(data.settings.temperature || '0.7');
+	let maxTokens = $state(data.settings.max_tokens || 1024);
+	let systemPrompt = $state(data.settings.system_prompt || '');
+	let greetingEn = $state(data.settings.greeting_en || '');
+	let greetingRu = $state(data.settings.greeting_ru || '');
+	let greetingEs = $state(data.settings.greeting_es || '');
+	let greetingZh = $state(data.settings.greeting_zh || '');
+	let isEnabled = $state(data.settings.is_enabled ?? true);
 </script>
 
 <svelte:head>
@@ -45,7 +57,7 @@
 					<input
 						type="checkbox"
 						name="is_enabled"
-						checked={data.settings.is_enabled}
+						bind:checked={isEnabled}
 					/>
 					Enable Chatbot
 				</label>
@@ -58,7 +70,7 @@
 					type="password"
 					name="api_key"
 					id="api_key"
-					value={data.settings.api_key || ''}
+					bind:value={apiKey}
 					placeholder="sk-or-v1-..."
 					autocomplete="off"
 				/>
@@ -70,14 +82,14 @@
 
 			<div class="form-group">
 				<label for="model">AI Model</label>
-				<select name="model" id="model" required>
-					{#each data.availableModels as model}
-						<option value={model.id} selected={data.settings.model === model.id}>
-							{model.name}
+				<select name="model" id="model" bind:value={model} required>
+					{#each data.availableModels as m}
+						<option value={m.id}>
+							{m.name}
 						</option>
 					{/each}
 				</select>
-				<p class="help-text">Select the AI model to use. Haiku is fast and affordable.</p>
+				<p class="help-text">Select the AI model to use. GPT-4o Mini is fast and reliable.</p>
 			</div>
 
 			<div class="form-row">
@@ -90,7 +102,7 @@
 						min="0"
 						max="2"
 						step="0.1"
-						value={data.settings.temperature}
+						bind:value={temperature}
 					/>
 					<p class="help-text">Higher = more creative (0-2)</p>
 				</div>
@@ -103,8 +115,8 @@
 						id="max_tokens"
 						min="100"
 						max="4096"
-						step="100"
-						value={data.settings.max_tokens}
+						step="1"
+						bind:value={maxTokens}
 					/>
 					<p class="help-text">Maximum response length</p>
 				</div>
@@ -123,7 +135,8 @@
 					id="system_prompt"
 					rows="12"
 					required
-				>{data.settings.system_prompt}</textarea>
+					bind:value={systemPrompt}
+				></textarea>
 			</div>
 		</div>
 
@@ -139,7 +152,7 @@
 					type="text"
 					name="greeting_en"
 					id="greeting_en"
-					value={data.settings.greeting_en || ''}
+					bind:value={greetingEn}
 				/>
 			</div>
 
@@ -149,7 +162,7 @@
 					type="text"
 					name="greeting_ru"
 					id="greeting_ru"
-					value={data.settings.greeting_ru || ''}
+					bind:value={greetingRu}
 				/>
 			</div>
 
@@ -159,7 +172,7 @@
 					type="text"
 					name="greeting_es"
 					id="greeting_es"
-					value={data.settings.greeting_es || ''}
+					bind:value={greetingEs}
 				/>
 			</div>
 
@@ -169,7 +182,7 @@
 					type="text"
 					name="greeting_zh"
 					id="greeting_zh"
-					value={data.settings.greeting_zh || ''}
+					bind:value={greetingZh}
 				/>
 			</div>
 		</div>
