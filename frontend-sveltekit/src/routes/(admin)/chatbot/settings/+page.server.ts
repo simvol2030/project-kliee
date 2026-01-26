@@ -46,6 +46,7 @@ export const actions: Actions = {
 		const greeting_ru = formData.get('greeting_ru') as string;
 		const greeting_es = formData.get('greeting_es') as string;
 		const greeting_zh = formData.get('greeting_zh') as string;
+		const avatar_url = formData.get('avatar_url') as string;
 		const is_enabled = formData.get('is_enabled') === 'on';
 
 		if (!system_prompt || !model) {
@@ -69,6 +70,7 @@ export const actions: Actions = {
 						greeting_ru,
 						greeting_es,
 						greeting_zh,
+						avatar_url: avatar_url || null,
 						is_enabled,
 						updated_at: new Date().toISOString()
 					})
@@ -84,6 +86,7 @@ export const actions: Actions = {
 					greeting_ru,
 					greeting_es,
 					greeting_zh,
+					avatar_url: avatar_url || null,
 					is_enabled
 				});
 			}

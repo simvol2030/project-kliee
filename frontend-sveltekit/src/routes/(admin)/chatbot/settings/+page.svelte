@@ -5,6 +5,7 @@
 	let { data, form } = $props();
 
 	let saving = $state(false);
+	let uploading = $state(false);
 
 	// Local form state (Svelte 5 requires explicit state for two-way binding)
 	let apiKey = $state(data.settings.api_key || '');
@@ -16,6 +17,7 @@
 	let greetingRu = $state(data.settings.greeting_ru || '');
 	let greetingEs = $state(data.settings.greeting_es || '');
 	let greetingZh = $state(data.settings.greeting_zh || '');
+	let avatarUrl = $state(data.settings.avatar_url || '');
 	let isEnabled = $state(data.settings.is_enabled ?? true);
 
 	// Sync local state when data.settings changes (after form submission)
@@ -30,8 +32,48 @@
 		greetingRu = s.greeting_ru || '';
 		greetingEs = s.greeting_es || '';
 		greetingZh = s.greeting_zh || '';
+		avatarUrl = s.avatar_url || '';
 		isEnabled = s.is_enabled ?? true;
 	});
+
+	// Handle avatar file upload
+	async function handleAvatarUpload(event: Event) {
+		const input = event.target as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+
+		uploading = true;
+		try {
+			const formData = new FormData();
+			formData.append('file', file);
+			formData.append('folder', 'chatbot');
+
+			const response = await fetch('/api/media/upload', {
+				method: 'POST',
+				body: formData
+			});
+
+			if (!response.ok) {
+				throw new Error('Upload failed');
+			}
+
+			const result = await response.json();
+			if (result.success && result.media?.url) {
+				avatarUrl = result.media.url;
+			}
+		} catch (err) {
+			console.error('Avatar upload error:', err);
+			alert('Failed to upload avatar');
+		} finally {
+			uploading = false;
+			input.value = '';
+		}
+	}
+
+	// Remove avatar
+	function removeAvatar() {
+		avatarUrl = '';
+	}
 </script>
 
 <svelte:head>
@@ -134,6 +176,43 @@
 						bind:value={maxTokens}
 					/>
 					<p class="help-text">Maximum response length</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-section">
+			<h2>Avatar</h2>
+			<p class="section-description">
+				Upload an image for Melena's avatar in the chat widget.
+			</p>
+
+			<input type="hidden" name="avatar_url" value={avatarUrl} />
+
+			<div class="avatar-upload">
+				{#if avatarUrl}
+					<div class="avatar-preview">
+						<img src={avatarUrl} alt="Melena avatar" />
+						<button type="button" class="remove-btn" onclick={removeAvatar} title="Remove avatar">
+							&times;
+						</button>
+					</div>
+				{:else}
+					<div class="avatar-placeholder">
+						<span>M</span>
+					</div>
+				{/if}
+
+				<div class="avatar-actions">
+					<label class="upload-btn" class:disabled={uploading}>
+						<input
+							type="file"
+							accept="image/jpeg,image/png,image/webp"
+							onchange={handleAvatarUpload}
+							disabled={uploading}
+						/>
+						{uploading ? 'Uploading...' : 'Upload Image'}
+					</label>
+					<p class="help-text">Recommended: 200x200px, JPG/PNG/WebP</p>
 				</div>
 			</div>
 		</div>
@@ -382,6 +461,92 @@
 		cursor: not-allowed;
 	}
 
+	/* Avatar Upload */
+	.avatar-upload {
+		display: flex;
+		align-items: center;
+		gap: 24px;
+	}
+
+	.avatar-preview,
+	.avatar-placeholder {
+		width: 80px;
+		height: 80px;
+		border-radius: 50%;
+		overflow: hidden;
+		flex-shrink: 0;
+		position: relative;
+	}
+
+	.avatar-preview img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.avatar-placeholder {
+		background: var(--accent, #d4af37);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		font-size: 32px;
+		font-weight: 600;
+	}
+
+	.remove-btn {
+		position: absolute;
+		top: -4px;
+		right: -4px;
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		background: #dc2626;
+		color: white;
+		border: 2px solid white;
+		font-size: 16px;
+		line-height: 1;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.remove-btn:hover {
+		background: #b91c1c;
+	}
+
+	.avatar-actions {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.upload-btn {
+		display: inline-block;
+		padding: 8px 16px;
+		background: var(--bg-tertiary);
+		border: 1px solid var(--border-primary);
+		border-radius: 8px;
+		font-size: 14px;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.upload-btn:hover:not(.disabled) {
+		background: var(--bg-secondary);
+		border-color: var(--accent);
+	}
+
+	.upload-btn.disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
+	.upload-btn input[type="file"] {
+		display: none;
+	}
+
 	@media (max-width: 600px) {
 		.admin-page {
 			padding: 16px;
@@ -389,6 +554,11 @@
 
 		.form-row {
 			grid-template-columns: 1fr;
+		}
+
+		.avatar-upload {
+			flex-direction: column;
+			align-items: flex-start;
 		}
 	}
 </style>

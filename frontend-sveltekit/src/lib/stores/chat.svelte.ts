@@ -27,6 +27,7 @@ class ChatStore {
 	error = $state<string | null>(null);
 	sessionId = $state<string | null>(null);
 	greeting = $state<string>('');
+	avatarUrl = $state<string | null>(null);
 	initialized = $state(false);
 
 	/**
@@ -46,6 +47,7 @@ class ChatStore {
 				const data = await response.json();
 				this.isEnabled = data.enabled;
 				this.greeting = data.greeting;
+				this.avatarUrl = data.avatarUrl || null;
 
 				// Add greeting as first message if no messages
 				if (this.messages.length === 0 && this.greeting) {

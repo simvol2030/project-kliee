@@ -96,7 +96,13 @@
 			<!-- Header -->
 			<div class="chat-header">
 				<div class="chat-header-info">
-					<div class="chat-avatar">M</div>
+					<div class="chat-avatar">
+						{#if chatStore.avatarUrl}
+							<img src={chatStore.avatarUrl} alt="Melena" />
+						{:else}
+							M
+						{/if}
+					</div>
 					<div class="chat-header-text">
 						<h3 class="chat-title">Melena</h3>
 						<span class="chat-status">
@@ -286,6 +292,13 @@
 		justify-content: center;
 		font-weight: 600;
 		font-size: 18px;
+		overflow: hidden;
+	}
+
+	.chat-avatar img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
 
 	.chat-header-text {

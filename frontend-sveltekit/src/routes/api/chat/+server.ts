@@ -149,7 +149,8 @@ export const GET: RequestHandler = async ({ url }) => {
 		return json({
 			enabled: settings.is_enabled,
 			greeting,
-			model: settings.model
+			model: settings.model,
+			avatarUrl: settings.avatar_url || null
 		});
 	} catch (err) {
 		console.error('Error fetching chat settings:', err);
