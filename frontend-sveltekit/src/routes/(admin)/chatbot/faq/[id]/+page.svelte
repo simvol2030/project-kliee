@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import CsrfToken from '$lib/components/CsrfToken.svelte';
 
 	let { data, form } = $props();
 
@@ -46,6 +47,7 @@
 				};
 			}}
 		>
+			<CsrfToken />
 			<div class="form-group">
 				<label for="question_en">Question (English) *</label>
 				<input type="text" name="question_en" id="question_en" value={data.faq.question_en} required />

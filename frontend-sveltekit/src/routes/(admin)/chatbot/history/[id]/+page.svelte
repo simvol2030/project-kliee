@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import CsrfToken from '$lib/components/CsrfToken.svelte';
 
 	let { data, form } = $props();
 
@@ -96,6 +97,7 @@
 				};
 			}}
 		>
+			<CsrfToken />
 			<textarea
 				name="admin_note"
 				placeholder="Add a note about this conversation..."
