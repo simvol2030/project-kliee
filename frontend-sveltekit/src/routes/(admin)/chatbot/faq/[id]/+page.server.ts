@@ -57,7 +57,7 @@ export const actions: Actions = {
 
 			throw redirect(303, '/chatbot/faq');
 		} catch (err) {
-			if (err instanceof Response) throw err;
+			if (err instanceof Response || (err && typeof err === "object" && "status" in err)) throw err;
 			console.error('Failed to update FAQ:', err);
 			return fail(500, { error: 'Failed to update FAQ' });
 		}
