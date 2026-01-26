@@ -40,6 +40,9 @@
 			formData.append('folder', 'chatbot');
 
 			const response = await fetch('/api/media/upload', {
+				headers: {
+					'x-csrf-token': data.csrfToken || ''
+				},
 				method: 'POST',
 				body: formData
 			});
