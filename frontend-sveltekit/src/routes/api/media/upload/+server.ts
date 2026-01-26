@@ -14,6 +14,9 @@ import {
 	getImageDimensions
 } from '$lib/server/image-processor';
 
+// Use environment variable for upload path, with fallback
+const STATIC_IMAGES_PATH = process.env.STATIC_IMAGES_PATH || '/opt/websites/k-liee.com/static-images';
+
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm'];
 const ALLOWED_TYPES = [...ALLOWED_IMAGE_TYPES, ...ALLOWED_VIDEO_TYPES];
@@ -88,10 +91,15 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 		// Generate unique filename
 		const baseName = uuid();
-		const uploadDir = join('/opt/websites/k-liee.com/static-images/uploads', folder);
+		const uploadDir = join(STATIC_IMAGES_PATH, 'uploads', folder);
 
 		// Create directory if not exists
-		await mkdir(uploadDir, { recursive: true });
+		try {
+			await mkdir(uploadDir, { recursive: true });
+		} catch (mkdirErr) {
+			console.error('Failed to create upload directory:', uploadDir, mkdirErr);
+			throw error(500, `Failed to create upload directory: ${uploadDir}`);
+		}
 
 		let storedFilename: string;
 		let metadata: { width?: number; height?: number } = {};
@@ -99,33 +107,39 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 		// Process images with Sharp (WebP + watermark)
 		if (!isVideo) {
-			// Get media settings from database
-			const mediaSettings = await getMediaSettings();
+			try {
+				// Get media settings from database
+				const mediaSettings = await getMediaSettings();
 
-			// Process original image (WebP + watermark) - NO FALLBACK without watermark!
-			const processed = await processImage(buffer, mediaSettings);
-			storedFilename = `${baseName}.webp`;
-			const filePath = join(uploadDir, storedFilename);
-			await writeFile(filePath, processed.buffer);
+				// Process original image (WebP + watermark) - watermark is mandatory!
+				const processed = await processImage(buffer, mediaSettings);
+				storedFilename = `${baseName}.webp`;
+				const filePath = join(uploadDir, storedFilename);
+				await writeFile(filePath, processed.buffer);
 
-			metadata = {
-				width: processed.width,
-				height: processed.height
-			};
+				metadata = {
+					width: processed.width,
+					height: processed.height
+				};
 
-			// Create thumbnails (also WebP + watermark)
-			const thumbResults = await createThumbnails(buffer, baseName, mediaSettings);
+				// Create thumbnails (also WebP + watermark)
+				const thumbResults = await createThumbnails(buffer, baseName, mediaSettings);
 
-			for (const thumb of thumbResults) {
-				const thumbPath = join(uploadDir, thumb.stored_filename);
-				await writeFile(thumbPath, thumb.buffer);
+				for (const thumb of thumbResults) {
+					const thumbPath = join(uploadDir, thumb.stored_filename);
+					await writeFile(thumbPath, thumb.buffer);
 
-				thumbnails.push({
-					size_name: thumb.size_name,
-					width: thumb.width,
-					height: thumb.height,
-					stored_filename: thumb.stored_filename
-				});
+					thumbnails.push({
+						size_name: thumb.size_name,
+						width: thumb.width,
+						height: thumb.height,
+						stored_filename: thumb.stored_filename
+					});
+				}
+			} catch (imgErr) {
+				console.error('Image processing error:', imgErr);
+				const errMessage = imgErr instanceof Error ? imgErr.message : 'Unknown error';
+				throw error(500, `Failed to process image: ${errMessage}. Please ensure the image is valid and try again.`);
 			}
 		} else {
 			// Video: save as-is
@@ -180,9 +194,12 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		});
 	} catch (err) {
 		console.error('Upload error:', err);
-		if (err instanceof Error && 'status' in err) {
+		// Re-throw SvelteKit errors (they already have proper status/message)
+		if (err && typeof err === 'object' && 'status' in err) {
 			throw err;
 		}
-		throw error(500, 'Failed to upload file');
+		// Wrap other errors with helpful message
+		const errMessage = err instanceof Error ? err.message : 'Unknown error';
+		throw error(500, `Upload failed: ${errMessage}`);
 	}
 };

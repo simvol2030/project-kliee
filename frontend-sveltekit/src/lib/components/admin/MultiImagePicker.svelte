@@ -38,6 +38,7 @@
 	let isOpen = $state(false);
 	let isLoading = $state(false);
 	let isUploading = $state(false);
+	let uploadError = $state<string | null>(null);
 	let draggedIndex = $state<number | null>(null);
 	let dragOverIndex = $state<number | null>(null);
 
@@ -64,6 +65,7 @@
 		if (!files || files.length === 0) return;
 
 		isUploading = true;
+		uploadError = null;
 		try {
 			for (const file of files) {
 				const formData = new FormData();
@@ -80,14 +82,22 @@
 				});
 
 				const data = await res.json();
-				if (data.success && data.media) {
+				if (!res.ok) {
+					uploadError = data.message || `Upload failed: ${file.name} (${res.status})`;
+					console.error('Upload error:', data);
+					break; // Stop on first error
+				} else if (data.success && data.media) {
 					// Auto-add uploaded image
 					addImage(data.media);
+				} else {
+					uploadError = data.error || `Upload failed: ${file.name}`;
+					break;
 				}
 			}
 			await loadMedia();
 		} catch (err) {
 			console.error('Upload failed:', err);
+			uploadError = err instanceof Error ? err.message : 'Upload failed';
 		}
 		isUploading = false;
 		input.value = '';
@@ -292,6 +302,10 @@
 						<button type="button" class="btn-close" onclick={() => (isOpen = false)}>×</button>
 					</div>
 				</div>
+
+				{#if uploadError}
+					<div class="upload-error">{uploadError}</div>
+				{/if}
 
 				<div class="modal-body">
 					{#if isLoading}
@@ -546,6 +560,16 @@
 		cursor: pointer;
 		padding: 0.25rem 0.5rem;
 		line-height: 1;
+	}
+
+	.upload-error {
+		background: #fef2f2;
+		color: #dc2626;
+		padding: 0.75rem 1rem;
+		margin: 0 1rem;
+		border-radius: 4px;
+		font-size: 0.875rem;
+		border: 1px solid #fecaca;
 	}
 
 	.modal-body {
