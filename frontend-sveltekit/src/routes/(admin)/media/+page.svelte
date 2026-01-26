@@ -121,7 +121,9 @@
 	}
 
 	function getThumbnailUrl(item: MediaItem): string {
-		const thumb = item.thumbnails?.find((t) => t.size === 'small');
+		// Use medium (600px) for better quality in admin UI
+		const thumb = item.thumbnails?.find((t) => t.size === 'medium')
+			|| item.thumbnails?.find((t) => t.size === 'small');
 		return thumb?.url || item.url;
 	}
 

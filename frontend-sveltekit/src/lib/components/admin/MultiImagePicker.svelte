@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+
 	interface MediaItem {
 		id: number;
 		filename?: string;
@@ -67,6 +69,10 @@
 				const formData = new FormData();
 				formData.append('file', file);
 				formData.append('folder', folder);
+				// Include CSRF token for production security
+				if ($page.data.csrfToken) {
+					formData.append('csrf_token', $page.data.csrfToken);
+				}
 
 				const res = await fetch('/api/media/upload', {
 					method: 'POST',
@@ -141,7 +147,9 @@
 	}
 
 	function getThumbnailUrl(item: MediaItem): string {
-		const thumb = item.thumbnails?.find((t) => t.size === 'small');
+		// Use medium (600px) for better quality in admin UI
+		const thumb = item.thumbnails?.find((t) => t.size === 'medium')
+			|| item.thumbnails?.find((t) => t.size === 'small');
 		return thumb?.url || item.url;
 	}
 

@@ -1,7 +1,7 @@
 import type { PageServerLoad, Actions } from './$types';
 import { db } from '$lib/server/db/client';
-import { series } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { series, artworks } from '$lib/server/db/schema';
+import { eq, count } from 'drizzle-orm';
 import { fail } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async () => {
@@ -22,7 +22,21 @@ export const actions: Actions = {
 		}
 
 		try {
-			// id is TEXT in schema, no parseInt needed
+			// Check for artworks linked to this series
+			const linkedArtworks = await db
+				.select({ count: count() })
+				.from(artworks)
+				.where(eq(artworks.series_id, id));
+
+			const artworkCount = linkedArtworks[0]?.count || 0;
+
+			if (artworkCount > 0) {
+				return fail(400, {
+					error: `Cannot delete series: ${artworkCount} artwork(s) are linked to this series. Please reassign or delete them first.`
+				});
+			}
+
+			// Safe to delete - no linked artworks
 			await db.delete(series).where(eq(series.id, id));
 			return { success: true, message: 'Series deleted successfully' };
 		} catch (error) {

@@ -99,50 +99,33 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 		// Process images with Sharp (WebP + watermark)
 		if (!isVideo) {
-			try {
-				// Get media settings from database
-				const mediaSettings = await getMediaSettings();
+			// Get media settings from database
+			const mediaSettings = await getMediaSettings();
 
-				// Process original image (WebP + watermark)
-				const processed = await processImage(buffer, mediaSettings);
-				storedFilename = `${baseName}.webp`;
-				const filePath = join(uploadDir, storedFilename);
-				await writeFile(filePath, processed.buffer);
+			// Process original image (WebP + watermark) - NO FALLBACK without watermark!
+			const processed = await processImage(buffer, mediaSettings);
+			storedFilename = `${baseName}.webp`;
+			const filePath = join(uploadDir, storedFilename);
+			await writeFile(filePath, processed.buffer);
 
-				metadata = {
-					width: processed.width,
-					height: processed.height
-				};
+			metadata = {
+				width: processed.width,
+				height: processed.height
+			};
 
-				// Create thumbnails (also WebP + watermark)
-				const thumbResults = await createThumbnails(buffer, baseName, mediaSettings);
+			// Create thumbnails (also WebP + watermark)
+			const thumbResults = await createThumbnails(buffer, baseName, mediaSettings);
 
-				for (const thumb of thumbResults) {
-					const thumbPath = join(uploadDir, thumb.stored_filename);
-					await writeFile(thumbPath, thumb.buffer);
+			for (const thumb of thumbResults) {
+				const thumbPath = join(uploadDir, thumb.stored_filename);
+				await writeFile(thumbPath, thumb.buffer);
 
-					thumbnails.push({
-						size_name: thumb.size_name,
-						width: thumb.width,
-						height: thumb.height,
-						stored_filename: thumb.stored_filename
-					});
-				}
-			} catch (imgErr) {
-				console.error('Image processing error:', imgErr);
-				// Fallback: save original without processing
-				const ext = file.name.split('.').pop() || 'jpg';
-				storedFilename = `${baseName}.${ext}`;
-				const filePath = join(uploadDir, storedFilename);
-				await writeFile(filePath, buffer);
-
-				// Try to get dimensions
-				try {
-					const dims = await getImageDimensions(buffer);
-					metadata = dims;
-				} catch {
-					// Continue without dimensions
-				}
+				thumbnails.push({
+					size_name: thumb.size_name,
+					width: thumb.width,
+					height: thumb.height,
+					stored_filename: thumb.stored_filename
+				});
 			}
 		} else {
 			// Video: save as-is

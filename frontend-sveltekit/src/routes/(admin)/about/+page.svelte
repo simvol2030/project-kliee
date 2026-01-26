@@ -2,6 +2,7 @@
 	import type { PageData, ActionData } from './$types';
 	import { enhance } from '$app/forms';
 	import LanguageTabs from '$lib/components/admin/LanguageTabs.svelte';
+	import CsrfToken from '$lib/components/CsrfToken.svelte';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
@@ -201,6 +202,7 @@
 				};
 			}}
 		>
+			<CsrfToken />
 			<div class="form-section">
 				<h2>Artist Information</h2>
 
@@ -312,6 +314,7 @@
 					};
 				}}
 			>
+				<CsrfToken />
 				<div class="form-grid-compact">
 					<input type="text" name="year" placeholder="Year (e.g., 2015-2019)" />
 					<input type="number" name="orderIndex" placeholder="Order" value="0" class="order-input" />
@@ -367,6 +370,7 @@
 									};
 								}}
 							>
+								<CsrfToken />
 								<input type="hidden" name="id" value={item.id} />
 								<div class="form-grid-compact">
 									<input type="text" name="year" value={item.year || ''} placeholder="Year" />
@@ -400,6 +404,7 @@
 							<div class="item-actions">
 								<button type="button" class="btn-edit" onclick={() => startEdit(item.id)}>Edit</button>
 								<form method="POST" action="?/deleteEducation" use:enhance onsubmit={(e) => !confirm('Delete?') && e.preventDefault()}>
+									<CsrfToken />
 									<input type="hidden" name="id" value={item.id} />
 									<button type="submit" class="btn-delete">Delete</button>
 								</form>
@@ -436,6 +441,7 @@
 					};
 				}}
 			>
+				<CsrfToken />
 				<div class="form-grid-compact">
 					<input type="text" name="year" placeholder="Year" />
 					<input type="number" name="orderIndex" placeholder="Order" value="0" class="order-input" />
@@ -478,6 +484,7 @@
 					<div class="list-item">
 						{#if editingId === item.id}
 							<form method="POST" action="?/updateAward" class="edit-form" use:enhance={() => { return async ({ update }) => { await update(); editingId = null; }; }}>
+								<CsrfToken />
 								<input type="hidden" name="id" value={item.id} />
 								<div class="form-grid-compact">
 									<input type="text" name="year" value={item.year || ''} placeholder="Year" />
@@ -511,6 +518,7 @@
 							<div class="item-actions">
 								<button type="button" class="btn-edit" onclick={() => startEdit(item.id)}>Edit</button>
 								<form method="POST" action="?/deleteAward" use:enhance onsubmit={(e) => !confirm('Delete?') && e.preventDefault()}>
+									<CsrfToken />
 									<input type="hidden" name="id" value={item.id} />
 									<button type="submit" class="btn-delete">Delete</button>
 								</form>
@@ -546,6 +554,7 @@
 					};
 				}}
 			>
+				<CsrfToken />
 				<div class="form-grid-compact">
 					<input type="text" name="year" placeholder="Year" />
 					<input type="number" name="orderIndex" placeholder="Order" value="0" class="order-input" />
@@ -579,6 +588,7 @@
 					<div class="list-item">
 						{#if editingId === item.id}
 							<form method="POST" action="?/updateResidency" class="edit-form" use:enhance={() => { return async ({ update }) => { await update(); editingId = null; }; }}>
+								<CsrfToken />
 								<input type="hidden" name="id" value={item.id} />
 								<div class="form-grid-compact">
 									<input type="text" name="year" value={item.year || ''} placeholder="Year" />
@@ -603,6 +613,7 @@
 							<div class="item-actions">
 								<button type="button" class="btn-edit" onclick={() => startEdit(item.id)}>Edit</button>
 								<form method="POST" action="?/deleteResidency" use:enhance onsubmit={(e) => !confirm('Delete?') && e.preventDefault()}>
+									<CsrfToken />
 									<input type="hidden" name="id" value={item.id} />
 									<button type="submit" class="btn-delete">Delete</button>
 								</form>
@@ -617,6 +628,7 @@
 	<!-- SEO Tab -->
 	{#if activeTab === 'seo'}
 		<form method="POST" action="?/saveArtist" use:enhance>
+			<CsrfToken />
 			<!-- Hidden artist fields (use reactive state to sync with Artist tab) -->
 			<input type="hidden" name="name" value={artistName || 'Artist'} />
 			<input type="hidden" name="imageId" value={imageId || ''} />
