@@ -14,6 +14,9 @@ import {
 	getImageDimensions
 } from '$lib/server/image-processor';
 
+// Use environment variable for upload path, with fallback
+const STATIC_IMAGES_PATH = process.env.STATIC_IMAGES_PATH || '/opt/websites/k-liee.com/static-images';
+
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm'];
 const ALLOWED_TYPES = [...ALLOWED_IMAGE_TYPES, ...ALLOWED_VIDEO_TYPES];
@@ -88,10 +91,15 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 		// Generate unique filename
 		const baseName = uuid();
-		const uploadDir = join('/opt/websites/k-liee.com/static-images/uploads', folder);
+		const uploadDir = join(STATIC_IMAGES_PATH, 'uploads', folder);
 
 		// Create directory if not exists
-		await mkdir(uploadDir, { recursive: true });
+		try {
+			await mkdir(uploadDir, { recursive: true });
+		} catch (mkdirErr) {
+			console.error('Failed to create upload directory:', uploadDir, mkdirErr);
+			throw error(500, `Failed to create upload directory: ${uploadDir}`);
+		}
 
 		let storedFilename: string;
 		let metadata: { width?: number; height?: number } = {};
@@ -103,7 +111,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				// Get media settings from database
 				const mediaSettings = await getMediaSettings();
 
-				// Process original image (WebP + watermark)
+				// Process original image (WebP + watermark) - watermark is mandatory!
 				const processed = await processImage(buffer, mediaSettings);
 				storedFilename = `${baseName}.webp`;
 				const filePath = join(uploadDir, storedFilename);
@@ -130,19 +138,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				}
 			} catch (imgErr) {
 				console.error('Image processing error:', imgErr);
-				// Fallback: save original without processing
-				const ext = file.name.split('.').pop() || 'jpg';
-				storedFilename = `${baseName}.${ext}`;
-				const filePath = join(uploadDir, storedFilename);
-				await writeFile(filePath, buffer);
-
-				// Try to get dimensions
-				try {
-					const dims = await getImageDimensions(buffer);
-					metadata = dims;
-				} catch {
-					// Continue without dimensions
-				}
+				const errMessage = imgErr instanceof Error ? imgErr.message : 'Unknown error';
+				throw error(500, `Failed to process image: ${errMessage}. Please ensure the image is valid and try again.`);
 			}
 		} else {
 			// Video: save as-is
@@ -197,9 +194,12 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		});
 	} catch (err) {
 		console.error('Upload error:', err);
-		if (err instanceof Error && 'status' in err) {
+		// Re-throw SvelteKit errors (they already have proper status/message)
+		if (err && typeof err === 'object' && 'status' in err) {
 			throw err;
 		}
-		throw error(500, 'Failed to upload file');
+		// Wrap other errors with helpful message
+		const errMessage = err instanceof Error ? err.message : 'Unknown error';
+		throw error(500, `Upload failed: ${errMessage}`);
 	}
 };

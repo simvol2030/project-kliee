@@ -23,6 +23,7 @@
 
 	let mediaItems = $state<MediaItem[]>(data.items || []);
 	let isUploading = $state(false);
+	let uploadError = $state<string | null>(null);
 	let selectedItem = $state<MediaItem | null>(null);
 	let isEditModalOpen = $state(false);
 	let activeFolder = $state('all');
@@ -42,6 +43,7 @@
 		if (!files || files.length === 0) return;
 
 		isUploading = true;
+		uploadError = null;
 
 		for (const file of files) {
 			const formData = new FormData();
@@ -53,12 +55,24 @@
 			}
 
 			try {
-				await fetch('/api/media/upload', {
+				const res = await fetch('/api/media/upload', {
 					method: 'POST',
 					body: formData
 				});
+
+				const result = await res.json();
+				if (!res.ok) {
+					uploadError = result.message || `Upload failed: ${file.name} (${res.status})`;
+					console.error('Upload error:', result);
+					break;
+				} else if (!result.success) {
+					uploadError = result.error || `Upload failed: ${file.name}`;
+					break;
+				}
 			} catch (err) {
 				console.error('Upload failed:', err);
+				uploadError = err instanceof Error ? err.message : 'Upload failed';
+				break;
 			}
 		}
 
@@ -121,7 +135,9 @@
 	}
 
 	function getThumbnailUrl(item: MediaItem): string {
-		const thumb = item.thumbnails?.find((t) => t.size === 'small');
+		// Use medium (600px) for better quality in admin UI
+		const thumb = item.thumbnails?.find((t) => t.size === 'medium')
+			|| item.thumbnails?.find((t) => t.size === 'small');
 		return thumb?.url || item.url;
 	}
 
@@ -148,6 +164,10 @@
 			<input type="file" accept="image/*" multiple onchange={handleUpload} disabled={isUploading} hidden />
 		</label>
 	</header>
+
+	{#if uploadError}
+		<div class="upload-error">{uploadError}</div>
+	{/if}
 
 	<nav class="folder-nav">
 		{#each folders as folder}
@@ -265,6 +285,16 @@
 	.upload-btn.uploading {
 		opacity: 0.6;
 		cursor: wait;
+	}
+
+	.upload-error {
+		background: #fef2f2;
+		color: #dc2626;
+		padding: 0.75rem 1rem;
+		margin-bottom: 1rem;
+		border-radius: 4px;
+		font-size: 0.875rem;
+		border: 1px solid #fecaca;
 	}
 
 	.folder-nav {

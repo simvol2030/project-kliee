@@ -17,7 +17,7 @@ import { eq } from 'drizzle-orm';
 const DEFAULT_SETTINGS = {
 	watermark_text: 'K-LIÉE',
 	watermark_enabled: true,
-	watermark_opacity: 0.6,
+	watermark_opacity: 0.75, // Increased from 0.6 for better visibility
 	watermark_position: 'bottom-right',
 	image_quality: 92,
 	image_format: 'webp'
@@ -165,6 +165,7 @@ function createWatermarkSvg(
 /**
  * Create simple text watermark without external fonts
  * (More reliable - doesn't depend on Google Fonts)
+ * Enhanced for better visibility with stroke and shadow
  */
 function createSimpleWatermarkSvg(
 	text: string,
@@ -172,9 +173,10 @@ function createSimpleWatermarkSvg(
 	imageHeight: number,
 	opacity: number
 ): Buffer {
-	// Calculate font size: 3-5% of image width, min 16px, max 48px
-	const fontSize = Math.max(16, Math.min(48, Math.floor(imageWidth * 0.035)));
-	const padding = 20;
+	// Calculate font size: 3-5% of image width, min 20px, max 56px (increased from 16/48)
+	const fontSize = Math.max(20, Math.min(56, Math.floor(imageWidth * 0.04)));
+	const padding = 25;
+	const strokeWidth = Math.max(1, Math.floor(fontSize / 20));
 
 	// Estimate text width
 	const textWidth = text.length * fontSize * 0.55;
@@ -187,21 +189,39 @@ function createSimpleWatermarkSvg(
 		<svg width="${imageWidth}" height="${imageHeight}" xmlns="http://www.w3.org/2000/svg">
 			<defs>
 				<filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-					<feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
-					<feOffset dx="1" dy="1"/>
+					<feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+					<feOffset dx="2" dy="2"/>
+					<feComponentTransfer>
+						<feFuncA type="linear" slope="0.7"/>
+					</feComponentTransfer>
 					<feMerge>
 						<feMergeNode/>
 						<feMergeNode in="SourceGraphic"/>
 					</feMerge>
 				</filter>
 			</defs>
+			<!-- Dark outline for contrast on light backgrounds -->
 			<text
 				x="${x}"
 				y="${y}"
 				font-family="Georgia, 'Times New Roman', serif"
 				font-size="${fontSize}"
-				font-weight="600"
+				font-weight="700"
+				fill="none"
+				stroke="rgba(0,0,0,${opacity * 0.6})"
+				stroke-width="${strokeWidth * 2}"
+				text-anchor="start"
+			>${escapeXml(text)}</text>
+			<!-- Main white text with shadow -->
+			<text
+				x="${x}"
+				y="${y}"
+				font-family="Georgia, 'Times New Roman', serif"
+				font-size="${fontSize}"
+				font-weight="700"
 				fill="rgba(255,255,255,${opacity})"
+				stroke="rgba(255,255,255,${opacity * 0.3})"
+				stroke-width="${strokeWidth}"
 				filter="url(#shadow)"
 				text-anchor="start"
 			>${escapeXml(text)}</text>

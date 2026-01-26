@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+
 	interface MediaItem {
 		id: number;
 		filename?: string;
@@ -31,6 +33,7 @@
 	let isOpen = $state(false);
 	let isLoading = $state(false);
 	let isUploading = $state(false);
+	let uploadError = $state<string | null>(null);
 
 	// Use value prop if provided, otherwise find selected from id
 	let selectedItem = $derived(value || null);
@@ -53,10 +56,15 @@
 		if (!file) return;
 
 		isUploading = true;
+		uploadError = null;
 		try {
 			const formData = new FormData();
 			formData.append('file', file);
 			formData.append('folder', folder);
+			// Include CSRF token for production security
+			if ($page.data.csrfToken) {
+				formData.append('csrf_token', $page.data.csrfToken);
+			}
 
 			const res = await fetch('/api/media/upload', {
 				method: 'POST',
@@ -64,15 +72,21 @@
 			});
 
 			const data = await res.json();
-			if (data.success) {
+			if (!res.ok) {
+				uploadError = data.message || `Upload failed (${res.status})`;
+				console.error('Upload error:', data);
+			} else if (data.success) {
 				await loadMedia();
 				if (onselect) {
 					onselect(new CustomEvent('select', { detail: { id: data.media.id, url: data.media.url } }));
 				}
 				isOpen = false;
+			} else {
+				uploadError = data.error || 'Upload failed';
 			}
 		} catch (err) {
 			console.error('Upload failed:', err);
+			uploadError = err instanceof Error ? err.message : 'Upload failed';
 		}
 		isUploading = false;
 		input.value = '';
@@ -97,7 +111,9 @@
 	}
 
 	function getThumbnailUrl(item: MediaItem): string {
-		const thumb = item.thumbnails?.find((t) => t.size === 'small');
+		// Use medium (600px) for better quality in admin UI
+		const thumb = item.thumbnails?.find((t) => t.size === 'medium')
+			|| item.thumbnails?.find((t) => t.size === 'small');
 		return thumb?.url || item.url;
 	}
 </script>
@@ -137,6 +153,10 @@
 						<button type="button" class="btn-close" onclick={() => (isOpen = false)}>×</button>
 					</div>
 				</div>
+
+				{#if uploadError}
+					<div class="upload-error">{uploadError}</div>
+				{/if}
 
 				<div class="modal-body">
 					{#if isLoading}
@@ -308,6 +328,16 @@
 		cursor: pointer;
 		padding: 0.25rem 0.5rem;
 		line-height: 1;
+	}
+
+	.upload-error {
+		background: #fef2f2;
+		color: #dc2626;
+		padding: 0.75rem 1rem;
+		margin: 0 1rem;
+		border-radius: 4px;
+		font-size: 0.875rem;
+		border: 1px solid #fecaca;
 	}
 
 	.modal-body {
