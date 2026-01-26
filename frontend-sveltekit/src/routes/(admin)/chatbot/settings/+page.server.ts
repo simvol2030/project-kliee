@@ -86,8 +86,8 @@ export const actions: Actions = {
 					greeting_ru,
 					greeting_es,
 					greeting_zh,
-					avatar_url: avatar_url || null,
-					is_enabled
+					is_enabled,
+					avatar_url: avatar_url || null
 				});
 			}
 

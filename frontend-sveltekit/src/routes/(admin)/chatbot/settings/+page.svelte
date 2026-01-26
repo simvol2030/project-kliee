@@ -5,44 +5,35 @@
 	let { data, form } = $props();
 
 	let saving = $state(false);
-	let uploading = $state(false);
-
-	// Local form state (Svelte 5 requires explicit state for two-way binding)
-	let apiKey = $state(data.settings.api_key || '');
-	let model = $state(data.settings.model || 'anthropic/claude-3-haiku');
-	let temperature = $state(data.settings.temperature || '0.7');
-	let maxTokens = $state(data.settings.max_tokens || 1024);
-	let systemPrompt = $state(data.settings.system_prompt || '');
-	let greetingEn = $state(data.settings.greeting_en || '');
-	let greetingRu = $state(data.settings.greeting_ru || '');
-	let greetingEs = $state(data.settings.greeting_es || '');
-	let greetingZh = $state(data.settings.greeting_zh || '');
 	let avatarUrl = $state(data.settings.avatar_url || '');
-	let isEnabled = $state(data.settings.is_enabled ?? true);
+	let avatarUploading = $state(false);
+	let avatarError = $state('');
 
-	// Sync local state when data.settings changes (after form submission)
+	// Sync avatarUrl when data changes
 	$effect(() => {
-		const s = data.settings;
-		apiKey = s.api_key || '';
-		model = s.model || 'anthropic/claude-3-haiku';
-		temperature = s.temperature || '0.7';
-		maxTokens = s.max_tokens || 1024;
-		systemPrompt = s.system_prompt || '';
-		greetingEn = s.greeting_en || '';
-		greetingRu = s.greeting_ru || '';
-		greetingEs = s.greeting_es || '';
-		greetingZh = s.greeting_zh || '';
-		avatarUrl = s.avatar_url || '';
-		isEnabled = s.is_enabled ?? true;
+		avatarUrl = data.settings.avatar_url || '';
 	});
 
-	// Handle avatar file upload
 	async function handleAvatarUpload(event: Event) {
 		const input = event.target as HTMLInputElement;
 		const file = input.files?.[0];
 		if (!file) return;
 
-		uploading = true;
+		// Validate file type
+		if (!file.type.startsWith('image/')) {
+			avatarError = 'Please select an image file';
+			return;
+		}
+
+		// Validate file size (max 2MB)
+		if (file.size > 2 * 1024 * 1024) {
+			avatarError = 'Image must be less than 2MB';
+			return;
+		}
+
+		avatarUploading = true;
+		avatarError = '';
+
 		try {
 			const formData = new FormData();
 			formData.append('file', file);
@@ -58,19 +49,16 @@
 			}
 
 			const result = await response.json();
-			if (result.success && result.media?.url) {
-				avatarUrl = result.media.url;
-			}
+			avatarUrl = result.url;
 		} catch (err) {
+			avatarError = 'Failed to upload image';
 			console.error('Avatar upload error:', err);
-			alert('Failed to upload avatar');
 		} finally {
-			uploading = false;
-			input.value = '';
+			avatarUploading = false;
+			input.value = ''; // Reset input
 		}
 	}
 
-	// Remove avatar
 	function removeAvatar() {
 		avatarUrl = '';
 	}
@@ -114,7 +102,7 @@
 					<input
 						type="checkbox"
 						name="is_enabled"
-						bind:checked={isEnabled}
+						checked={data.settings.is_enabled}
 					/>
 					Enable Chatbot
 				</label>
@@ -127,7 +115,7 @@
 					type="password"
 					name="api_key"
 					id="api_key"
-					bind:value={apiKey}
+					value={data.settings.api_key || ''}
 					placeholder="sk-or-v1-..."
 					autocomplete="off"
 				/>
@@ -139,14 +127,14 @@
 
 			<div class="form-group">
 				<label for="model">AI Model</label>
-				<select name="model" id="model" bind:value={model} required>
-					{#each data.availableModels as m}
-						<option value={m.id}>
-							{m.name}
+				<select name="model" id="model" required>
+					{#each data.availableModels as model}
+						<option value={model.id} selected={data.settings.model === model.id}>
+							{model.name}
 						</option>
 					{/each}
 				</select>
-				<p class="help-text">Select the AI model to use. GPT-4o Mini is fast and reliable.</p>
+				<p class="help-text">Select the AI model to use. Haiku is fast and affordable.</p>
 			</div>
 
 			<div class="form-row">
@@ -159,7 +147,7 @@
 						min="0"
 						max="2"
 						step="0.1"
-						bind:value={temperature}
+						value={data.settings.temperature}
 					/>
 					<p class="help-text">Higher = more creative (0-2)</p>
 				</div>
@@ -172,8 +160,8 @@
 						id="max_tokens"
 						min="100"
 						max="4096"
-						step="1"
-						bind:value={maxTokens}
+						step="100"
+						value={data.settings.max_tokens}
 					/>
 					<p class="help-text">Maximum response length</p>
 				</div>
@@ -183,38 +171,46 @@
 		<div class="form-section">
 			<h2>Avatar</h2>
 			<p class="section-description">
-				Upload an image for Melena's avatar in the chat widget.
+				Upload an image to display in the chat widget header instead of the default "M" letter.
 			</p>
 
-			<input type="hidden" name="avatar_url" value={avatarUrl} />
-
 			<div class="avatar-upload">
-				{#if avatarUrl}
-					<div class="avatar-preview">
+				<div class="avatar-preview">
+					{#if avatarUrl}
 						<img src={avatarUrl} alt="Melena avatar" />
-						<button type="button" class="remove-btn" onclick={removeAvatar} title="Remove avatar">
-							&times;
-						</button>
-					</div>
-				{:else}
-					<div class="avatar-placeholder">
-						<span>M</span>
-					</div>
-				{/if}
+					{:else}
+						<div class="avatar-placeholder">M</div>
+					{/if}
+				</div>
 
-				<div class="avatar-actions">
-					<label class="upload-btn" class:disabled={uploading}>
+				<div class="avatar-controls">
+					<label class="btn secondary upload-btn">
+						{avatarUploading ? 'Uploading...' : 'Upload Image'}
 						<input
 							type="file"
-							accept="image/jpeg,image/png,image/webp"
+							accept="image/*"
 							onchange={handleAvatarUpload}
-							disabled={uploading}
+							disabled={avatarUploading}
+							hidden
 						/>
-						{uploading ? 'Uploading...' : 'Upload Image'}
 					</label>
-					<p class="help-text">Recommended: 200x200px, JPG/PNG/WebP</p>
+
+					{#if avatarUrl}
+						<button type="button" class="btn danger" onclick={removeAvatar}>
+							Remove
+						</button>
+					{/if}
 				</div>
+
+				{#if avatarError}
+					<p class="error-text">{avatarError}</p>
+				{/if}
+
+				<p class="help-text">Recommended: Square image, at least 80x80px. Max 2MB.</p>
 			</div>
+
+			<!-- Hidden input to submit avatar_url with form -->
+			<input type="hidden" name="avatar_url" value={avatarUrl} />
 		</div>
 
 		<div class="form-section">
@@ -229,8 +225,7 @@
 					id="system_prompt"
 					rows="12"
 					required
-					bind:value={systemPrompt}
-				></textarea>
+				>{data.settings.system_prompt}</textarea>
 			</div>
 		</div>
 
@@ -246,7 +241,7 @@
 					type="text"
 					name="greeting_en"
 					id="greeting_en"
-					bind:value={greetingEn}
+					value={data.settings.greeting_en || ''}
 				/>
 			</div>
 
@@ -256,7 +251,7 @@
 					type="text"
 					name="greeting_ru"
 					id="greeting_ru"
-					bind:value={greetingRu}
+					value={data.settings.greeting_ru || ''}
 				/>
 			</div>
 
@@ -266,7 +261,7 @@
 					type="text"
 					name="greeting_es"
 					id="greeting_es"
-					bind:value={greetingEs}
+					value={data.settings.greeting_es || ''}
 				/>
 			</div>
 
@@ -276,7 +271,7 @@
 					type="text"
 					name="greeting_zh"
 					id="greeting_zh"
-					bind:value={greetingZh}
+					value={data.settings.greeting_zh || ''}
 				/>
 			</div>
 		</div>
@@ -456,6 +451,25 @@
 		background: var(--accent-dark);
 	}
 
+	.btn.secondary {
+		background: var(--bg-tertiary);
+		color: var(--text-primary);
+		border: 1px solid var(--border-primary);
+	}
+
+	.btn.secondary:hover:not(:disabled) {
+		background: var(--bg-secondary);
+	}
+
+	.btn.danger {
+		background: #dc2626;
+		color: white;
+	}
+
+	.btn.danger:hover:not(:disabled) {
+		background: #b91c1c;
+	}
+
 	.btn:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
@@ -464,18 +478,19 @@
 	/* Avatar Upload */
 	.avatar-upload {
 		display: flex;
-		align-items: center;
-		gap: 24px;
+		flex-direction: column;
+		gap: 12px;
 	}
 
-	.avatar-preview,
-	.avatar-placeholder {
+	.avatar-preview {
 		width: 80px;
 		height: 80px;
 		border-radius: 50%;
 		overflow: hidden;
-		flex-shrink: 0;
-		position: relative;
+		background: var(--accent);
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.avatar-preview img {
@@ -485,66 +500,25 @@
 	}
 
 	.avatar-placeholder {
-		background: var(--accent, #d4af37);
-		display: flex;
-		align-items: center;
-		justify-content: center;
 		color: white;
 		font-size: 32px;
 		font-weight: 600;
 	}
 
-	.remove-btn {
-		position: absolute;
-		top: -4px;
-		right: -4px;
-		width: 24px;
-		height: 24px;
-		border-radius: 50%;
-		background: #dc2626;
-		color: white;
-		border: 2px solid white;
-		font-size: 16px;
-		line-height: 1;
-		cursor: pointer;
+	.avatar-controls {
 		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.remove-btn:hover {
-		background: #b91c1c;
-	}
-
-	.avatar-actions {
-		display: flex;
-		flex-direction: column;
 		gap: 8px;
+		align-items: center;
 	}
 
 	.upload-btn {
-		display: inline-block;
-		padding: 8px 16px;
-		background: var(--bg-tertiary);
-		border: 1px solid var(--border-primary);
-		border-radius: 8px;
-		font-size: 14px;
 		cursor: pointer;
-		transition: all 0.2s;
 	}
 
-	.upload-btn:hover:not(.disabled) {
-		background: var(--bg-secondary);
-		border-color: var(--accent);
-	}
-
-	.upload-btn.disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
-	}
-
-	.upload-btn input[type="file"] {
-		display: none;
+	.error-text {
+		color: #dc2626;
+		font-size: 13px;
+		margin: 0;
 	}
 
 	@media (max-width: 600px) {
@@ -554,11 +528,6 @@
 
 		.form-row {
 			grid-template-columns: 1fr;
-		}
-
-		.avatar-upload {
-			flex-direction: column;
-			align-items: flex-start;
 		}
 	}
 </style>
