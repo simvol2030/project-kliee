@@ -17,6 +17,21 @@
 	let greetingEs = $state(data.settings.greeting_es || '');
 	let greetingZh = $state(data.settings.greeting_zh || '');
 	let isEnabled = $state(data.settings.is_enabled ?? true);
+
+	// Sync local state when data.settings changes (after form submission)
+	$effect(() => {
+		const s = data.settings;
+		apiKey = s.api_key || '';
+		model = s.model || 'anthropic/claude-3-haiku';
+		temperature = s.temperature || '0.7';
+		maxTokens = s.max_tokens || 1024;
+		systemPrompt = s.system_prompt || '';
+		greetingEn = s.greeting_en || '';
+		greetingRu = s.greeting_ru || '';
+		greetingEs = s.greeting_es || '';
+		greetingZh = s.greeting_zh || '';
+		isEnabled = s.is_enabled ?? true;
+	});
 </script>
 
 <svelte:head>
