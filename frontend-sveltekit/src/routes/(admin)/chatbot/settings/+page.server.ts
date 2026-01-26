@@ -47,6 +47,7 @@ export const actions: Actions = {
 		const greeting_es = formData.get('greeting_es') as string;
 		const greeting_zh = formData.get('greeting_zh') as string;
 		const is_enabled = formData.get('is_enabled') === 'on';
+		const avatar_url = formData.get('avatar_url') as string;
 
 		if (!system_prompt || !model) {
 			return fail(400, { error: 'System prompt and model are required' });
@@ -70,6 +71,7 @@ export const actions: Actions = {
 						greeting_es,
 						greeting_zh,
 						is_enabled,
+						avatar_url: avatar_url || null,
 						updated_at: new Date().toISOString()
 					})
 					.where(eq(chatbotSettings.id, existing.id));
@@ -84,7 +86,8 @@ export const actions: Actions = {
 					greeting_ru,
 					greeting_es,
 					greeting_zh,
-					is_enabled
+					is_enabled,
+					avatar_url: avatar_url || null
 				});
 			}
 

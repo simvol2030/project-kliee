@@ -5,6 +5,63 @@
 	let { data, form } = $props();
 
 	let saving = $state(false);
+	let avatarUrl = $state(data.settings.avatar_url || '');
+	let avatarUploading = $state(false);
+	let avatarError = $state('');
+
+	// Sync avatarUrl when data changes
+	$effect(() => {
+		avatarUrl = data.settings.avatar_url || '';
+	});
+
+	async function handleAvatarUpload(event: Event) {
+		const input = event.target as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+
+		// Validate file type
+		if (!file.type.startsWith('image/')) {
+			avatarError = 'Please select an image file';
+			return;
+		}
+
+		// Validate file size (max 2MB)
+		if (file.size > 2 * 1024 * 1024) {
+			avatarError = 'Image must be less than 2MB';
+			return;
+		}
+
+		avatarUploading = true;
+		avatarError = '';
+
+		try {
+			const formData = new FormData();
+			formData.append('file', file);
+			formData.append('folder', 'chatbot');
+
+			const response = await fetch('/api/media/upload', {
+				method: 'POST',
+				body: formData
+			});
+
+			if (!response.ok) {
+				throw new Error('Upload failed');
+			}
+
+			const result = await response.json();
+			avatarUrl = result.url;
+		} catch (err) {
+			avatarError = 'Failed to upload image';
+			console.error('Avatar upload error:', err);
+		} finally {
+			avatarUploading = false;
+			input.value = ''; // Reset input
+		}
+	}
+
+	function removeAvatar() {
+		avatarUrl = '';
+	}
 </script>
 
 <svelte:head>
@@ -109,6 +166,51 @@
 					<p class="help-text">Maximum response length</p>
 				</div>
 			</div>
+		</div>
+
+		<div class="form-section">
+			<h2>Avatar</h2>
+			<p class="section-description">
+				Upload an image to display in the chat widget header instead of the default "M" letter.
+			</p>
+
+			<div class="avatar-upload">
+				<div class="avatar-preview">
+					{#if avatarUrl}
+						<img src={avatarUrl} alt="Melena avatar" />
+					{:else}
+						<div class="avatar-placeholder">M</div>
+					{/if}
+				</div>
+
+				<div class="avatar-controls">
+					<label class="btn secondary upload-btn">
+						{avatarUploading ? 'Uploading...' : 'Upload Image'}
+						<input
+							type="file"
+							accept="image/*"
+							onchange={handleAvatarUpload}
+							disabled={avatarUploading}
+							hidden
+						/>
+					</label>
+
+					{#if avatarUrl}
+						<button type="button" class="btn danger" onclick={removeAvatar}>
+							Remove
+						</button>
+					{/if}
+				</div>
+
+				{#if avatarError}
+					<p class="error-text">{avatarError}</p>
+				{/if}
+
+				<p class="help-text">Recommended: Square image, at least 80x80px. Max 2MB.</p>
+			</div>
+
+			<!-- Hidden input to submit avatar_url with form -->
+			<input type="hidden" name="avatar_url" value={avatarUrl} />
 		</div>
 
 		<div class="form-section">
@@ -349,9 +451,74 @@
 		background: var(--accent-dark);
 	}
 
+	.btn.secondary {
+		background: var(--bg-tertiary);
+		color: var(--text-primary);
+		border: 1px solid var(--border-primary);
+	}
+
+	.btn.secondary:hover:not(:disabled) {
+		background: var(--bg-secondary);
+	}
+
+	.btn.danger {
+		background: #dc2626;
+		color: white;
+	}
+
+	.btn.danger:hover:not(:disabled) {
+		background: #b91c1c;
+	}
+
 	.btn:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
+	}
+
+	/* Avatar Upload */
+	.avatar-upload {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.avatar-preview {
+		width: 80px;
+		height: 80px;
+		border-radius: 50%;
+		overflow: hidden;
+		background: var(--accent);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.avatar-preview img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.avatar-placeholder {
+		color: white;
+		font-size: 32px;
+		font-weight: 600;
+	}
+
+	.avatar-controls {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+	}
+
+	.upload-btn {
+		cursor: pointer;
+	}
+
+	.error-text {
+		color: #dc2626;
+		font-size: 13px;
+		margin: 0;
 	}
 
 	@media (max-width: 600px) {

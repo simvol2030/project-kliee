@@ -833,6 +833,7 @@ export const chatbotSettings = sqliteTable('chatbot_settings', {
 	greeting_es: text('greeting_es'),
 	greeting_zh: text('greeting_zh'),
 	is_enabled: integer('is_enabled', { mode: 'boolean' }).default(true),
+	avatar_url: text('avatar_url'), // Avatar image URL for chat widget
 	updated_at: text('updated_at').default(sql`CURRENT_TIMESTAMP`)
 });
 
