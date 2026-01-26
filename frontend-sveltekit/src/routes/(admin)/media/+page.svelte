@@ -57,7 +57,10 @@
 			try {
 				const res = await fetch('/api/media/upload', {
 					method: 'POST',
-					body: formData
+					body: formData,
+					headers: {
+						'x-csrf-token': $page.data.csrfToken || ''
+					}
 				});
 
 				const result = await res.json();
