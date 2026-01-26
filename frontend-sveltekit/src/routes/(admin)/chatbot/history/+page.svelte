@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import CsrfToken from '$lib/components/CsrfToken.svelte';
 
 	let { data, form } = $props();
 
@@ -68,6 +69,7 @@
 							<td>{formatDate(session.last_message_at)}</td>
 							<td>
 								<form method="POST" action="?/toggleSaved" use:enhance>
+									<CsrfToken />
 									<input type="hidden" name="session_id" value={session.session_id} />
 									<input type="hidden" name="is_saved" value={session.is_saved} />
 									<button type="submit" class="btn-icon" title={session.is_saved ? 'Unsave' : 'Save'}>
@@ -80,6 +82,7 @@
 									👁
 								</a>
 								<form method="POST" action="?/delete" use:enhance>
+									<CsrfToken />
 									<input type="hidden" name="session_id" value={session.session_id} />
 									<button
 										type="submit"

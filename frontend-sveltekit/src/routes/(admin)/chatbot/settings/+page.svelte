@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import CsrfToken from '$lib/components/CsrfToken.svelte';
 
 	let { data, form } = $props();
 
@@ -35,6 +36,7 @@
 			};
 		}}
 	>
+		<CsrfToken />
 		<div class="form-section">
 			<h2>General</h2>
 

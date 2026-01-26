@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import CsrfToken from '$lib/components/CsrfToken.svelte';
 
 	let { data, form } = $props();
 
@@ -46,6 +47,7 @@
 					};
 				}}
 			>
+				<CsrfToken />
 				<div class="form-group">
 					<label for="question_en">Question (English) *</label>
 					<input type="text" name="question_en" id="question_en" required />
@@ -130,6 +132,7 @@
 					</div>
 					<div class="faq-actions">
 						<form method="POST" action="?/toggle" use:enhance>
+							<CsrfToken />
 							<input type="hidden" name="id" value={faq.id} />
 							<input type="hidden" name="is_active" value={faq.is_active} />
 							<button type="submit" class="btn-icon" title={faq.is_active ? 'Deactivate' : 'Activate'}>
@@ -140,6 +143,7 @@
 							✎
 						</a>
 						<form method="POST" action="?/delete" use:enhance>
+							<CsrfToken />
 							<input type="hidden" name="id" value={faq.id} />
 							<button type="submit" class="btn-icon danger" title="Delete" onclick={(e) => { if (!confirm('Delete this FAQ?')) e.preventDefault(); }}>
 								✕
