@@ -1,107 +1,158 @@
-# Feedback v21 - Melena AI: Menu Links + CSRF Issue
+# Feedback v21 - Avatar Upload для Melena Chatbot
 
-**Дата:** 2026-01-25
-**Session:** Melena AI Implementation
-**Branch:** main (после merge)
-**Коммит:** e9ae5b9
-
----
-
-## Что работает
-
-- [x] Таблицы chatbot созданы в БД (вручную через SQL)
-- [x] Страница /chatbot/settings открывается и отображает форму
-- [x] Страница /chatbot/faq доступна
-- [x] Страница /chatbot/history доступна
-- [x] Виджет чата появляется на публичном сайте (кнопка "Chat with Melena")
-- [x] Виджет открывается при клике
-- [x] Поле API Key в настройках работает
+**Дата:** 2026-01-26
+**Session:** Chatbot Avatar Feature
+**Коммит main:** a554398
+**Branch to create:** `claude/chatbot-avatar-v21`
 
 ---
 
-## Баги (score 6+)
+## Контекст задачи
 
-### Bug 1: Нет ссылок на Chatbot в sidebar админки
+Нужно добавить возможность загружать аватар (фото) для AI-консультанта Melena в чат-виджете.
 
-- **Score:** 7 (Сложность 1×3 + Файлы 1×2 + Риск 1×2 = 7)
-- **Проблема:** В боковом меню админки (/dashboard) нет секции "Chatbot" со ссылками
-- **Где:** Sidebar компонент в `(admin)/+layout.svelte` или аналогичный файл
-- **Ожидание:** Добавить секцию:
-  ```
-  Chatbot
-  ├── 🤖 Settings → /chatbot/settings
-  ├── 📚 FAQ → /chatbot/faq
-  └── 💬 History → /chatbot/history
-  ```
-- **Примечание:** Страницы работают, просто нет навигации к ним
+**Требования:**
+1. В админке (Chatbot Settings) должна быть возможность загрузить изображение аватара
+2. Загруженный аватар должен отображаться в чат-виджете вместо буквы "M"
+3. Если аватар не загружен — показывать fallback "M"
 
 ---
 
-### Bug 2: CSRF token mismatch на POST /api/chat
+## Что уже сделано (CLI) - НО MODERATOR НЕ ДОВОЛЕН
 
-- **Score:** 9 (Сложность 2×3 + Файлы 2×2 + Риск 2×2 = 14, упрощаю до 9)
-- **Проблема:** При отправке сообщения в чат возвращается ошибка 403
-- **Лог сервера:**
-  ```
-  CSRF token mismatch for POST /api/chat
-  ```
-- **Файлы:**
-  - `src/routes/api/chat/+server.ts` - API endpoint
-  - `src/lib/stores/chat.svelte.ts` - клиентский store
-  - `src/hooks.server.ts` - CSRF middleware
+Код добавлен, но нужна проверка и исправление:
 
-**Варианты исправления:**
-
-**Вариант A (рекомендуется):** Добавить исключение для /api/chat в CSRF hook
+### 1. Schema (`src/lib/server/db/schema.ts:835`)
 ```typescript
-// hooks.server.ts
-const csrfExemptPaths = ['/api/chat']; // Публичный endpoint
-if (csrfExemptPaths.some(path => event.url.pathname.startsWith(path))) {
-  // Skip CSRF for this path
-}
+avatar_url: text('avatar_url'), // Avatar image URL for chat widget
 ```
 
-**Вариант B:** Передавать CSRF токен из клиента
+### 2. API (`src/routes/api/chat/+server.ts:149-154`)
 ```typescript
-// chat.svelte.ts - получить токен из cookie и отправить в header
-const csrfToken = document.cookie.match(/csrf_token=([^;]+)/)?.[1];
-fetch('/api/chat', {
-  headers: { 'x-csrf-token': csrfToken }
+return json({
+  enabled: settings.is_enabled,
+  greeting,
+  model: settings.model,
+  avatarUrl: settings.avatar_url || null  // <-- добавлено
 });
 ```
 
+### 3. ChatStore (`src/lib/stores/chat.svelte.ts`)
+```typescript
+// Строка 30:
+avatarUrl = $state<string | null>(null);
+
+// В init() строка 50:
+this.avatarUrl = data.avatarUrl || null;
+```
+
+### 4. ChatWidget (`src/lib/components/chat/ChatWidget.svelte`)
+```svelte
+<!-- Строки 99-105 -->
+<div class="chat-avatar">
+  {#if chatStore.avatarUrl}
+    <img src={chatStore.avatarUrl} alt="Melena" />
+  {:else}
+    M
+  {/if}
+</div>
+```
+
+CSS добавлены стили для `.chat-avatar img` (overflow: hidden, object-fit: cover)
+
+### 5. Admin Settings Page
+
+**+page.server.ts:**
+- Строка 49: `const avatar_url = formData.get('avatar_url') as string;`
+- Строка 73: `avatar_url: avatar_url || null,` в update
+- Строка 89: `avatar_url: avatar_url || null,` в insert
+
+**+page.svelte:**
+- Строка 20: `let avatarUrl = $state(data.settings.avatar_url || '');`
+- Строка 35: `avatarUrl = s.avatar_url || '';` в $effect
+- Строки 39-76: функции `handleAvatarUpload()` и `removeAvatar()`
+- Строки 183-217: секция "Avatar" с UI
+- Строки 464-548: CSS стили для avatar upload
+
 ---
 
-## Прямые URL (пока нет меню)
+## Что нужно проверить и исправить
 
-- Настройки: https://k-liee.com/chatbot/settings
-- FAQ: https://k-liee.com/chatbot/faq
-- История: https://k-liee.com/chatbot/history
+### Task 1: Проверить загрузку аватара в админке
+- [ ] Открыть https://k-liee.com/login → Dashboard → Chatbot Settings
+- [ ] Найти секцию "Avatar"
+- [ ] Загрузить изображение
+- [ ] Проверить появляется ли preview
+- [ ] Сохранить настройки
+- [ ] Проверить сохраняется ли URL в БД
+
+**Возможные проблемы:**
+- CSRF token mismatch при upload (см. логи PM2)
+- URL не сохраняется в hidden input
+- Проблемы с /api/media/upload endpoint
+
+### Task 2: Проверить отображение в виджете
+- [ ] Открыть публичную страницу (например https://k-liee.com/en)
+- [ ] Нажать на FAB кнопку чата
+- [ ] Проверить header виджета — отображается ли аватар?
+
+**Возможные проблемы:**
+- ChatStore не получает avatarUrl из API
+- Условный рендеринг в ChatWidget не работает
+- Стили неправильные
+
+### Task 3: End-to-end тест
+1. Загрузить аватар в админке
+2. Сохранить
+3. Открыть виджет на сайте
+4. Убедиться что аватар отображается
+5. Удалить аватар в админке
+6. Сохранить
+7. Проверить что в виджете снова показывается "M"
 
 ---
 
-## Тестирование после фикса
+## Файлы для проверки
 
-1. Проверить что в sidebar появился раздел Chatbot
-2. Проверить отправку сообщения в чат (не должно быть 403)
-3. Если API ключ введён - проверить ответ от AI
+```
+frontend-sveltekit/src/lib/server/db/schema.ts
+frontend-sveltekit/src/routes/api/chat/+server.ts
+frontend-sveltekit/src/lib/stores/chat.svelte.ts
+frontend-sveltekit/src/lib/components/chat/ChatWidget.svelte
+frontend-sveltekit/src/routes/(admin)/chatbot/settings/+page.server.ts
+frontend-sveltekit/src/routes/(admin)/chatbot/settings/+page.svelte
+```
 
 ---
 
-## Git команды
+## Логи сервера (для диагностики)
+
+```bash
+# PM2 логи
+pm2 logs k-liee-frontend --lines 50
+
+# Проверить колонку в БД
+sqlite3 /opt/websites/k-liee.com/data/db/sqlite/app.db "SELECT avatar_url FROM chatbot_settings;"
+```
+
+---
+
+## После исправления
 
 ```bash
 git checkout main
 git pull origin main
-git checkout -b claude/melena-hotfix-v21
+git checkout -b claude/chatbot-avatar-v21
 
 # После фикса
 git add .
-git commit -m "fix: Add chatbot menu links and fix CSRF for /api/chat (feedback-v21)"
-git push origin claude/melena-hotfix-v21
+git commit -m "fix(chatbot): avatar upload and display - feedback v21"
+git push origin claude/chatbot-avatar-v21
 ```
+
+**Уведомить CLI:** "Готово, ветка claude/chatbot-avatar-v21 готова к интеграции"
 
 ---
 
-*Feedback создан: 2026-01-25*
+*Feedback создан: 2026-01-26*
 *Интегратор: Claude Code CLI*
