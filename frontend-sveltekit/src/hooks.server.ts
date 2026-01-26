@@ -92,7 +92,10 @@ const csrfProtection: Handle = async ({ event, resolve }) => {
 				if (!publicEndpoints.includes(event.url.pathname) && !isShopApi) {
 					console.warn(`CSRF token mismatch for ${request.method} ${event.url.pathname}`);
 					if (process.env.NODE_ENV === 'production') {
-						return new Response('CSRF token validation failed', { status: 403 });
+						return new Response(JSON.stringify({ error: 'CSRF token validation failed' }), {
+							status: 403,
+							headers: { 'Content-Type': 'application/json' }
+						});
 					}
 				}
 			}
