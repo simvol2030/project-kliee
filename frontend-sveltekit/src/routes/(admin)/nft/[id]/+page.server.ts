@@ -102,9 +102,7 @@ export const actions: Actions = {
 			return fail(400, { error: 'Image is required. Please select an image.' });
 		}
 
-		if (!videoId) {
-			return fail(400, { error: 'Video is required. Please select a video.' });
-		}
+		// Video is optional - Media Library doesn't support video upload yet
 
 		// Auto-generate slug if not provided
 		if (!slug) {

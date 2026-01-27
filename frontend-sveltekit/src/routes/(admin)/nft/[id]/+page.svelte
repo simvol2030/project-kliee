@@ -253,8 +253,8 @@
 
 			<!-- Video Picker -->
 			<div class="form-section">
-				<h2>Video <span class="required">*</span></h2>
-				<p class="field-hint">Select the video file for this NFT</p>
+				<h2>Video</h2>
+				<p class="field-hint">Optional: Select a video file for this NFT</p>
 
 				<input type="hidden" name="videoId" value={videoId || ''} />
 
@@ -270,7 +270,7 @@
 					<button type="button" class="btn-media-select" onclick={() => (showVideoPicker = true)}>
 						Select Video
 					</button>
-					<p class="validation-hint">Video is required</p>
+					<p class="field-hint-small">Upload videos in Media section to select here</p>
 				{/if}
 			</div>
 
@@ -485,6 +485,13 @@
 		font-size: 0.75rem;
 		color: #6b7280;
 		margin-bottom: 1rem;
+	}
+
+	.field-hint-small {
+		font-size: 0.75rem;
+		color: #9ca3af;
+		margin-top: 0.5rem;
+		font-style: italic;
 	}
 
 	.validation-hint {
