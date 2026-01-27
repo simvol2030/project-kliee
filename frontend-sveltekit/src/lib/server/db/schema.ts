@@ -725,8 +725,8 @@ export const nfts = sqliteTable('nfts', {
 		.notNull()
 		.references(() => media.id),
 	video_id: integer('video_id')
-		.notNull()
-		.references(() => media.id),
+		.references(() => media.id), // Optional - for uploaded videos
+	video_url: text('video_url'), // Optional - for external URLs (YouTube, Vimeo)
 	technique: text('technique'),
 	year: integer('year'),
 	price: text('price'), // String for crypto prices

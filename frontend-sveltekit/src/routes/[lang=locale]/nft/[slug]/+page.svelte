@@ -20,6 +20,14 @@
 		zh: `${baseUrl}/zh/nft/${nft.slug}`
 	});
 
+	// Check if both photo and video exist
+	const hasPhoto = $derived(!!nft.imageUrl);
+	const hasVideo = $derived(!!nft.videoUrl);
+	const hasBothMedia = $derived(hasPhoto && hasVideo);
+
+	// Media tab state (only used when both exist)
+	let activeMediaTab = $state<'photo' | 'video'>('photo');
+
 	// Labels
 	const labels = $derived({
 		back: locale === 'ru' ? 'Назад к коллекции' : locale === 'es' ? 'Volver a la colección' : locale === 'zh' ? '返回收藏' : 'Back to Collection',
@@ -28,7 +36,10 @@
 		price: locale === 'ru' ? 'Цена' : locale === 'es' ? 'Precio' : locale === 'zh' ? '价格' : 'Price',
 		blockchain: locale === 'ru' ? 'Блокчейн' : locale === 'es' ? 'Blockchain' : locale === 'zh' ? '区块链' : 'Blockchain',
 		viewOnOpenSea: locale === 'ru' ? 'Посмотреть на OpenSea' : locale === 'es' ? 'Ver en OpenSea' : locale === 'zh' ? '在OpenSea查看' : 'View on OpenSea',
-		description: locale === 'ru' ? 'Описание' : locale === 'es' ? 'Descripción' : locale === 'zh' ? '描述' : 'Description'
+		description: locale === 'ru' ? 'Описание' : locale === 'es' ? 'Descripción' : locale === 'zh' ? '描述' : 'Description',
+		photo: locale === 'ru' ? 'Фото' : locale === 'es' ? 'Foto' : locale === 'zh' ? '照片' : 'Photo',
+		video: locale === 'ru' ? 'Видео' : locale === 'es' ? 'Video' : locale === 'zh' ? '视频' : 'Video',
+		noMedia: locale === 'ru' ? 'Нет медиа' : locale === 'es' ? 'Sin medios' : locale === 'zh' ? '无媒体' : 'No media'
 	});
 </script>
 
@@ -64,7 +75,46 @@
 			<div class="nft-content">
 				<!-- Media Section -->
 				<div class="nft-media">
-					{#if nft.videoUrl}
+					{#if hasBothMedia}
+						<!-- Tabs for Photo/Video -->
+						<div class="media-tabs">
+							<button
+								class="media-tab"
+								class:active={activeMediaTab === 'photo'}
+								onclick={() => (activeMediaTab = 'photo')}
+							>
+								{labels.photo}
+							</button>
+							<button
+								class="media-tab"
+								class:active={activeMediaTab === 'video'}
+								onclick={() => (activeMediaTab = 'video')}
+							>
+								{labels.video}
+							</button>
+						</div>
+
+						<!-- Tab Content -->
+						{#if activeMediaTab === 'photo'}
+							<div class="image-wrapper">
+								<img src={nft.imageUrl} alt={nft.title} />
+							</div>
+						{:else}
+							<div class="video-wrapper">
+								<video
+									src={nft.videoUrl}
+									poster={nft.imageUrl || undefined}
+									controls
+									playsinline
+									preload="metadata"
+								>
+									<track kind="captions" />
+									Your browser does not support the video tag.
+								</video>
+							</div>
+						{/if}
+					{:else if hasVideo}
+						<!-- Only video -->
 						<div class="video-wrapper">
 							<video
 								src={nft.videoUrl}
@@ -77,13 +127,15 @@
 								Your browser does not support the video tag.
 							</video>
 						</div>
-					{:else if nft.imageUrl}
+					{:else if hasPhoto}
+						<!-- Only photo -->
 						<div class="image-wrapper">
 							<img src={nft.imageUrl} alt={nft.title} />
 						</div>
 					{:else}
+						<!-- No media -->
 						<div class="no-media">
-							<span>NFT</span>
+							<span>{labels.noMedia}</span>
 						</div>
 					{/if}
 				</div>
@@ -243,6 +295,50 @@
 	.nft-media {
 		position: sticky;
 		top: var(--spacing-lg, 2rem);
+	}
+
+	/* Media Tabs */
+	.media-tabs {
+		display: flex;
+		gap: 0;
+		margin-bottom: var(--spacing-md, 1rem);
+		background: var(--bg-primary, #fff);
+		border-radius: var(--radius-md, 0.5rem);
+		overflow: hidden;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	}
+
+	.media-tab {
+		flex: 1;
+		padding: var(--spacing-sm, 0.75rem) var(--spacing-md, 1rem);
+		background: transparent;
+		border: none;
+		font-size: var(--text-sm, 0.875rem);
+		font-weight: 500;
+		color: var(--text-secondary, #666);
+		cursor: pointer;
+		transition: all 0.2s;
+		position: relative;
+	}
+
+	.media-tab:hover {
+		color: var(--text-primary, #1a1a1a);
+		background: var(--bg-secondary, #f5f5f5);
+	}
+
+	.media-tab.active {
+		color: var(--color-accent, #d4af37);
+		background: var(--bg-primary, #fff);
+	}
+
+	.media-tab.active::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: var(--color-accent, #d4af37);
 	}
 
 	.video-wrapper,
@@ -473,5 +569,23 @@
 	:global(.dark) .btn-secondary:hover {
 		background: rgba(255, 255, 255, 0.1);
 		border-color: #f9fafb;
+	}
+
+	:global(.dark) .media-tabs {
+		background: var(--bg-tertiary, #2c2c2e);
+	}
+
+	:global(.dark) .media-tab {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .media-tab:hover {
+		color: #f9fafb;
+		background: rgba(255, 255, 255, 0.05);
+	}
+
+	:global(.dark) .media-tab.active {
+		color: var(--color-accent, #d4af37);
+		background: var(--bg-tertiary, #2c2c2e);
 	}
 </style>
