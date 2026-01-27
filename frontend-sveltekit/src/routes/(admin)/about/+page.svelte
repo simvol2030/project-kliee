@@ -140,6 +140,39 @@
 	let saving = $state(false);
 	let editingId = $state<number | null>(null);
 
+	// Sync state when data changes (after form submission)
+	$effect(() => {
+		bioFields = {
+			biography_en: data.artist?.biography_en || '',
+			biography_ru: data.artist?.biography_ru || '',
+			biography_es: data.artist?.biography_es || '',
+			biography_zh: data.artist?.biography_zh || ''
+		};
+	});
+
+	$effect(() => {
+		artistName = data.artist?.name || '';
+		artistNationality = data.artist?.nationality || '';
+		artistBasedIn = data.artist?.based_in || '';
+	});
+
+	$effect(() => {
+		seoFields = {
+			seo_title_en: data.artist?.seo_title_en || '',
+			seo_title_ru: data.artist?.seo_title_ru || '',
+			seo_title_es: data.artist?.seo_title_es || '',
+			seo_title_zh: data.artist?.seo_title_zh || '',
+			seo_description_en: data.artist?.seo_description_en || '',
+			seo_description_ru: data.artist?.seo_description_ru || '',
+			seo_description_es: data.artist?.seo_description_es || '',
+			seo_description_zh: data.artist?.seo_description_zh || ''
+		};
+	});
+
+	$effect(() => {
+		imageId = data.artist?.image_id || null;
+	});
+
 	// Selected media
 	let selectedImage = $derived(data.allMedia.find((m) => m.id === imageId));
 	let imageMedia = $derived(data.allMedia.filter((m) => m.mime_type?.startsWith('image/')));
