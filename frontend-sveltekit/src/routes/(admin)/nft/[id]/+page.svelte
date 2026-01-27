@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData, ActionData } from './$types';
 	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	import LanguageTabs from '$lib/components/admin/LanguageTabs.svelte';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -62,6 +63,48 @@
 	let videoMedia = $derived(data.allMedia.filter((m) => m.mime_type?.startsWith('video/')));
 
 	let saving = $state(false);
+	let videoUploading = $state(false);
+	let videoUploadError = $state<string | null>(null);
+
+	async function handleVideoUpload(e: Event) {
+		const input = e.target as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+
+		videoUploading = true;
+		videoUploadError = null;
+
+		try {
+			const formData = new FormData();
+			formData.append('file', file);
+			formData.append('folder', 'nft');
+
+			const res = await fetch('/api/media/upload', {
+				method: 'POST',
+				body: formData
+			});
+
+			const result = await res.json();
+			if (!res.ok) {
+				videoUploadError = result.message || `Upload failed (${res.status})`;
+				console.error('Video upload error:', result);
+			} else if (result.success) {
+				// Refresh data to include new video
+				await invalidateAll();
+				// Select the newly uploaded video
+				videoId = result.media.id;
+				showVideoPicker = false;
+			} else {
+				videoUploadError = result.error || 'Upload failed';
+			}
+		} catch (err) {
+			console.error('Video upload failed:', err);
+			videoUploadError = err instanceof Error ? err.message : 'Upload failed';
+		}
+
+		videoUploading = false;
+		input.value = '';
+	}
 
 	function generateSlug() {
 		if (multiLang.title_en) {
@@ -414,8 +457,23 @@
 		<div class="modal-content" onclick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
 			<div class="modal-header">
 				<h3>Select Video</h3>
-				<button type="button" class="btn-close" onclick={() => (showVideoPicker = false)}>&times;</button>
+				<div class="header-actions">
+					<label class="upload-btn" class:uploading={videoUploading}>
+						{videoUploading ? 'Uploading...' : 'Upload Video'}
+						<input
+							type="file"
+							accept="video/mp4,video/webm"
+							onchange={handleVideoUpload}
+							disabled={videoUploading}
+							hidden
+						/>
+					</label>
+					<button type="button" class="btn-close" onclick={() => (showVideoPicker = false)}>&times;</button>
+				</div>
 			</div>
+			{#if videoUploadError}
+				<div class="upload-error">{videoUploadError}</div>
+			{/if}
 			<div class="media-grid video-grid">
 				{#each videoMedia as item}
 					<button
@@ -429,7 +487,7 @@
 					</button>
 				{/each}
 				{#if videoMedia.length === 0}
-					<p class="no-media">No videos available. Upload videos in Media section first.</p>
+					<p class="no-media">No videos yet. Click "Upload Video" to add one!</p>
 				{/if}
 			</div>
 		</div>
@@ -747,6 +805,41 @@
 
 	.modal-header h3 {
 		margin: 0;
+	}
+
+	.header-actions {
+		display: flex;
+		gap: 0.75rem;
+		align-items: center;
+	}
+
+	.upload-btn {
+		padding: 0.5rem 1rem;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+		border-radius: 0.375rem;
+		cursor: pointer;
+		font-size: 0.875rem;
+		font-weight: 500;
+	}
+
+	.upload-btn:hover {
+		opacity: 0.9;
+	}
+
+	.upload-btn.uploading {
+		opacity: 0.6;
+		cursor: wait;
+	}
+
+	.upload-error {
+		background: #fef2f2;
+		color: #dc2626;
+		padding: 0.75rem 1rem;
+		margin: 0 1rem;
+		border-radius: 0.375rem;
+		font-size: 0.875rem;
+		border: 1px solid #fecaca;
 	}
 
 	.btn-close {
