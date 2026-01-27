@@ -369,6 +369,9 @@
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
+		min-height: 120px;
+		max-height: 160px;
+		isolation: isolate;
 	}
 
 	.media-item:hover {
@@ -383,7 +386,9 @@
 	.media-item img {
 		flex: 1;
 		width: 100%;
+		height: calc(100% - 24px);
 		object-fit: cover;
+		min-height: 0;
 	}
 
 	.media-item .filename {
@@ -393,9 +398,76 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		background: white;
+		flex-shrink: 0;
+		height: 24px;
+		line-height: 16px;
 	}
 
 	.picker-label:empty {
 		display: none;
+	}
+
+	/* Dark mode support */
+	:global(.dark) .picker-label {
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .picker-preview {
+		border-color: #4b5563;
+		background: #374151;
+	}
+
+	:global(.dark) .btn-select {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .btn-select:hover {
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .btn-change,
+	:global(.dark) .btn-clear {
+		background: #374151;
+		border-color: #4b5563;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .modal-content {
+		background: #1f2937;
+	}
+
+	:global(.dark) .modal-header {
+		border-bottom-color: #374151;
+	}
+
+	:global(.dark) .modal-header h3 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .btn-close {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .btn-close:hover {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .loading,
+	:global(.dark) .empty {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .media-item {
+		background: #374151;
+		border-color: #4b5563;
+	}
+
+	:global(.dark) .media-item:hover {
+		border-color: #667eea;
+	}
+
+	:global(.dark) .media-item .filename {
+		background: #1f2937;
+		color: #e5e7eb;
 	}
 </style>

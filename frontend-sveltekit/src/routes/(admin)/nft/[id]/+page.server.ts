@@ -71,6 +71,7 @@ export const actions: Actions = {
 
 		const imageId = formData.get('imageId') ? parseInt(formData.get('imageId') as string) : null;
 		const videoId = formData.get('videoId') ? parseInt(formData.get('videoId') as string) : null;
+		const videoUrl = (formData.get('videoUrl') as string) || null;
 
 		let slug = (formData.get('slug') as string) || null;
 		const isFeatured = formData.get('isFeatured') === 'on';
@@ -127,7 +128,8 @@ export const actions: Actions = {
 			opensea_url: openSeaUrl,
 			blockchain,
 			image_id: imageId,
-			video_id: videoId,
+			video_id: videoId || null,
+			video_url: videoUrl,
 			is_featured: isFeatured,
 			is_visible: isVisible,
 			order_index: orderIndex

@@ -44,6 +44,9 @@
 	let blockchain = $state(data.item?.blockchain || 'Ethereum');
 	let imageId = $state<number | null>(data.item?.image_id || null);
 	let videoId = $state<number | null>(data.item?.video_id || null);
+	let videoUrl = $state(data.item?.video_url || '');
+	// Determine initial video type based on existing data
+	let videoType = $state<'upload' | 'url'>(data.item?.video_url ? 'url' : 'upload');
 	let isFeatured = $state(data.item?.is_featured || false);
 	let isVisible = $state(data.item?.is_visible ?? true);
 	let orderIndex = $state(data.item?.order_index?.toString() || '0');
@@ -251,26 +254,78 @@
 				{/if}
 			</div>
 
-			<!-- Video Picker -->
+			<!-- Video Section -->
 			<div class="form-section">
 				<h2>Video</h2>
-				<p class="field-hint">Optional: Select a video file for this NFT</p>
+				<p class="field-hint">Optional: Add a video from Media Library or external URL</p>
 
-				<input type="hidden" name="videoId" value={videoId || ''} />
+				<!-- Video Type Radio Buttons -->
+				<div class="video-type-selector">
+					<label class="radio-label">
+						<input
+							type="radio"
+							name="videoTypeRadio"
+							value="upload"
+							checked={videoType === 'upload'}
+							onchange={() => { videoType = 'upload'; videoUrl = ''; }}
+						/>
+						<span>Upload Video</span>
+					</label>
+					<label class="radio-label">
+						<input
+							type="radio"
+							name="videoTypeRadio"
+							value="url"
+							checked={videoType === 'url'}
+							onchange={() => { videoType = 'url'; videoId = null; }}
+						/>
+						<span>Video URL</span>
+					</label>
+				</div>
 
-				{#if selectedVideo}
-					<div class="media-preview video-preview">
-						<video src={getMediaUrl(selectedVideo)} controls></video>
-						<div class="media-actions">
-							<button type="button" class="btn-secondary" onclick={() => (showVideoPicker = true)}>Change</button>
-							<button type="button" class="btn-secondary" onclick={() => (videoId = null)}>Remove</button>
+				<!-- Hidden inputs for form submission -->
+				<input type="hidden" name="videoId" value={videoType === 'upload' ? (videoId || '') : ''} />
+				<input type="hidden" name="videoUrl" value={videoType === 'url' ? videoUrl : ''} />
+
+				{#if videoType === 'upload'}
+					<!-- Upload Video Section -->
+					{#if selectedVideo}
+						<div class="media-preview video-preview">
+							<video src={getMediaUrl(selectedVideo)} controls></video>
+							<div class="media-actions">
+								<button type="button" class="btn-secondary" onclick={() => (showVideoPicker = true)}>Change</button>
+								<button type="button" class="btn-secondary" onclick={() => (videoId = null)}>Remove</button>
+							</div>
 						</div>
-					</div>
+					{:else}
+						<button type="button" class="btn-media-select" onclick={() => (showVideoPicker = true)}>
+							Select Video
+						</button>
+						<p class="field-hint-small">Upload videos in Media section to select here</p>
+					{/if}
 				{:else}
-					<button type="button" class="btn-media-select" onclick={() => (showVideoPicker = true)}>
-						Select Video
-					</button>
-					<p class="field-hint-small">Upload videos in Media section to select here</p>
+					<!-- Video URL Section -->
+					<div class="form-group">
+						<label for="videoUrlInput">Video URL</label>
+						<input
+							type="url"
+							id="videoUrlInput"
+							bind:value={videoUrl}
+							placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..."
+						/>
+						<p class="field-hint-small">Supports YouTube, Vimeo, and direct video URLs</p>
+					</div>
+					{#if videoUrl}
+						<div class="url-preview">
+							{#if videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')}
+								<p class="preview-label">YouTube Video</p>
+							{:else if videoUrl.includes('vimeo.com')}
+								<p class="preview-label">Vimeo Video</p>
+							{:else}
+								<p class="preview-label">External Video URL</p>
+							{/if}
+						</div>
+					{/if}
 				{/if}
 			</div>
 
@@ -557,6 +612,45 @@
 	.checkbox-label input[type='checkbox'] {
 		width: 1rem;
 		height: 1rem;
+	}
+
+	/* Video Type Selector */
+	.video-type-selector {
+		display: flex;
+		gap: 1.5rem;
+		margin-bottom: 1rem;
+		padding: 0.75rem;
+		background: #f9fafb;
+		border-radius: 0.5rem;
+	}
+
+	.radio-label {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		cursor: pointer;
+		font-size: 0.875rem;
+		font-weight: 500;
+	}
+
+	.radio-label input[type='radio'] {
+		width: 1rem;
+		height: 1rem;
+		accent-color: #667eea;
+	}
+
+	.url-preview {
+		margin-top: 0.5rem;
+		padding: 0.75rem;
+		background: #f0f9ff;
+		border: 1px solid #bae6fd;
+		border-radius: 0.375rem;
+	}
+
+	.url-preview .preview-label {
+		margin: 0;
+		font-size: 0.875rem;
+		color: #0369a1;
 	}
 
 	.form-actions {

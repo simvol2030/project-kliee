@@ -278,7 +278,8 @@ export async function getNftBySlug(
 			is_featured: nfts.is_featured,
 			is_visible: nfts.is_visible,
 			image_id: nfts.image_id,
-			video_id: nfts.video_id
+			video_id: nfts.video_id,
+			video_url: nfts.video_url
 		})
 		.from(nfts)
 		.where(eq(nfts.slug, slug));
@@ -286,10 +287,16 @@ export async function getNftBySlug(
 	if (!result || !result.is_visible) return undefined;
 
 	const [imageMedia] = await db.select().from(media).where(eq(media.id, result.image_id));
-	const [videoMedia] = await db.select().from(media).where(eq(media.id, result.video_id));
+	// Only fetch video media if video_id exists and no video_url
+	const [videoMedia] = result.video_id && !result.video_url
+		? await db.select().from(media).where(eq(media.id, result.video_id))
+		: [null];
 
 	const titleKey = `title${suffix}` as keyof typeof result;
 	const descriptionKey = `description${suffix}` as keyof typeof result;
+
+	// Use video_url if set, otherwise use media URL from video_id
+	const videoUrl = result.video_url || buildMediaUrl(videoMedia?.folder, videoMedia?.stored_filename);
 
 	return {
 		id: result.id,
@@ -301,7 +308,7 @@ export async function getNftBySlug(
 		price: result.price,
 		currency: result.currency,
 		imageUrl: buildMediaUrl(imageMedia?.folder, imageMedia?.stored_filename),
-		videoUrl: buildMediaUrl(videoMedia?.folder, videoMedia?.stored_filename),
+		videoUrl,
 		openSeaUrl: result.opensea_url,
 		blockchain: result.blockchain,
 		isFeatured: result.is_featured ?? false
@@ -349,7 +356,10 @@ export async function getNftByIdAdmin(id: number): Promise<NftFull | undefined> 
 	if (!result) return undefined;
 
 	const [imageMedia] = await db.select().from(media).where(eq(media.id, result.image_id));
-	const [videoMedia] = await db.select().from(media).where(eq(media.id, result.video_id));
+	// Only fetch video media if video_id exists
+	const [videoMedia] = result.video_id
+		? await db.select().from(media).where(eq(media.id, result.video_id))
+		: [null];
 
 	return {
 		...result,
@@ -357,7 +367,7 @@ export async function getNftByIdAdmin(id: number): Promise<NftFull | undefined> 
 		is_visible: result.is_visible ?? true,
 		order_index: result.order_index ?? 0,
 		imageUrl: buildMediaUrl(imageMedia?.folder, imageMedia?.stored_filename),
-		videoUrl: buildMediaUrl(videoMedia?.folder, videoMedia?.stored_filename)
+		videoUrl: result.video_url || buildMediaUrl(videoMedia?.folder, videoMedia?.stored_filename)
 	};
 }
 
