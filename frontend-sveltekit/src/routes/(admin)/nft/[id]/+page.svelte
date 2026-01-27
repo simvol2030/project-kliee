@@ -85,7 +85,24 @@
 	}
 
 	function getMediaUrl(mediaItem: typeof data.allMedia[0]): string {
-		return `/uploads/${mediaItem.folder || 'uploads'}/${mediaItem.stored_filename}`;
+		const storedFilename = mediaItem.stored_filename?.trim() || '';
+		const folder = mediaItem.folder?.trim() || 'uploads';
+		// Old images: stored_filename starts with /images/ - use directly
+		if (storedFilename.startsWith('/images/')) {
+			return storedFilename;
+		}
+		if (storedFilename.startsWith('/')) {
+			return `/uploads${storedFilename}`;
+		}
+		if (storedFilename.includes('/')) {
+			return `/uploads/${storedFilename}`;
+		}
+		// Handle folder with /images/ path (old data format)
+		if (folder.startsWith('/images/') || folder.startsWith('images/')) {
+			const normalizedFolder = folder.startsWith('/') ? folder : `/${folder}`;
+			return `${normalizedFolder.replace(/\/$/, '')}/${storedFilename}`;
+		}
+		return `/uploads/${folder}/${storedFilename}`;
 	}
 </script>
 
