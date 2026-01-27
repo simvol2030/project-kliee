@@ -25,6 +25,35 @@
 	const hasVideo = $derived(!!nft.videoUrl);
 	const hasBothMedia = $derived(hasPhoto && hasVideo);
 
+	// YouTube URL detection and embed helpers
+	function isYouTubeUrl(url: string | null | undefined): boolean {
+		if (!url) return false;
+		return url.includes('youtube.com') || url.includes('youtu.be');
+	}
+
+	function getYouTubeEmbedUrl(url: string): string {
+		let videoId = '';
+
+		// Format: https://youtu.be/VIDEO_ID
+		if (url.includes('youtu.be/')) {
+			videoId = url.split('youtu.be/')[1]?.split(/[?&#]/)[0] || '';
+		}
+		// Format: https://www.youtube.com/watch?v=VIDEO_ID
+		else if (url.includes('youtube.com/watch')) {
+			const urlParams = new URL(url).searchParams;
+			videoId = urlParams.get('v') || '';
+		}
+		// Format: https://www.youtube.com/embed/VIDEO_ID
+		else if (url.includes('youtube.com/embed/')) {
+			videoId = url.split('/embed/')[1]?.split(/[?&#]/)[0] || '';
+		}
+
+		return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+	}
+
+	const isYouTube = $derived(isYouTubeUrl(nft.videoUrl));
+	const youtubeEmbedUrl = $derived(isYouTube && nft.videoUrl ? getYouTubeEmbedUrl(nft.videoUrl) : '');
+
 	// Media tab state (only used when both exist)
 	let activeMediaTab = $state<'photo' | 'video'>('photo');
 
@@ -101,6 +130,40 @@
 							</div>
 						{:else}
 							<div class="video-wrapper">
+								{#if isYouTube}
+									<iframe
+										src={youtubeEmbedUrl}
+										title={nft.title}
+										frameborder="0"
+										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+										allowfullscreen
+									></iframe>
+								{:else}
+									<video
+										src={nft.videoUrl}
+										poster={nft.imageUrl || undefined}
+										controls
+										playsinline
+										preload="metadata"
+									>
+										<track kind="captions" />
+										Your browser does not support the video tag.
+									</video>
+								{/if}
+							</div>
+						{/if}
+					{:else if hasVideo}
+						<!-- Only video -->
+						<div class="video-wrapper">
+							{#if isYouTube}
+								<iframe
+									src={youtubeEmbedUrl}
+									title={nft.title}
+									frameborder="0"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+									allowfullscreen
+								></iframe>
+							{:else}
 								<video
 									src={nft.videoUrl}
 									poster={nft.imageUrl || undefined}
@@ -111,21 +174,7 @@
 									<track kind="captions" />
 									Your browser does not support the video tag.
 								</video>
-							</div>
-						{/if}
-					{:else if hasVideo}
-						<!-- Only video -->
-						<div class="video-wrapper">
-							<video
-								src={nft.videoUrl}
-								poster={nft.imageUrl || undefined}
-								controls
-								playsinline
-								preload="metadata"
-							>
-								<track kind="captions" />
-								Your browser does not support the video tag.
-							</video>
+							{/if}
 						</div>
 					{:else if hasPhoto}
 						<!-- Only photo -->
@@ -349,9 +398,12 @@
 		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
 	}
 
-	.video-wrapper video {
+	.video-wrapper video,
+	.video-wrapper iframe {
 		width: 100%;
+		aspect-ratio: 16 / 9;
 		display: block;
+		border: none;
 	}
 
 	.image-wrapper img {
