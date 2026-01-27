@@ -33,7 +33,9 @@
 		$page.url.pathname.startsWith('/layout') ||
 		$page.url.pathname.startsWith('/homepage') ||
 		$page.url.pathname.startsWith('/shop') ||
-		$page.url.pathname.startsWith('/chatbot')
+		$page.url.pathname.startsWith('/chatbot') ||
+		$page.url.pathname.startsWith('/about') ||
+		$page.url.pathname.startsWith('/nft')
 	);
 
 	// Mobile menu state

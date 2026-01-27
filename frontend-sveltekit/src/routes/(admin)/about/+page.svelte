@@ -1061,4 +1061,129 @@
 		color: #6b7280;
 		padding: 2rem;
 	}
+
+	/* Dark mode support */
+	:global(.dark) .page-header h1 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .tabs {
+		border-bottom-color: #374151;
+	}
+
+	:global(.dark) .tabs button {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .tabs button:hover {
+		background: #374151;
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .tab-content {
+		background: #1f2937;
+	}
+
+	:global(.dark) .form-section h2 {
+		color: #f9fafb;
+		border-bottom-color: #374151;
+	}
+
+	:global(.dark) .form-section h3 {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .form-group label {
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .form-group input,
+	:global(.dark) .form-group textarea {
+		background: #374151;
+		border-color: #4b5563;
+		color: #f9fafb;
+	}
+
+	:global(.dark) .form-group input::placeholder,
+	:global(.dark) .form-group textarea::placeholder {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .add-form {
+		background: #374151;
+	}
+
+	:global(.dark) .form-grid-compact input {
+		background: #1f2937;
+		border-color: #4b5563;
+		color: #f9fafb;
+	}
+
+	:global(.dark) .list-item {
+		background: #374151;
+	}
+
+	:global(.dark) .item-year,
+	:global(.dark) .item-main {
+		color: #e5e7eb;
+	}
+
+	:global(.dark) .item-secondary {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .btn-secondary {
+		background: #374151;
+		color: #e5e7eb;
+		border-color: #4b5563;
+	}
+
+	:global(.dark) .btn-edit {
+		background: #374151;
+		color: #93c5fd;
+	}
+
+	:global(.dark) .btn-delete {
+		background: #7f1d1d;
+		color: #fecaca;
+	}
+
+	:global(.dark) .btn-media-select {
+		background: #374151;
+		border-color: #4b5563;
+		color: #9ca3af;
+	}
+
+	:global(.dark) .form-actions {
+		border-top-color: #374151;
+	}
+
+	:global(.dark) .modal-content {
+		background: #1f2937;
+	}
+
+	:global(.dark) .modal-header {
+		border-bottom-color: #374151;
+	}
+
+	:global(.dark) .modal-header h3 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .media-item {
+		background: #374151;
+		border-color: #4b5563;
+	}
+
+	:global(.dark) .alert-error {
+		background: #7f1d1d;
+		color: #fecaca;
+		border-color: #991b1b;
+	}
+
+	:global(.dark) .alert-success {
+		background: #14532d;
+		color: #bbf7d0;
+		border-color: #166534;
+	}
 </style>
