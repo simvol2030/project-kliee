@@ -126,6 +126,11 @@ function getLocaleSuffix(locale: LanguageCode): string {
 
 function buildMediaUrl(folder: string | null, filename: string | null): string | null {
 	if (!filename) return null;
+
+	// Normalize inputs
+	filename = filename.trim();
+	folder = folder?.trim() || null;
+
 	// Old images: stored_filename starts with /images/ - use directly
 	if (filename.startsWith('/images/')) {
 		return filename;
@@ -136,6 +141,15 @@ function buildMediaUrl(folder: string | null, filename: string | null): string |
 	if (filename.includes('/')) {
 		return `/uploads/${filename}`;
 	}
+
+	// filename is just a filename - check if folder is a static images path
+	if (folder) {
+		if (folder.startsWith('/images/') || folder.startsWith('images/')) {
+			const normalizedFolder = folder.startsWith('/') ? folder : `/${folder}`;
+			return `${normalizedFolder.replace(/\/$/, '')}/${filename}`;
+		}
+	}
+
 	return `/uploads/${folder || 'uploads'}/${filename}`;
 }
 
