@@ -369,9 +369,6 @@
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
-		min-height: 120px;
-		max-height: 160px;
-		isolation: isolate;
 	}
 
 	.media-item:hover {
@@ -386,21 +383,18 @@
 	.media-item img {
 		flex: 1;
 		width: 100%;
-		height: calc(100% - 24px);
 		object-fit: cover;
 		min-height: 0;
 	}
 
 	.media-item .filename {
 		font-size: 0.75rem;
-		padding: 0.25rem;
+		padding: 0.25rem 0.5rem;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		background: white;
 		flex-shrink: 0;
-		height: 24px;
-		line-height: 16px;
 	}
 
 	.picker-label:empty {
