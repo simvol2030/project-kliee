@@ -20,9 +20,21 @@ import type { ArtworkLocalized, LanguageCode } from '$lib/types/content.types';
 function buildImageUrl(storedFilename: string | null, folder: string | null): string | null {
 	if (!storedFilename) return null;
 
+	// Normalize inputs
+	storedFilename = storedFilename.trim();
+	folder = folder?.trim() || null;
+
 	// If stored_filename starts with "/" - it's a full path (migrated from JSON or static)
 	if (storedFilename.startsWith('/')) {
 		return storedFilename;
+	}
+
+	// storedFilename is just a filename - check if folder is a static images path
+	if (folder) {
+		if (folder.startsWith('/images/') || folder.startsWith('images/')) {
+			const normalizedFolder = folder.startsWith('/') ? folder : `/${folder}`;
+			return `${normalizedFolder.replace(/\/$/, '')}/${storedFilename}`;
+		}
 	}
 
 	// Otherwise it's an uploaded file - build /uploads/ path

@@ -7,6 +7,10 @@ import { eq, desc, like, and } from 'drizzle-orm';
 // Helper function to construct media URL
 // Handles cases where stored_filename might already include path
 function buildMediaUrl(folder: string | null, storedFilename: string): string {
+	// Normalize inputs
+	storedFilename = storedFilename?.trim() || '';
+	folder = folder?.trim() || null;
+
 	// Old images: stored_filename starts with /images/ - use directly
 	if (storedFilename.startsWith('/images/')) {
 		return storedFilename;
@@ -17,6 +21,16 @@ function buildMediaUrl(folder: string | null, storedFilename: string): string {
 	if (storedFilename.includes('/')) {
 		return `/uploads/${storedFilename}`;
 	}
+
+	// stored_filename is just a filename - check if folder is a static images path
+	if (folder) {
+		// Handle folder with /images/ path (old data format)
+		if (folder.startsWith('/images/') || folder.startsWith('images/')) {
+			const normalizedFolder = folder.startsWith('/') ? folder : `/${folder}`;
+			return `${normalizedFolder.replace(/\/$/, '')}/${storedFilename}`;
+		}
+	}
+
 	return `/uploads/${folder || 'uploads'}/${storedFilename}`;
 }
 

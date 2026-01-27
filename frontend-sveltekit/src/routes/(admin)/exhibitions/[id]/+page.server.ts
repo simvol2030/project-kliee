@@ -7,6 +7,11 @@ import { fail, redirect, error } from '@sveltejs/kit';
 // Helper function to construct media URL
 function buildMediaUrl(folder: string | null, storedFilename: string | null): string | null {
 	if (!storedFilename) return null;
+
+	// Normalize inputs
+	storedFilename = storedFilename.trim();
+	folder = folder?.trim() || null;
+
 	// Old images: stored_filename starts with /images/ - use directly
 	if (storedFilename.startsWith('/images/')) {
 		return storedFilename;
@@ -17,6 +22,15 @@ function buildMediaUrl(folder: string | null, storedFilename: string | null): st
 	if (storedFilename.includes('/')) {
 		return `/uploads/${storedFilename}`;
 	}
+
+	// stored_filename is just a filename - check if folder is a static images path
+	if (folder) {
+		if (folder.startsWith('/images/') || folder.startsWith('images/')) {
+			const normalizedFolder = folder.startsWith('/') ? folder : `/${folder}`;
+			return `${normalizedFolder.replace(/\/$/, '')}/${storedFilename}`;
+		}
+	}
+
 	return `/uploads/${folder || 'uploads'}/${storedFilename}`;
 }
 

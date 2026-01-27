@@ -68,7 +68,11 @@ function getLocaleSuffix(locale: LanguageCode): 'en' | 'ru' | 'es' | 'zh' {
  */
 function buildImageUrl(mediaRecord: { folder: string | null; stored_filename: string } | null): string {
 	if (!mediaRecord) return '/images/placeholder-artwork.svg';
-	const filename = mediaRecord.stored_filename;
+
+	// Normalize inputs
+	const filename = mediaRecord.stored_filename?.trim() || '';
+	const folder = mediaRecord.folder?.trim() || null;
+
 	// Old images: stored_filename starts with /images/ - use directly
 	if (filename.startsWith('/images/')) {
 		return filename;
@@ -79,8 +83,16 @@ function buildImageUrl(mediaRecord: { folder: string | null; stored_filename: st
 	if (filename.includes('/')) {
 		return `/uploads/${filename}`;
 	}
-	const folder = mediaRecord.folder || 'uploads';
-	return `/uploads/${folder}/${filename}`;
+
+	// filename is just a filename - check if folder is a static images path
+	if (folder) {
+		if (folder.startsWith('/images/') || folder.startsWith('images/')) {
+			const normalizedFolder = folder.startsWith('/') ? folder : `/${folder}`;
+			return `${normalizedFolder.replace(/\/$/, '')}/${filename}`;
+		}
+	}
+
+	return `/uploads/${folder || 'uploads'}/${filename}`;
 }
 
 /**
