@@ -125,7 +125,7 @@
 						<td>{row[col.key] ?? '—'}</td>
 					{/each}
 					{#if actions}
-						<td>
+						<td class="actions-col" onclick={(e) => e.stopPropagation()}>
 							{@render actions(row)}
 						</td>
 					{/if}
