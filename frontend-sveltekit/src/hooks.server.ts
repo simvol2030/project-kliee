@@ -23,6 +23,7 @@ const securityHeaders: Handle = async ({ event, resolve }) => {
 		"img-src 'self' data: https:",
 		"font-src 'self' data: https://fonts.gstatic.com",
 		"connect-src 'self'",
+		"frame-src 'self' https://www.youtube.com https://youtube.com",
 		"frame-ancestors 'none'",
 		"base-uri 'self'",
 		"form-action 'self'"
