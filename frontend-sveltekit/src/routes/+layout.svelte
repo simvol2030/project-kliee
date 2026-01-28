@@ -84,7 +84,7 @@
 			{@render children?.()}
 		</main>
 
-		<Footer />
+		<Footer footerData={data.footerData} />
 	</div>
 
 	<!-- Mobile Menu (outside Header for full-screen) -->
