@@ -1,12 +1,39 @@
 <script lang="ts">
-  import { page } from '$app/stores';
-  import { getFooterData } from '$lib/data/footer.provider';
-  import { currentTranslations } from '$lib/i18n';
-  import type { LanguageCode } from '$lib/types/layout.types';
+  /**
+   * Footer Component
+   * Receives localized footer data from layout server
+   */
 
-  // Derived: locale and footer data
-  const locale = $derived(($page.data.locale as LanguageCode) || 'en');
-  const footerData = $derived(getFooterData(locale));
+  interface SocialLink {
+    platform: string;
+    label: string;
+    badge: string | null;
+    url: string;
+    icon: string;
+  }
+
+  interface FooterData {
+    brand: {
+      title: string;
+      subtitle: string;
+      quote: string;
+    };
+    social: {
+      title: string;
+      links: SocialLink[];
+    };
+    contact: {
+      title: string;
+      email: string;
+    };
+    copyright: string;
+  }
+
+  interface Props {
+    footerData: FooterData;
+  }
+
+  let { footerData }: Props = $props();
 
   // Get translated strings from footer data
   const brandTitle = $derived(footerData.brand.title);

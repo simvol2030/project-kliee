@@ -12,7 +12,7 @@ import type { LayoutServerLoad } from './$types';
 import type { LanguageCode } from '$lib/types/layout.types';
 import { LANGUAGES, DEFAULT_LANGUAGE } from '$lib/i18n';
 import { db } from '$lib/server/db/client';
-import { currencyRates, menuItems } from '$lib/server/db/schema';
+import { currencyRates, menuItems, footerBrand, footerSocialLinks, footerContact } from '$lib/server/db/schema';
 import { asc, eq } from 'drizzle-orm';
 
 export const load: LayoutServerLoad = async ({ url }) => {
@@ -69,12 +69,54 @@ export const load: LayoutServerLoad = async ({ url }) => {
 			}))
 	}));
 
+	// Load footer data from database
+	const [brand] = await db.select().from(footerBrand).limit(1);
+	const socialLinks = await db
+		.select()
+		.from(footerSocialLinks)
+		.where(eq(footerSocialLinks.is_visible, true))
+		.orderBy(asc(footerSocialLinks.order_index));
+	const [contact] = await db.select().from(footerContact).limit(1);
+
+	// Social section title translations
+	const socialTitles: Record<LanguageCode, string> = {
+		en: 'Follow',
+		ru: 'Подписаться',
+		es: 'Seguir',
+		zh: '关注'
+	};
+
+	// Build localized footer data
+	const footerData = {
+		brand: {
+			title: brand?.title || 'K-LIÉE',
+			subtitle: brand?.[`subtitle_${locale}` as keyof typeof brand] as string || brand?.subtitle_en || '',
+			quote: brand?.[`quote_${locale}` as keyof typeof brand] as string || brand?.quote_en || ''
+		},
+		social: {
+			title: socialTitles[locale],
+			links: socialLinks.map((link) => ({
+				platform: link.platform,
+				label: link.label,
+				badge: link.badge,
+				url: link.url,
+				icon: link.icon
+			}))
+		},
+		contact: {
+			title: contact?.[`title_${locale}` as keyof typeof contact] as string || contact?.title_en || 'Contact',
+			email: contact?.email || ''
+		},
+		copyright: `© ${new Date().getFullYear()} K-LIÉE. All rights reserved.`
+	};
+
 	return {
 		locale,
 		currencyRates: rates.map((r) => ({
 			currency: r.to_currency,
 			rate: parseFloat(r.rate)
 		})),
-		menuItems: menuWithChildren
+		menuItems: menuWithChildren,
+		footerData
 	};
 };
