@@ -1,10 +1,21 @@
 # COMPLETED.md - Change Status Tracking
 
-**Last Updated:** 2026-01-08
+**Last Updated:** 2026-01-28
 
 ---
 
 ## Активные сессии
+
+### Session-2: Footer Database Integration
+
+| Change | Status | Описание |
+|--------|--------|----------|
+| changes-1-footer-db | ⏳ PENDING | Footer читает из SQLite вместо JSON |
+
+**Проблема:** Footer использует статический JSON, админка - SQLite. Разные источники.
+**Решение:** Переключить Footer на чтение из БД.
+
+---
 
 ### Session-1: CMS Admin Panels
 
