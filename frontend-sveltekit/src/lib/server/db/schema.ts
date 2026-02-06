@@ -536,6 +536,22 @@ export const pageBlocks = sqliteTable('page_blocks', {
 });
 
 // ============================================
+// CONTACT SOCIAL LINKS
+// ============================================
+
+/**
+ * Contact Social Links - ссылки на соцсети для страницы контактов
+ */
+export const contactSocialLinks = sqliteTable('contact_social_links', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	platform: text('platform').notNull(),
+	label: text('label').notNull(),
+	url: text('url').notNull(),
+	order_index: integer('order_index').default(0),
+	is_visible: integer('is_visible', { mode: 'boolean' }).default(true)
+});
+
+// ============================================
 // SETTINGS (Global)
 // ============================================
 
@@ -997,6 +1013,10 @@ export type AboutAward = typeof aboutAwards.$inferSelect;
 export type NewAboutAward = typeof aboutAwards.$inferInsert;
 export type AboutResidency = typeof aboutResidencies.$inferSelect;
 export type NewAboutResidency = typeof aboutResidencies.$inferInsert;
+
+// Contact Social Links
+export type ContactSocialLink = typeof contactSocialLinks.$inferSelect;
+export type NewContactSocialLink = typeof contactSocialLinks.$inferInsert;
 
 // Chatbot
 export type ChatbotSettings = typeof chatbotSettings.$inferSelect;
