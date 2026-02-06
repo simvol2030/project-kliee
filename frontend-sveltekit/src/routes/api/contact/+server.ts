@@ -1,12 +1,16 @@
 /**
  * Contact Form API Endpoint
  *
- * Handles contact form submissions with validation, rate limiting, and email notifications
+ * Handles contact form submissions with validation, rate limiting, and email notifications.
+ * Reads settings (recipient email, form enabled, auto-reply) from DB.
  */
 
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { sendContactFormEmail, sendContactAutoReply } from '$lib/server/notifications/email';
+import { db } from '$lib/server/db/client';
+import { settings } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
 
 // Simple in-memory rate limiting (production should use Redis)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -50,6 +54,14 @@ function checkRateLimit(ip: string): boolean {
 	return true;
 }
 
+/**
+ * Helper to read a contact setting from the DB
+ */
+async function getContactSetting(key: string): Promise<string | null> {
+	const [row] = await db.select().from(settings).where(eq(settings.key, key)).limit(1);
+	return row?.value ?? null;
+}
+
 export const POST: RequestHandler = async ({ request, getClientAddress }) => {
 	const clientIP = getClientAddress();
 
@@ -62,6 +74,15 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
 	}
 
 	try {
+		// Check if form is enabled
+		const formEnabled = await getContactSetting('contact_form_enabled');
+		if (formEnabled === 'false') {
+			return json(
+				{ error: 'Contact form is currently disabled.' },
+				{ status: 503 }
+			);
+		}
+
 		const data: ContactFormData = await request.json();
 
 		// Validation
@@ -105,11 +126,18 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
 			messageLength: sanitizedData.message.length
 		});
 
-		// Send emails in parallel
-		const [adminEmailSent, autoReplySent] = await Promise.all([
-			sendContactFormEmail(sanitizedData),
-			sendContactAutoReply(sanitizedData)
-		]);
+		// Read settings from DB
+		const recipientEmail = await getContactSetting('contact_recipient_email');
+		const autoReplyEnabled = await getContactSetting('contact_auto_reply_enabled');
+
+		// Send admin notification (with DB recipient override)
+		const adminEmailSent = await sendContactFormEmail(sanitizedData, recipientEmail || undefined);
+
+		// Send auto-reply only if enabled
+		let autoReplySent = false;
+		if (autoReplyEnabled !== 'false') {
+			autoReplySent = await sendContactAutoReply(sanitizedData);
+		}
 
 		console.log('[Contact Form] Email status:', { adminEmailSent, autoReplySent });
 

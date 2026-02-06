@@ -8,6 +8,13 @@
 	const locale = $derived(($page.data.locale as LanguageCode) || 'en');
 	const { contact } = data;
 
+	// Use DB social links if available, otherwise fall back to JSON data
+	const socialLinks = $derived(
+		data.dbSocialLinks && data.dbSocialLinks.length > 0
+			? data.dbSocialLinks
+			: contact.contact.socialLinks
+	);
+
 	// Form state
 	let formData = $state({
 		name: '',
@@ -190,7 +197,7 @@
 							{:else}Social Media{/if}
 						</h3>
 						<div class="social-links">
-							{#each contact.contact.socialLinks as link}
+							{#each socialLinks as link}
 								<a
 									href={link.url}
 									target="_blank"

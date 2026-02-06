@@ -456,19 +456,21 @@ export async function sendAdminOrderNotification(data: OrderEmailData): Promise<
 
 /**
  * Send contact form notification to admin
+ * @param data - Contact form data
+ * @param recipientOverride - Optional email override (from DB settings). Falls back to ADMIN_EMAIL env var.
  */
-export async function sendContactFormEmail(data: ContactFormData): Promise<boolean> {
-	const { ADMIN_EMAIL } = env;
+export async function sendContactFormEmail(data: ContactFormData, recipientOverride?: string): Promise<boolean> {
+	const recipient = recipientOverride || env.ADMIN_EMAIL;
 
-	if (!ADMIN_EMAIL) {
-		console.log('[Email] ADMIN_EMAIL not configured, skipping contact notification');
+	if (!recipient) {
+		console.log('[Email] No recipient configured (neither DB setting nor ADMIN_EMAIL env), skipping contact notification');
 		return false;
 	}
 
 	const html = generateContactEmailHtml(data);
 
 	return sendEmail({
-		to: ADMIN_EMAIL,
+		to: recipient,
 		subject: `[K-LIÉE Contact] ${data.subject}`,
 		html,
 		replyTo: data.email
