@@ -17,9 +17,24 @@ _old-static-site/
 *.png
 *.gif
 *.webp
+*.mp4
+*.webm
 *.JPG
 *.JPEG
 *.PNG
+
+# Build artifacts
+dist/
+build/
+.svelte-kit/
+
+# Data (persistent volumes)
+data/db/sqlite/
+data/logs/
+data/media/
+
+# Backups
+*.tar.gz
 
 # Frontend local files
 frontend-sveltekit/.claude/
