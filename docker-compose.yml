@@ -2,122 +2,62 @@ version: '3.8'
 
 services:
   # ========================================
-  # FRONTEND SERVICE - React Router (Remix)
+  # FRONTEND SERVICE - SvelteKit
   # ========================================
 
-  frontend-remix:
+  frontend:
     build:
-      context: ./frontend-remix
+      context: ./frontend-sveltekit
       target: development
-    container_name: frontend-remix-dev
+    container_name: frontend-sveltekit-dev
     ports:
-      - "5173:5173"
+      - "3000:5173"
     environment:
       - NODE_ENV=development
-      - DATABASE_URL=file:../data/db/app.db
-      - SESSION_SECRET=development-secret-change-in-production
-      - API_URL=http://backend-hono:3001
+      - ORIGIN=http://localhost:3000
     volumes:
-      # Hot-reload: mount source code
-      - ./frontend-remix/app:/app/app
-      - ./frontend-remix/package.json:/app/package.json
-      - ./frontend-remix/tsconfig.json:/app/tsconfig.json
-      - ./frontend-remix/vite.config.ts:/app/vite.config.ts
-      - ./frontend-remix/react-router.config.ts:/app/react-router.config.ts
-      # Shared Prisma schema and database
-      - ./prisma:/app/../prisma
+      - ./frontend-sveltekit/src:/app/src
+      - ./frontend-sveltekit/static:/app/static
       - ./data:/app/../data
-      # Prevent overwriting node_modules from container
       - /app/node_modules
     depends_on:
-      - backend-hono
+      - backend
     networks:
       - app-network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5173/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 
   # ========================================
-  # BACKEND SERVICE - Hono
+  # BACKEND SERVICE - Express.js
   # ========================================
 
-  backend-hono:
+  backend:
     build:
-      context: ./backend-hono
+      context: ./backend-expressjs
       target: development
-    container_name: backend-hono-dev
+    container_name: backend-expressjs-dev
     ports:
       - "3001:3001"
     environment:
       - NODE_ENV=development
       - PORT=3001
-      - DATABASE_URL=file:../data/db/app.db
-      - ALLOWED_ORIGINS=http://localhost:5173
     volumes:
-      # Hot-reload: mount source code
-      - ./backend-hono/src:/app/src
-      - ./backend-hono/tsconfig.json:/app/tsconfig.json
-      # Shared Prisma schema and database
-      - ./prisma:/app/../prisma
-      - ./data:/app/../data
-      # Prevent overwriting node_modules from container
+      - ./backend-expressjs/src:/app/src
+      - ./data:/app/data
       - /app/node_modules
     networks:
       - app-network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
-  # ========================================
-  # DATABASE (optional for production)
-  # ========================================
-
-  postgres:
-    image: postgres:16-alpine
-    container_name: postgres-db
-    environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app-network
-    profiles:
-      - database
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d mydb"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 networks:
   app-network:
     driver: bridge
 
-volumes:
-  postgres_data:
-
 # ========================================
 # USAGE / ИСПОЛЬЗОВАНИЕ:
 # ========================================
 #
-# Start full stack (Remix + Hono):
+# Start full stack (SvelteKit + Express):
 #   docker-compose up
-#
-# Start with PostgreSQL:
-#   docker-compose --profile database up
 #
 # Start in detached mode:
 #   docker-compose up -d
