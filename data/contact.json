@@ -6,17 +6,32 @@
     "socialLinks": [
       {
         "platform": "instagram",
-        "url": "https://instagram.com/kliee_art",
+        "url": "https://instagram.com/Official.k.liee",
         "label": "Instagram"
       },
       {
-        "platform": "facebook",
-        "url": "https://facebook.com/kliee.art",
-        "label": "Facebook"
+        "platform": "telegram",
+        "url": "https://t.me/SvetlanaKliee",
+        "label": "Telegram"
+      },
+      {
+        "platform": "youtube",
+        "url": "https://www.youtube.com/@SvetlanaKLiee",
+        "label": "YouTube"
+      },
+      {
+        "platform": "pinterest",
+        "url": "https://uk.pinterest.com/svetaklie/_profile/",
+        "label": "Pinterest"
+      },
+      {
+        "platform": "tiktok",
+        "url": "https://www.tiktok.com/@svetlanakliee_art",
+        "label": "TikTok"
       },
       {
         "platform": "opensea",
-        "url": "https://opensea.io/kliee",
+        "url": "https://opensea.io/collection/k-lieesculptures",
         "label": "OpenSea"
       }
     ],

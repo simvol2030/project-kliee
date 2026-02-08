@@ -91,6 +91,10 @@
 					<span class="icon">👤</span>
 					<span>About</span>
 				</a>
+				<a href="/contact" class:active={$page.url.pathname.startsWith('/contact')} onclick={closeMobileMenu}>
+					<span class="icon">📧</span>
+					<span>Contact</span>
+				</a>
 
 				<p class="nav-section">Layout</p>
 				<a href="/layout/menu" class:active={$page.url.pathname.startsWith('/layout/menu')} onclick={closeMobileMenu}>

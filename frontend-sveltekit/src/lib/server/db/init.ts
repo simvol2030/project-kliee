@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { db } from './client';
-import { users, posts, admins } from './schema';
-import { count } from 'drizzle-orm';
+import { users, posts, admins, settings, contactSocialLinks } from './schema';
+import { count, eq } from 'drizzle-orm';
 
 /**
  * Инициализация базы данных
@@ -75,6 +75,30 @@ export async function seedDatabase() {
 			});
 
 			console.log('✅ Default super-admin created (email: admin@example.com, password: Admin123!@#$)');
+		}
+		// Seed contact settings
+		const [contactSettingExists] = await db.select({ count: count() }).from(settings).where(eq(settings.group, 'contact'));
+		if (!contactSettingExists?.count) {
+			await db.insert(settings).values([
+				{ key: 'contact_recipient_email', value: 'info@k-liee.com', type: 'string', group: 'contact' },
+				{ key: 'contact_form_enabled', value: 'true', type: 'boolean', group: 'contact' },
+				{ key: 'contact_auto_reply_enabled', value: 'true', type: 'boolean', group: 'contact' }
+			]);
+			console.log('✅ Contact settings seeded');
+		}
+
+		// Seed contact social links
+		const [contactSocialCount] = await db.select({ count: count() }).from(contactSocialLinks);
+		if (!contactSocialCount?.count) {
+			await db.insert(contactSocialLinks).values([
+				{ platform: 'instagram', label: 'Instagram', url: 'https://instagram.com/Official.k.liee', order_index: 0, is_visible: true },
+				{ platform: 'telegram', label: 'Telegram', url: 'https://t.me/SvetlanaKliee', order_index: 1, is_visible: true },
+				{ platform: 'youtube', label: 'YouTube', url: 'https://www.youtube.com/@SvetlanaKLiee', order_index: 2, is_visible: true },
+				{ platform: 'pinterest', label: 'Pinterest', url: 'https://uk.pinterest.com/svetaklie/_profile/', order_index: 3, is_visible: true },
+				{ platform: 'tiktok', label: 'TikTok', url: 'https://www.tiktok.com/@svetlanakliee_art', order_index: 4, is_visible: true },
+				{ platform: 'opensea', label: 'OpenSea', url: 'https://opensea.io/collection/k-lieesculptures', order_index: 5, is_visible: true }
+			]);
+			console.log('✅ Contact social links seeded');
 		}
 	} catch (error) {
 		console.error('❌ Error seeding database:', error);

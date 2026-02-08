@@ -98,7 +98,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
 
 	const transport = getTransporter();
 	const fromEmail = SMTP_FROM_EMAIL || 'noreply@k-liee.com';
-	const fromName = SMTP_FROM_NAME || 'K-LIÉE';
+	const fromName = SMTP_FROM_NAME || 'K-LI\u00C9E';
 
 	try {
 		const info = await transport.sendMail({
@@ -124,13 +124,13 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
 function getOrderSubject(orderNumber: string, lang: string): string {
 	switch (lang) {
 		case 'ru':
-			return `Заказ ${orderNumber} подтверждён - K-LIÉE`;
+			return `\u0417\u0430\u043a\u0430\u0437 ${orderNumber} \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0451\u043d - K-LI\u00C9E`;
 		case 'es':
-			return `Pedido ${orderNumber} confirmado - K-LIÉE`;
+			return `Pedido ${orderNumber} confirmado - K-LI\u00C9E`;
 		case 'zh':
-			return `订单 ${orderNumber} 已确认 - K-LIÉE`;
+			return `\u8ba2\u5355 ${orderNumber} \u5df2\u786e\u8ba4 - K-LI\u00C9E`;
 		default:
-			return `Order ${orderNumber} confirmed - K-LIÉE`;
+			return `Order ${orderNumber} confirmed - K-LI\u00C9E`;
 	}
 }
 
@@ -141,39 +141,39 @@ function getTranslations(lang: string) {
 	switch (lang) {
 		case 'ru':
 			return {
-				greeting: 'Здравствуйте',
-				thankYou: 'Спасибо за ваш заказ!',
-				orderNumber: 'Номер заказа',
-				orderDetails: 'Детали заказа',
-				shippingTo: 'Доставка',
-				total: 'Итого',
-				nextSteps: 'Мы свяжемся с вами в ближайшее время для подтверждения деталей доставки и оплаты.',
-				questions: 'Есть вопросы?',
-				contactUs: 'Свяжитесь с нами'
+				greeting: '\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439\u0442\u0435',
+				thankYou: '\u0421\u043f\u0430\u0441\u0438\u0431\u043e \u0437\u0430 \u0432\u0430\u0448 \u0437\u0430\u043a\u0430\u0437!',
+				orderNumber: '\u041d\u043e\u043c\u0435\u0440 \u0437\u0430\u043a\u0430\u0437\u0430',
+				orderDetails: '\u0414\u0435\u0442\u0430\u043b\u0438 \u0437\u0430\u043a\u0430\u0437\u0430',
+				shippingTo: '\u0414\u043e\u0441\u0442\u0430\u0432\u043a\u0430',
+				total: '\u0418\u0442\u043e\u0433\u043e',
+				nextSteps: '\u041c\u044b \u0441\u0432\u044f\u0436\u0435\u043c\u0441\u044f \u0441 \u0432\u0430\u043c\u0438 \u0432 \u0431\u043b\u0438\u0436\u0430\u0439\u0448\u0435\u0435 \u0432\u0440\u0435\u043c\u044f \u0434\u043b\u044f \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u044f \u0434\u0435\u0442\u0430\u043b\u0435\u0439 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0438 \u0438 \u043e\u043f\u043b\u0430\u0442\u044b.',
+				questions: '\u0415\u0441\u0442\u044c \u0432\u043e\u043f\u0440\u043e\u0441\u044b?',
+				contactUs: '\u0421\u0432\u044f\u0436\u0438\u0442\u0435\u0441\u044c \u0441 \u043d\u0430\u043c\u0438'
 			};
 		case 'es':
 			return {
 				greeting: 'Hola',
-				thankYou: '¡Gracias por tu pedido!',
-				orderNumber: 'Número de pedido',
+				thankYou: '\u00a1Gracias por tu pedido!',
+				orderNumber: 'N\u00famero de pedido',
 				orderDetails: 'Detalles del pedido',
-				shippingTo: 'Envío a',
+				shippingTo: 'Env\u00edo a',
 				total: 'Total',
-				nextSteps: 'Nos pondremos en contacto contigo pronto para confirmar los detalles de envío y pago.',
-				questions: '¿Tienes preguntas?',
-				contactUs: 'Contáctanos'
+				nextSteps: 'Nos pondremos en contacto contigo pronto para confirmar los detalles de env\u00edo y pago.',
+				questions: '\u00bfTienes preguntas?',
+				contactUs: 'Cont\u00e1ctanos'
 			};
 		case 'zh':
 			return {
-				greeting: '您好',
-				thankYou: '感谢您的订单！',
-				orderNumber: '订单号',
-				orderDetails: '订单详情',
-				shippingTo: '收货地址',
-				total: '总计',
-				nextSteps: '我们将尽快与您联系，确认配送和付款详情。',
-				questions: '有问题？',
-				contactUs: '联系我们'
+				greeting: '\u60a8\u597d',
+				thankYou: '\u611f\u8c22\u60a8\u7684\u8ba2\u5355\uff01',
+				orderNumber: '\u8ba2\u5355\u53f7',
+				orderDetails: '\u8ba2\u5355\u8be6\u60c5',
+				shippingTo: '\u6536\u8d27\u5730\u5740',
+				total: '\u603b\u8ba1',
+				nextSteps: '\u6211\u4eec\u5c06\u5c3d\u5feb\u4e0e\u60a8\u8054\u7cfb\uff0c\u786e\u8ba4\u914d\u9001\u548c\u4ed8\u6b3e\u8be6\u60c5\u3002',
+				questions: '\u6709\u95ee\u9898\uff1f',
+				contactUs: '\u8054\u7cfb\u6211\u4eec'
 			};
 		default:
 			return {
@@ -195,10 +195,10 @@ function getTranslations(lang: string) {
  */
 function formatEmailPrice(amount: number, currency: string): string {
 	const symbols: Record<string, string> = {
-		EUR: '€',
+		EUR: '\u20ac',
 		USD: '$',
-		RUB: '₽',
-		CNY: '¥'
+		RUB: '\u20bd',
+		CNY: '\u00a5'
 	};
 	return `${symbols[currency] || currency} ${amount.toLocaleString()}`;
 }
@@ -217,7 +217,7 @@ function generateEmailTemplate(content: string, footer?: string): string {
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f9fafb;">
 	<div style="max-width: 600px; margin: 0 auto; padding: 20px;">
 		<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-			<h1 style="color: white; margin: 0; font-size: 28px; font-weight: 600;">K-LIÉE</h1>
+			<h1 style="color: white; margin: 0; font-size: 28px; font-weight: 600;">K-LI\u00C9E</h1>
 		</div>
 
 		<div style="background: white; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
@@ -225,7 +225,7 @@ function generateEmailTemplate(content: string, footer?: string): string {
 		</div>
 
 		<p style="text-align: center; color: #9ca3af; font-size: 12px; margin-top: 20px;">
-			${footer || `© ${new Date().getFullYear()} K-LIÉE. All rights reserved.`}
+			${footer || `\u00a9 ${new Date().getFullYear()} K-LI\u00C9E. All rights reserved.`}
 		</p>
 	</div>
 </body>
@@ -339,22 +339,22 @@ function generateContactAutoReplyHtml(data: ContactFormData): string {
 		en: {
 			title: 'Thank you for contacting us!',
 			body: 'We have received your message and will get back to you as soon as possible. Usually within 1-2 business days.',
-			closing: 'Best regards,<br>K-LIÉE Team'
+			closing: 'Best regards,<br>K-LI\u00C9E Team'
 		},
 		ru: {
-			title: 'Спасибо за ваше сообщение!',
-			body: 'Мы получили ваше сообщение и ответим вам в ближайшее время. Обычно в течение 1-2 рабочих дней.',
-			closing: 'С уважением,<br>Команда K-LIÉE'
+			title: '\u0421\u043f\u0430\u0441\u0438\u0431\u043e \u0437\u0430 \u0432\u0430\u0448\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435!',
+			body: '\u041c\u044b \u043f\u043e\u043b\u0443\u0447\u0438\u043b\u0438 \u0432\u0430\u0448\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u0438 \u043e\u0442\u0432\u0435\u0442\u0438\u043c \u0432\u0430\u043c \u0432 \u0431\u043b\u0438\u0436\u0430\u0439\u0448\u0435\u0435 \u0432\u0440\u0435\u043c\u044f. \u041e\u0431\u044b\u0447\u043d\u043e \u0432 \u0442\u0435\u0447\u0435\u043d\u0438\u0435 1-2 \u0440\u0430\u0431\u043e\u0447\u0438\u0445 \u0434\u043d\u0435\u0439.',
+			closing: '\u0421 \u0443\u0432\u0430\u0436\u0435\u043d\u0438\u0435\u043c,<br>\u041a\u043e\u043c\u0430\u043d\u0434\u0430 K-LI\u00C9E'
 		},
 		es: {
-			title: '¡Gracias por contactarnos!',
-			body: 'Hemos recibido tu mensaje y te responderemos lo antes posible. Normalmente dentro de 1-2 días hábiles.',
-			closing: 'Saludos cordiales,<br>Equipo K-LIÉE'
+			title: '\u00a1Gracias por contactarnos!',
+			body: 'Hemos recibido tu mensaje y te responderemos lo antes posible. Normalmente dentro de 1-2 d\u00edas h\u00e1biles.',
+			closing: 'Saludos cordiales,<br>Equipo K-LI\u00C9E'
 		},
 		zh: {
-			title: '感谢您的留言！',
-			body: '我们已收到您的消息，将尽快回复您。通常在1-2个工作日内。',
-			closing: '此致敬礼,<br>K-LIÉE 团队'
+			title: '\u611f\u8c22\u60a8\u7684\u7559\u8a00\uff01',
+			body: '\u6211\u4eec\u5df2\u6536\u5230\u60a8\u7684\u6d88\u606f\uff0c\u5c06\u5c3d\u5feb\u56de\u590d\u60a8\u3002\u901a\u5e38\u57281-2\u4e2a\u5de5\u4f5c\u65e5\u5185\u3002',
+			closing: '\u6b64\u81f4\u656c\u793c,<br>K-LI\u00C9E \u56e2\u961f'
 		}
 	};
 
@@ -405,7 +405,7 @@ export async function sendAdminOrderNotification(data: OrderEmailData): Promise<
 		return false;
 	}
 
-	const itemsList = data.items.map((i) => `- ${i.title}: €${i.price}`).join('\n');
+	const itemsList = data.items.map((i) => `- ${i.title}: \u20ac${i.price}`).join('\n');
 
 	const content = `
 		<h2 style="margin: 0 0 20px; color: #1a1a1a; font-size: 20px;">New Order Received!</h2>
@@ -438,7 +438,7 @@ export async function sendAdminOrderNotification(data: OrderEmailData): Promise<
 
 		<div style="margin-top: 20px; padding: 15px; background: #f0fdf4; border-radius: 6px;">
 			<p style="margin: 0; font-size: 18px; font-weight: 600; color: #166534;">
-				Total: €${data.totalEur} (${data.currencyCode} ${data.totalLocal})
+				Total: \u20ac${data.totalEur} (${data.currencyCode} ${data.totalLocal})
 			</p>
 		</div>
 
@@ -449,27 +449,29 @@ export async function sendAdminOrderNotification(data: OrderEmailData): Promise<
 
 	return sendEmail({
 		to: ADMIN_EMAIL,
-		subject: `[K-LIÉE] New Order ${data.orderNumber}`,
+		subject: `[K-LI\u00C9E] New Order ${data.orderNumber}`,
 		html: generateEmailTemplate(content)
 	});
 }
 
 /**
  * Send contact form notification to admin
+ * @param data - Contact form data
+ * @param recipientOverride - Optional email override (from DB settings). Falls back to ADMIN_EMAIL env var.
  */
-export async function sendContactFormEmail(data: ContactFormData): Promise<boolean> {
-	const { ADMIN_EMAIL } = env;
+export async function sendContactFormEmail(data: ContactFormData, recipientOverride?: string): Promise<boolean> {
+	const recipient = recipientOverride || env.ADMIN_EMAIL;
 
-	if (!ADMIN_EMAIL) {
-		console.log('[Email] ADMIN_EMAIL not configured, skipping contact notification');
+	if (!recipient) {
+		console.log('[Email] No recipient configured (neither DB setting nor ADMIN_EMAIL env), skipping contact notification');
 		return false;
 	}
 
 	const html = generateContactEmailHtml(data);
 
 	return sendEmail({
-		to: ADMIN_EMAIL,
-		subject: `[K-LIÉE Contact] ${data.subject}`,
+		to: recipient,
+		subject: `[K-LI\u00C9E Contact] ${data.subject}`,
 		html,
 		replyTo: data.email
 	});
@@ -480,10 +482,10 @@ export async function sendContactFormEmail(data: ContactFormData): Promise<boole
  */
 export async function sendContactAutoReply(data: ContactFormData): Promise<boolean> {
 	const translations: Record<string, string> = {
-		en: 'Thank you for your message - K-LIÉE',
-		ru: 'Спасибо за ваше сообщение - K-LIÉE',
-		es: 'Gracias por tu mensaje - K-LIÉE',
-		zh: '感谢您的留言 - K-LIÉE'
+		en: 'Thank you for your message - K-LI\u00C9E',
+		ru: '\u0421\u043f\u0430\u0441\u0438\u0431\u043e \u0437\u0430 \u0432\u0430\u0448\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 - K-LI\u00C9E',
+		es: 'Gracias por tu mensaje - K-LI\u00C9E',
+		zh: '\u611f\u8c22\u60a8\u7684\u7559\u8a00 - K-LI\u00C9E'
 	};
 
 	const subject = translations[data.lang || 'en'] || translations.en;
