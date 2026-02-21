@@ -12,6 +12,7 @@ export const load: LayoutServerLoad = async (event) => {
 
 	return {
 		user,
-		csrfToken: event.locals.csrfToken // Добавляем CSRF токен для всех страниц
+		csrfToken: event.locals.csrfToken,
+		isAdmin: true // Signal for root layout to suppress public header/footer
 	};
 };

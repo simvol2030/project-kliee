@@ -11,32 +11,9 @@
 
 	let { children, data } = $props();
 
-	// Check if current page is admin
-	const isAdminPage = $derived(
-		$page.url.pathname.startsWith('/dashboard') ||
-		$page.url.pathname.startsWith('/artworks') ||
-		$page.url.pathname.startsWith('/series') ||
-		$page.url.pathname.startsWith('/exhibitions') ||
-		$page.url.pathname.startsWith('/art-fairs') ||
-		$page.url.pathname.startsWith('/education') ||
-		$page.url.pathname.startsWith('/awards') ||
-		$page.url.pathname.startsWith('/pages') ||
-		$page.url.pathname.startsWith('/menu') ||
-		$page.url.pathname.startsWith('/products') ||
-		$page.url.pathname.startsWith('/orders') ||
-		$page.url.pathname.startsWith('/users') ||
-		$page.url.pathname.startsWith('/posts') ||
-		$page.url.pathname.startsWith('/settings') ||
-		$page.url.pathname.startsWith('/login') ||
-		$page.url.pathname.startsWith('/logout') ||
-		$page.url.pathname.startsWith('/media') ||
-		$page.url.pathname.startsWith('/layout') ||
-		$page.url.pathname.startsWith('/homepage') ||
-		$page.url.pathname.startsWith('/shop') ||
-		$page.url.pathname.startsWith('/chatbot') ||
-		$page.url.pathname.startsWith('/about') ||
-		$page.url.pathname.startsWith('/nft')
-	);
+	// Check if current page is admin — uses flag set by (admin)/+layout.server.ts
+	// This is more robust than matching URL patterns which would break with new admin routes
+	const isAdminPage = $derived(!!data.isAdmin);
 
 	// Mobile menu state
 	let mobileMenuOpen = $state(false);

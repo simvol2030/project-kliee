@@ -14,10 +14,10 @@
 
   // Language options
   const languages = [
-    { code: 'en' as LanguageCode, name: 'English', flag: '🇬🇧' },
-    { code: 'ru' as LanguageCode, name: 'Русский', flag: '🇷🇺' },
-    { code: 'es' as LanguageCode, name: 'Español', flag: '🇪🇸' },
-    { code: 'zh' as LanguageCode, name: '中文', flag: '🇨🇳' }
+    { code: 'en' as LanguageCode, name: 'English' },
+    { code: 'ru' as LanguageCode, name: 'Русский' },
+    { code: 'es' as LanguageCode, name: 'Español' },
+    { code: 'zh' as LanguageCode, name: '中文' }
   ];
 
   // Derived: current language object
@@ -88,8 +88,7 @@
     aria-expanded={isOpen}
     aria-haspopup="true"
   >
-    <span class="flag">{currentLanguage.flag}</span>
-    <span class="code">{currentLanguage.code.toUpperCase()}</span>
+    <span class="lang-badge">{currentLanguage.code.toUpperCase()}</span>
     <span class="arrow" class:rotated={isOpen}>▼</span>
   </button>
 
@@ -103,7 +102,7 @@
           role="menuitem"
           tabindex={isOpen ? 0 : -1}
         >
-          <span class="flag">{lang.flag}</span>
+          <span class="lang-badge">{lang.code.toUpperCase()}</span>
           <span class="name">{lang.name}</span>
         </button>
       {/each}
@@ -156,15 +155,18 @@
     outline-offset: 2px;
   }
 
-  .flag {
-    font-size: 18px;
-    line-height: 1;
-  }
-
-  .code {
-    font-size: 13px;
-    font-weight: 600;
+  .lang-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
     letter-spacing: 0.5px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: light-dark(rgba(0,0,0,0.08), rgba(255,255,255,0.12));
+    color: light-dark(var(--black, #000), #fff);
+    min-width: 28px;
   }
 
   .arrow {
@@ -247,9 +249,7 @@
     background: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.15));
   }
 
-  .lang-option .flag {
-    font-size: 20px;
-  }
+
 
   .lang-option .name {
     flex: 1;
