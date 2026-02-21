@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { goto } from '$app/navigation';
-	import MultilingualInput from '$lib/components/admin/MultilingualInput.svelte';
 	import TipTapEditor from '$lib/components/admin/TipTapEditor.svelte';
 	import Toast from '$lib/components/admin/Toast.svelte';
 	import ConfirmDialog from '$lib/components/admin/ConfirmDialog.svelte';

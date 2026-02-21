@@ -285,7 +285,7 @@
 		border-radius: 0.25rem;
 	}
 
-	:global(.tiptap-content p.is-editor-empty:first-child::before) {
+	:global(.tiptap-content.is-editor-empty::before) {
 		content: attr(data-placeholder);
 		color: #9ca3af;
 		pointer-events: none;
