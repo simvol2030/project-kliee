@@ -46,7 +46,7 @@
 			const response = await fetch('/api/contact', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(formData)
+				body: JSON.stringify({ ...formData, lang: locale })
 			});
 
 			if (response.ok) {
@@ -79,7 +79,7 @@
 	<meta property="og:description" content={contact.seo.description} />
 </svelte:head>
 
-<main class="contact-page">
+<div class="contact-page">
 	<!-- Hero Section -->
 	<section class="contact-hero">
 		<div class="container">
@@ -214,7 +214,7 @@
 			</div>
 		</div>
 	</section>
-</main>
+</div>
 
 <style>
 	.contact-page {
