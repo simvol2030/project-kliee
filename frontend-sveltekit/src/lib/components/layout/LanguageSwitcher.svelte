@@ -89,7 +89,6 @@
     aria-haspopup="true"
   >
     <span class="lang-badge">{currentLanguage.code.toUpperCase()}</span>
-    <span class="code">{currentLanguage.code.toUpperCase()}</span>
     <span class="arrow" class:rotated={isOpen}>▼</span>
   </button>
 
@@ -168,12 +167,6 @@
     background: light-dark(rgba(0,0,0,0.08), rgba(255,255,255,0.12));
     color: light-dark(var(--black, #000), #fff);
     min-width: 28px;
-  }
-
-  .code {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
   }
 
   .arrow {

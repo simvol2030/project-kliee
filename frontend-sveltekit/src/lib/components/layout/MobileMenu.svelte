@@ -181,7 +181,6 @@
             aria-label={`Switch to ${lang.name}`}
           >
             <span class="lang-badge-text">{lang.code.toUpperCase()}</span>
-            <span class="lang-code">{lang.code.toUpperCase()}</span>
           </button>
         {/each}
       </div>
@@ -385,21 +384,6 @@
     color: light-dark(var(--black, #000), #fff);
     min-width: 28px;
     text-align: center;
-  }
-
-  .lang-btn-compact .lang-code {
-    font-size: 10px;
-    font-weight: 600;
-    color: #666;
-    letter-spacing: 0.3px;
-  }
-
-  :global(.dark) .lang-btn-compact .lang-code {
-    color: #aaa;
-  }
-
-  .lang-btn-compact.active .lang-code {
-    color: var(--accent, #d4af37);
   }
 
   .lang-btn-compact:focus {

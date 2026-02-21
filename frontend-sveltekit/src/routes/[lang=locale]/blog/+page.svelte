@@ -31,7 +31,7 @@
 	<meta name="description" content={subtitles[locale]} />
 </svelte:head>
 
-<main class="blog-page">
+<div class="blog-page">
 	<section class="blog-hero">
 		<div class="container">
 			<h1 class="blog-title">{titles[locale]}</h1>
@@ -73,7 +73,7 @@
 			{/if}
 		</div>
 	</section>
-</main>
+</div>
 
 <style>
 	.blog-page {
