@@ -1,10 +1,32 @@
 # COMPLETED.md - Change Status Tracking
 
-**Last Updated:** 2026-01-28
+**Last Updated:** 2026-02-21
 
 ---
 
 ## Активные сессии
+
+### Session-4: Admin UX Fixes
+
+| Change | Status | Описание |
+|--------|--------|----------|
+| changes-1-bug-fixes | ⏳ PENDING | Blog posts 500, layout в адмике, флаги |
+| changes-2-homepage-admin-redesign | ⏳ PENDING | Скролл вместо табов на /homepage |
+| changes-3-sidebar-restructure | ⏳ PENDING | Логичный порядок в сайдбаре |
+
+---
+
+### Session-3: Contact Telegram + Homepage CMS + Blog
+
+| Change | Status | Описание |
+|--------|--------|----------|
+| changes-1-contact-telegram | ✅ DONE | Telegram уведомления при contact form |
+| changes-2-homepage-cms | ✅ DONE | Homepage читает из БД (provider переписан) |
+| changes-3-blog | ✅ DONE | Blog с TipTap WYSIWYG, admin + public |
+
+**Деплой:** 2026-02-21, production k-liee.com
+
+---
 
 ### Session-2: Footer Database Integration
 
@@ -39,23 +61,4 @@
 
 ---
 
-## Фаза 2: Документация
-
-**Статус:** ✅ DONE
-
-| Документ | Status |
-|----------|--------|
-| research.md (all 5) | ✅ Created |
-| tech-spec.md (all 5) | ✅ Created |
-| plan.md (all 5) | ✅ Created & Audited |
-| roadmap-final.md | ✅ Created |
-
----
-
-## Следующий шаг
-
-Фаза 3: Реализация по roadmap-final.md
-
----
-
-*Обновляется автоматически после завершения каждого change*
+*Обновляется после завершения каждого change*
