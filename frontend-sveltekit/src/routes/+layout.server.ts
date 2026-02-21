@@ -19,12 +19,17 @@ export const load: LayoutServerLoad = async ({ url }) => {
 	// Extract language from URL path
 	// URL format: /en, /ru, /es, /zh or /en/about, etc.
 	const pathSegments = url.pathname.split('/').filter((segment) => segment.length > 0);
-	const potentialLang = pathSegments[0] as LanguageCode;
+	const firstSegment = pathSegments[0] || '';
+	const potentialLang = firstSegment as LanguageCode;
 
 	// Validate language
 	const locale: LanguageCode = LANGUAGES.includes(potentialLang)
 		? potentialLang
 		: DEFAULT_LANGUAGE;
+
+	// Detect admin pages: admin routes don't start with a known locale prefix
+	// (all public pages are /en/..., /ru/..., /es/..., /zh/...)
+	const isAdmin = firstSegment.length > 0 && !LANGUAGES.includes(potentialLang);
 
 	// Load currency rates for shop components
 	const rates = await db.select().from(currencyRates);
@@ -112,6 +117,7 @@ export const load: LayoutServerLoad = async ({ url }) => {
 
 	return {
 		locale,
+		isAdmin,
 		currencyRates: rates.map((r) => ({
 			currency: r.to_currency,
 			rate: parseFloat(r.rate)
