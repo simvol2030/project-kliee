@@ -71,7 +71,8 @@ export const POST: RequestHandler = async ({ request }) => {
 				announcement_text_en,
 				announcement_text_ru,
 				announcement_text_es,
-				announcement_text_zh
+				announcement_text_zh,
+				announcement_link
 			} = body;
 
 			const [existing] = await db.select().from(homepageHero).limit(1);
@@ -99,7 +100,8 @@ export const POST: RequestHandler = async ({ request }) => {
 						announcement_text_en: announcement_text_en ?? existing.announcement_text_en,
 						announcement_text_ru: announcement_text_ru ?? existing.announcement_text_ru,
 						announcement_text_es: announcement_text_es ?? existing.announcement_text_es,
-						announcement_text_zh: announcement_text_zh ?? existing.announcement_text_zh
+						announcement_text_zh: announcement_text_zh ?? existing.announcement_text_zh,
+						announcement_link: announcement_link ?? existing.announcement_link
 					})
 					.where(eq(homepageHero.id, existing.id))
 					.returning();
@@ -127,7 +129,8 @@ export const POST: RequestHandler = async ({ request }) => {
 						announcement_text_en,
 						announcement_text_ru,
 						announcement_text_es,
-						announcement_text_zh
+						announcement_text_zh,
+						announcement_link
 					})
 					.returning();
 				return json({ success: true, hero: created });

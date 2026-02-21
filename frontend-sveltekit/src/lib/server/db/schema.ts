@@ -179,7 +179,8 @@ export const homepageHero = sqliteTable('homepage_hero', {
 	announcement_text_en: text('announcement_text_en'),
 	announcement_text_ru: text('announcement_text_ru'),
 	announcement_text_es: text('announcement_text_es'),
-	announcement_text_zh: text('announcement_text_zh')
+	announcement_text_zh: text('announcement_text_zh'),
+	announcement_link: text('announcement_link')
 });
 
 /**
@@ -291,7 +292,28 @@ export const homepageProcess = sqliteTable('homepage_process', {
 	description_es: text('description_es'),
 	description_zh: text('description_zh'),
 	icon: text('icon'),
+	image_id: integer('image_id').references(() => media.id),
 	step_number: integer('step_number'),
+	order_index: integer('order_index').default(0),
+	is_visible: integer('is_visible', { mode: 'boolean' }).default(true)
+});
+
+/**
+ * Homepage Featured Collections - коллекции на главной странице
+ */
+export const homepageFeaturedCollections = sqliteTable('homepage_featured_collections', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	series_id: text('series_id').references(() => series.id, { onDelete: 'cascade' }),
+	title_override_en: text('title_override_en'),
+	title_override_ru: text('title_override_ru'),
+	title_override_es: text('title_override_es'),
+	title_override_zh: text('title_override_zh'),
+	description_override_en: text('description_override_en'),
+	description_override_ru: text('description_override_ru'),
+	description_override_es: text('description_override_es'),
+	description_override_zh: text('description_override_zh'),
+	cover_image_id: integer('cover_image_id').references(() => media.id),
+	link: text('link'),
 	order_index: integer('order_index').default(0),
 	is_visible: integer('is_visible', { mode: 'boolean' }).default(true)
 });
@@ -444,6 +466,7 @@ export const exhibitions = sqliteTable('exhibitions', {
 	gallery_link: text('gallery_link'),
 	is_current: integer('is_current', { mode: 'boolean' }).default(false),
 	is_featured: integer('is_featured', { mode: 'boolean' }).default(false),
+	is_homepage_featured: integer('is_homepage_featured', { mode: 'boolean' }).default(false),
 	is_visible: integer('is_visible', { mode: 'boolean' }).default(true),
 	order_index: integer('order_index').default(0),
 	created_at: text('created_at').default(sql`CURRENT_TIMESTAMP`)
@@ -1027,3 +1050,7 @@ export type ChatbotSession = typeof chatbotSessions.$inferSelect;
 export type NewChatbotSession = typeof chatbotSessions.$inferInsert;
 export type ChatbotMessage = typeof chatbotMessages.$inferSelect;
 export type NewChatbotMessage = typeof chatbotMessages.$inferInsert;
+
+// Homepage Featured Collections
+export type HomepageFeaturedCollection = typeof homepageFeaturedCollections.$inferSelect;
+export type NewHomepageFeaturedCollection = typeof homepageFeaturedCollections.$inferInsert;
