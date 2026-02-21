@@ -10,9 +10,11 @@
 
 | Change | Status | Описание |
 |--------|--------|----------|
-| changes-1-bug-fixes | ⏳ PENDING | Blog posts 500, layout в адмике, флаги |
-| changes-2-homepage-admin-redesign | ⏳ PENDING | Скролл вместо табов на /homepage |
-| changes-3-sidebar-restructure | ⏳ PENDING | Логичный порядок в сайдбаре |
+| changes-1-bug-fixes | ✅ DONE | Blog posts 500 (schema fix), публичный layout в админке (isAdmin via URL), дубль Blog в sidebar |
+| changes-2-homepage-admin-redesign | ✅ DONE | Скролл вместо табов на /homepage |
+| changes-3-sidebar-restructure | ✅ DONE | Логичный порядок в сайдбаре (Content/Media/Pages/Shop/Chatbot/System) |
+
+**Деплой:** 2026-02-21, production k-liee.com
 
 ---
 
