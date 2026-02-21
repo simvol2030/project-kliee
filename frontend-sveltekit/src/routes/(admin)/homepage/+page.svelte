@@ -17,7 +17,7 @@
 		return { 'x-csrf-token': $page.data.csrfToken || '' };
 	}
 
-	let activeSection = $state<'hero' | 'about' | 'news' | 'testimonials' | 'process'>('hero');
+	let activeSection = $state<'hero' | 'about' | 'news' | 'testimonials' | 'process' | 'collections' | 'exhibitions'>('hero');
 	let isSaving = $state(false);
 
 	// Hero state - use Record to allow dynamic key access
@@ -26,7 +26,8 @@
 		subtitle_en: '', subtitle_ru: '', subtitle_es: '', subtitle_zh: '',
 		quote_en: '', quote_ru: '', quote_es: '', quote_zh: '',
 		announcement_highlight_en: '', announcement_highlight_ru: '', announcement_highlight_es: '', announcement_highlight_zh: '',
-		announcement_text_en: '', announcement_text_ru: '', announcement_text_es: '', announcement_text_zh: ''
+		announcement_text_en: '', announcement_text_ru: '', announcement_text_es: '', announcement_text_zh: '',
+		announcement_link: ''
 	});
 	let slides = $state<any[]>(data.slides || []);
 
@@ -53,6 +54,22 @@
 	let processSteps = $state(data.process || []);
 	let processModalOpen = $state(false);
 	let editingProcess = $state<any>(null);
+
+	// Featured Collections state
+	let collections = $state(data.collections || []);
+	let allSeries = $state(data.allSeries || []);
+	let collectionModalOpen = $state(false);
+	let editingCollection = $state<any>(null);
+
+	// Exhibitions state
+	let allExhibitions = $state(data.allExhibitions || []);
+	let exhibitionsSection = $state<Record<string, any>>(data.exhibitionsSection || {
+		title_en: '', title_ru: '', title_es: '', title_zh: '',
+		subtitle_en: '', subtitle_ru: '', subtitle_es: '', subtitle_zh: ''
+	});
+	let selectedExhibitionId = $state<number | null>(
+		data.allExhibitions?.find((e: any) => e.is_homepage_featured)?.id ?? null
+	);
 
 	// Hero functions
 	async function saveHero() {
@@ -214,6 +231,60 @@
 		const result = await res.json();
 		processSteps = result.items || [];
 	}
+
+	// Collections functions
+	function openCollectionModal(item?: any) {
+		editingCollection = item ? { ...item } : {
+			series_id: '',
+			title_override_en: '', title_override_ru: '', title_override_es: '', title_override_zh: '',
+			description_override_en: '', description_override_ru: '', description_override_es: '', description_override_zh: '',
+			cover_image_id: null, cover_image: null, link: '',
+			order_index: collections.length, is_visible: true
+		};
+		collectionModalOpen = true;
+	}
+
+	async function saveCollection() {
+		isSaving = true;
+		try {
+			const url = editingCollection.id ? `/api/homepage/collections/${editingCollection.id}` : '/api/homepage/collections';
+			const method = editingCollection.id ? 'PATCH' : 'POST';
+			await fetch(url, { method, headers: csrfHeaders(), body: JSON.stringify(editingCollection) });
+			await loadCollections();
+			collectionModalOpen = false;
+		} finally {
+			isSaving = false;
+		}
+	}
+
+	async function deleteCollection(id: number) {
+		if (!confirm('Delete this collection?')) return;
+		await fetch(`/api/homepage/collections/${id}`, { method: 'DELETE', headers: csrfDeleteHeaders() });
+		await loadCollections();
+	}
+
+	async function loadCollections() {
+		const res = await fetch('/api/homepage/collections');
+		const result = await res.json();
+		collections = result.items || [];
+	}
+
+	// Exhibitions functions
+	async function saveExhibitionsConfig() {
+		isSaving = true;
+		try {
+			await fetch('/api/homepage/exhibitions', {
+				method: 'POST',
+				headers: csrfHeaders(),
+				body: JSON.stringify({
+					featured_exhibition_id: selectedExhibitionId,
+					...exhibitionsSection
+				})
+			});
+		} finally {
+			isSaving = false;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -232,6 +303,8 @@
 		<button type="button" class:active={activeSection === 'news'} onclick={() => (activeSection = 'news')}>News</button>
 		<button type="button" class:active={activeSection === 'testimonials'} onclick={() => (activeSection = 'testimonials')}>Testimonials</button>
 		<button type="button" class:active={activeSection === 'process'} onclick={() => (activeSection = 'process')}>Process</button>
+		<button type="button" class:active={activeSection === 'collections'} onclick={() => (activeSection = 'collections')}>Collections</button>
+		<button type="button" class:active={activeSection === 'exhibitions'} onclick={() => (activeSection = 'exhibitions')}>Exhibitions</button>
 	</nav>
 
 	<!-- HERO SECTION -->
@@ -268,6 +341,10 @@
 					</LanguageTabs>
 
 					<h3>Announcement</h3>
+					<div class="form-group">
+						<label>Announcement Link (URL)</label>
+						<input type="text" bind:value={hero.announcement_link} placeholder="https://... or /path" />
+					</div>
 					<LanguageTabs>
 						{#snippet children(lang)}
 							<div class="form-row">
@@ -459,6 +536,95 @@
 			</div>
 		</div>
 	{/if}
+
+	<!-- FEATURED COLLECTIONS SECTION -->
+	{#if activeSection === 'collections'}
+	<div class="section-content">
+		<div class="card">
+			<div class="card-header">
+				<h2>Featured Collections</h2>
+				<button type="button" class="btn-primary" onclick={() => openCollectionModal()}>+ Add Collection</button>
+			</div>
+			<p class="section-hint">Select series to feature on the homepage. Override title/description if needed.</p>
+
+			<div class="items-list">
+				{#each collections as item}
+					<div class="list-item">
+						{#if item.cover_image}
+							<img src={item.cover_image.url} alt="" class="item-thumb" />
+						{/if}
+						<div class="item-info">
+							<strong>{item.title_override_en || item.series?.name_en || '(no series)'}</strong>
+							<span class="meta">Series: {item.series?.name_en || item.series_id || '—'} · Order: {item.order_index}</span>
+						</div>
+						<div class="item-actions">
+							<button type="button" class="btn-edit" onclick={() => openCollectionModal(item)}>Edit</button>
+							<button type="button" class="btn-delete" onclick={() => deleteCollection(item.id)}>Delete</button>
+						</div>
+					</div>
+				{:else}
+					<p class="empty">No featured collections yet.</p>
+				{/each}
+			</div>
+		</div>
+	</div>
+	{/if}
+
+	<!-- EXHIBITIONS SECTION -->
+	{#if activeSection === 'exhibitions'}
+	<div class="section-content">
+		<div class="card">
+			<h2>Exhibitions Preview</h2>
+			<p class="section-hint">Select one exhibition to feature on the homepage and set the section title.</p>
+
+			<form onsubmit={(e) => { e.preventDefault(); saveExhibitionsConfig(); }}>
+				<h3>Section Title &amp; Subtitle</h3>
+				<LanguageTabs>
+					{#snippet children(lang)}
+						<div class="form-row">
+							<div class="form-group">
+								<label>Title ({lang.toUpperCase()})</label>
+								<input type="text" bind:value={exhibitionsSection[`title_${lang}`]} placeholder="Current Exhibitions" />
+							</div>
+							<div class="form-group">
+								<label>Subtitle ({lang.toUpperCase()})</label>
+								<input type="text" bind:value={exhibitionsSection[`subtitle_${lang}`]} placeholder="Curated presentations..." />
+							</div>
+						</div>
+					{/snippet}
+				</LanguageTabs>
+
+				<h3>Featured Exhibition</h3>
+				<div class="form-group">
+					<label>Select exhibition to show on homepage</label>
+					<select bind:value={selectedExhibitionId}>
+						<option value={null}>— None (fallback to JSON) —</option>
+						{#each allExhibitions as ex}
+							<option value={ex.id}>{ex.title_en}{ex.year ? ` (${ex.year})` : ''}</option>
+						{/each}
+					</select>
+				</div>
+
+				{#if selectedExhibitionId}
+					{@const selected = allExhibitions.find((e: any) => e.id === selectedExhibitionId)}
+					{#if selected}
+						<div class="selected-exhibition">
+							{#if selected.cover_image}
+								<img src={selected.cover_image.url} alt="" class="exhibition-preview-img" />
+							{/if}
+							<div>
+								<strong>{selected.title_en}</strong>
+								<p class="meta">{selected.description_en || ''}</p>
+							</div>
+						</div>
+					{/if}
+				{/if}
+
+				<button type="submit" class="btn-save" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Exhibitions Config'}</button>
+			</form>
+		</div>
+	</div>
+	{/if}
 </div>
 
 <!-- NEWS MODAL -->
@@ -601,6 +767,72 @@
 	</div>
 {/if}
 
+<!-- COLLECTION MODAL -->
+{#if collectionModalOpen && editingCollection}
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div class="modal-overlay" onclick={() => (collectionModalOpen = false)}>
+		<div class="modal-content" onclick={(e) => e.stopPropagation()}>
+			<div class="modal-header">
+				<h2>{editingCollection.id ? 'Edit Collection' : 'New Featured Collection'}</h2>
+				<button type="button" class="btn-close" onclick={() => (collectionModalOpen = false)}>×</button>
+			</div>
+			<form class="modal-body" onsubmit={(e) => { e.preventDefault(); saveCollection(); }}>
+				<div class="form-group">
+					<label>Series</label>
+					<select bind:value={editingCollection.series_id}>
+						<option value="">— None —</option>
+						{#each allSeries as s}
+							<option value={s.id}>{s.name_en}</option>
+						{/each}
+					</select>
+				</div>
+
+				<h3>Title Override (optional)</h3>
+				<LanguageTabs>
+					{#snippet children(lang)}
+						<div class="form-group">
+							<input type="text" bind:value={editingCollection[`title_override_${lang}`]} placeholder="Leave blank to use series title" />
+						</div>
+					{/snippet}
+				</LanguageTabs>
+
+				<h3>Description Override (optional)</h3>
+				<LanguageTabs>
+					{#snippet children(lang)}
+						<div class="form-group">
+							<textarea bind:value={editingCollection[`description_override_${lang}`]} rows="2" placeholder="Leave blank to use series description"></textarea>
+						</div>
+					{/snippet}
+				</LanguageTabs>
+
+				<div class="form-row">
+					<div class="form-group">
+						<label>Link (URL override)</label>
+						<input type="text" bind:value={editingCollection.link} placeholder="/works/series-slug" />
+					</div>
+					<div class="form-group">
+						<label>Order Index</label>
+						<input type="number" bind:value={editingCollection.order_index} min="0" />
+					</div>
+				</div>
+
+				<MediaPicker
+					label="Cover Image Override"
+					value={editingCollection.cover_image}
+					onselect={(e) => { editingCollection.cover_image_id = e.detail.id; editingCollection.cover_image = e.detail; }}
+					onclear={() => { editingCollection.cover_image_id = null; editingCollection.cover_image = null; }}
+				/>
+
+				<div class="modal-footer">
+					<button type="submit" class="btn-save" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save'}</button>
+					<button type="button" class="btn-cancel" onclick={() => (collectionModalOpen = false)}>Cancel</button>
+				</div>
+			</form>
+		</div>
+	</div>
+{/if}
+
 <style>
 	.homepage-admin { padding: 2rem; }
 	.page-header { margin-bottom: 2rem; }
@@ -691,6 +923,19 @@
 
 	.empty { text-align: center; padding: 2rem; color: var(--color-text-secondary, #666); }
 
+	.section-hint { color: var(--color-text-secondary, #666); font-size: 0.875rem; margin: 0 0 1rem; }
+
+	.form-group select {
+		width: 100%; padding: 0.75rem; border: 1px solid var(--color-border, #ddd);
+		border-radius: 4px; font-size: 1rem; font-family: inherit; background: white;
+	}
+
+	.selected-exhibition {
+		display: flex; gap: 1rem; padding: 1rem; background: #f9f9f9;
+		border-radius: 8px; margin: 0.5rem 0 1.5rem; align-items: flex-start;
+	}
+	.exhibition-preview-img { width: 80px; height: 60px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
+
 	/* Modal */
 	.modal-overlay {
 		position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -775,6 +1020,9 @@
 	}
 
 	:global(.dark) .empty { color: #9ca3af; }
+	:global(.dark) .section-hint { color: #9ca3af; }
+	:global(.dark) .form-group select { background: #374151; border-color: #4b5563; color: #f9fafb; }
+	:global(.dark) .selected-exhibition { background: #374151; }
 
 	:global(.dark) .modal-content { background: #1f2937; }
 	:global(.dark) .modal-header { border-color: #374151; }
