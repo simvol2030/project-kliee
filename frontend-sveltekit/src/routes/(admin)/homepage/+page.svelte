@@ -17,7 +17,6 @@
 		return { 'x-csrf-token': $page.data.csrfToken || '' };
 	}
 
-	let activeSection = $state<'hero' | 'about' | 'news' | 'testimonials' | 'process'>('hero');
 	let isSaving = $state(false);
 
 	// Hero state - use Record to allow dynamic key access
@@ -226,17 +225,20 @@
 		<p class="subtitle">Configure all homepage sections (4 languages)</p>
 	</header>
 
-	<nav class="section-tabs">
-		<button type="button" class:active={activeSection === 'hero'} onclick={() => (activeSection = 'hero')}>Hero</button>
-		<button type="button" class:active={activeSection === 'about'} onclick={() => (activeSection = 'about')}>About</button>
-		<button type="button" class:active={activeSection === 'news'} onclick={() => (activeSection = 'news')}>News</button>
-		<button type="button" class:active={activeSection === 'testimonials'} onclick={() => (activeSection = 'testimonials')}>Testimonials</button>
-		<button type="button" class:active={activeSection === 'process'} onclick={() => (activeSection = 'process')}>Process</button>
+	<!-- Sticky Quick Nav -->
+	<nav class="quick-nav" aria-label="Section navigation">
+		<a href="#hero" class="quick-nav-link">Hero</a>
+		<a href="#slides" class="quick-nav-link">Slides</a>
+		<a href="#about" class="quick-nav-link">About</a>
+		<a href="#news" class="quick-nav-link">News</a>
+		<a href="#testimonials" class="quick-nav-link">Testimonials</a>
+		<a href="#process" class="quick-nav-link">Process</a>
 	</nav>
 
-	<!-- HERO SECTION -->
-	{#if activeSection === 'hero'}
-		<div class="section-content">
+	<div class="sections-scroll">
+
+		<!-- HERO SECTION -->
+		<section id="hero" class="page-section">
 			<div class="card">
 				<h2>Hero Content</h2>
 				<form onsubmit={(e) => { e.preventDefault(); saveHero(); }}>
@@ -286,7 +288,10 @@
 					<button type="submit" class="btn-save" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Hero'}</button>
 				</form>
 			</div>
+		</section>
 
+		<!-- SLIDES SECTION -->
+		<section id="slides" class="page-section">
 			<div class="card">
 				<div class="card-header">
 					<h2>Hero Slides</h2>
@@ -311,12 +316,10 @@
 					{/each}
 				</div>
 			</div>
-		</div>
-	{/if}
+		</section>
 
-	<!-- ABOUT SECTION -->
-	{#if activeSection === 'about'}
-		<div class="section-content">
+		<!-- ABOUT SECTION -->
+		<section id="about" class="page-section">
 			<div class="card">
 				<h2>About Preview Section</h2>
 				<form onsubmit={(e) => { e.preventDefault(); saveAbout(); }}>
@@ -363,12 +366,10 @@
 					<button type="submit" class="btn-save" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save About'}</button>
 				</form>
 			</div>
-		</div>
-	{/if}
+		</section>
 
-	<!-- NEWS SECTION -->
-	{#if activeSection === 'news'}
-		<div class="section-content">
+		<!-- NEWS SECTION -->
+		<section id="news" class="page-section">
 			<div class="card">
 				<div class="card-header">
 					<h2>News Grid</h2>
@@ -395,12 +396,10 @@
 					{/each}
 				</div>
 			</div>
-		</div>
-	{/if}
+		</section>
 
-	<!-- TESTIMONIALS SECTION -->
-	{#if activeSection === 'testimonials'}
-		<div class="section-content">
+		<!-- TESTIMONIALS SECTION -->
+		<section id="testimonials" class="page-section">
 			<div class="card">
 				<div class="card-header">
 					<h2>Testimonials</h2>
@@ -427,12 +426,10 @@
 					{/each}
 				</div>
 			</div>
-		</div>
-	{/if}
+		</section>
 
-	<!-- PROCESS SECTION -->
-	{#if activeSection === 'process'}
-		<div class="section-content">
+		<!-- PROCESS SECTION -->
+		<section id="process" class="page-section">
 			<div class="card">
 				<div class="card-header">
 					<h2>Creative Process Steps</h2>
@@ -457,8 +454,9 @@
 					{/each}
 				</div>
 			</div>
-		</div>
-	{/if}
+		</section>
+
+	</div>
 </div>
 
 <!-- NEWS MODAL -->
@@ -603,23 +601,53 @@
 
 <style>
 	.homepage-admin { padding: 2rem; }
-	.page-header { margin-bottom: 2rem; }
+	.page-header { margin-bottom: 1.5rem; }
 	.page-header h1 { margin: 0; font-size: 1.75rem; }
 	.subtitle { color: var(--color-text-secondary, #666); margin: 0.25rem 0 0; }
 
-	.section-tabs {
-		display: flex; gap: 0.5rem; margin-bottom: 1.5rem;
-		border-bottom: 1px solid var(--color-border, #ddd); padding-bottom: 0.5rem;
+	/* Sticky Quick Nav */
+	.quick-nav {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		display: flex;
+		gap: 0.375rem;
 		flex-wrap: wrap;
+		padding: 0.75rem 2rem;
+		margin: 0 -2rem 1.5rem;
+		background: var(--color-bg, #f9fafb);
+		border-bottom: 1px solid var(--color-border, #e5e7eb);
 	}
-	.section-tabs button {
-		padding: 0.75rem 1.5rem; background: none; border: none;
-		cursor: pointer; font-weight: 500; color: var(--color-text-secondary, #666);
-		border-radius: 4px 4px 0 0;
-	}
-	.section-tabs button.active { background: var(--color-primary, #333); color: white; }
 
-	.section-content { display: flex; flex-direction: column; gap: 1.5rem; }
+	.quick-nav-link {
+		padding: 0.375rem 0.875rem;
+		background: white;
+		border: 1px solid var(--color-border, #e5e7eb);
+		border-radius: 999px;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		color: var(--color-text-secondary, #555);
+		text-decoration: none;
+		transition: all 0.15s;
+		white-space: nowrap;
+	}
+
+	.quick-nav-link:hover {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-color: transparent;
+		color: white;
+	}
+
+	/* Sections */
+	.sections-scroll {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.page-section {
+		scroll-margin-top: 3.5rem;
+	}
 
 	.card {
 		background: white; border: 1px solid var(--color-border, #ddd);
@@ -721,11 +749,18 @@
 	:global(.dark) .page-header h1 { color: #f9fafb; }
 	:global(.dark) .subtitle { color: #9ca3af; }
 
-	:global(.dark) .section-tabs { border-color: #374151; }
-	:global(.dark) .section-tabs button { color: #9ca3af; }
-	:global(.dark) .section-tabs button:hover { color: #e5e7eb; }
-	:global(.dark) .section-tabs button.active {
+	:global(.dark) .quick-nav {
+		background: #111827;
+		border-color: #374151;
+	}
+	:global(.dark) .quick-nav-link {
+		background: #1f2937;
+		border-color: #374151;
+		color: #9ca3af;
+	}
+	:global(.dark) .quick-nav-link:hover {
 		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-color: transparent;
 		color: white;
 	}
 

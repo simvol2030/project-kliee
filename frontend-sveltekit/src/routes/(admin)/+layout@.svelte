@@ -63,14 +63,6 @@
 				</a>
 
 				<p class="nav-section">Content</p>
-				<a href="/media" class:active={$page.url.pathname === '/media'} onclick={closeMobileMenu}>
-					<span class="icon">📷</span>
-					<span>Media</span>
-				</a>
-				<a href="/media/settings" class:active={$page.url.pathname === '/media/settings'} onclick={closeMobileMenu}>
-					<span class="icon">🖼️</span>
-					<span>Media Settings</span>
-				</a>
 				<a href="/artworks" class:active={$page.url.pathname.startsWith('/artworks')} onclick={closeMobileMenu}>
 					<span class="icon">🖼️</span>
 					<span>Artworks</span>
@@ -87,6 +79,10 @@
 					<span class="icon">💎</span>
 					<span>NFT</span>
 				</a>
+				<a href="/blog" class:active={$page.url.pathname.startsWith('/blog')} onclick={closeMobileMenu}>
+					<span class="icon">✍️</span>
+					<span>Blog</span>
+				</a>
 				<a href="/about" class:active={$page.url.pathname.startsWith('/about')} onclick={closeMobileMenu}>
 					<span class="icon">👤</span>
 					<span>About</span>
@@ -95,12 +91,22 @@
 					<span class="icon">📧</span>
 					<span>Contact</span>
 				</a>
-				<a href="/blog" class:active={$page.url.pathname.startsWith('/blog')} onclick={closeMobileMenu}>
-					<span class="icon">✍️</span>
-					<span>Blog</span>
+
+				<p class="nav-section">Media</p>
+				<a href="/media" class:active={$page.url.pathname === '/media'} onclick={closeMobileMenu}>
+					<span class="icon">📷</span>
+					<span>Media Library</span>
+				</a>
+				<a href="/media/settings" class:active={$page.url.pathname === '/media/settings'} onclick={closeMobileMenu}>
+					<span class="icon">🖼️</span>
+					<span>Media Settings</span>
 				</a>
 
-				<p class="nav-section">Layout</p>
+				<p class="nav-section">Pages</p>
+				<a href="/homepage" class:active={$page.url.pathname.startsWith('/homepage')} onclick={closeMobileMenu}>
+					<span class="icon">🏠</span>
+					<span>Homepage</span>
+				</a>
 				<a href="/layout/menu" class:active={$page.url.pathname.startsWith('/layout/menu')} onclick={closeMobileMenu}>
 					<span class="icon">🔗</span>
 					<span>Menu</span>
@@ -108,10 +114,6 @@
 				<a href="/layout/footer" class:active={$page.url.pathname.startsWith('/layout/footer')} onclick={closeMobileMenu}>
 					<span class="icon">📑</span>
 					<span>Footer</span>
-				</a>
-				<a href="/homepage" class:active={$page.url.pathname.startsWith('/homepage')} onclick={closeMobileMenu}>
-					<span class="icon">🏠</span>
-					<span>Homepage</span>
 				</a>
 
 				<p class="nav-section">Shop</p>
