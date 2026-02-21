@@ -17,7 +17,6 @@
 		return { 'x-csrf-token': $page.data.csrfToken || '' };
 	}
 
-	let activeSection = $state<'hero' | 'about' | 'news' | 'testimonials' | 'process' | 'collections' | 'exhibitions'>('hero');
 	let isSaving = $state(false);
 
 	// Hero state - use Record to allow dynamic key access
@@ -26,8 +25,7 @@
 		subtitle_en: '', subtitle_ru: '', subtitle_es: '', subtitle_zh: '',
 		quote_en: '', quote_ru: '', quote_es: '', quote_zh: '',
 		announcement_highlight_en: '', announcement_highlight_ru: '', announcement_highlight_es: '', announcement_highlight_zh: '',
-		announcement_text_en: '', announcement_text_ru: '', announcement_text_es: '', announcement_text_zh: '',
-		announcement_link: ''
+		announcement_text_en: '', announcement_text_ru: '', announcement_text_es: '', announcement_text_zh: ''
 	});
 	let slides = $state<any[]>(data.slides || []);
 
@@ -297,19 +295,22 @@
 		<p class="subtitle">Configure all homepage sections (4 languages)</p>
 	</header>
 
-	<nav class="section-tabs">
-		<button type="button" class:active={activeSection === 'hero'} onclick={() => (activeSection = 'hero')}>Hero</button>
-		<button type="button" class:active={activeSection === 'about'} onclick={() => (activeSection = 'about')}>About</button>
-		<button type="button" class:active={activeSection === 'news'} onclick={() => (activeSection = 'news')}>News</button>
-		<button type="button" class:active={activeSection === 'testimonials'} onclick={() => (activeSection = 'testimonials')}>Testimonials</button>
-		<button type="button" class:active={activeSection === 'process'} onclick={() => (activeSection = 'process')}>Process</button>
-		<button type="button" class:active={activeSection === 'collections'} onclick={() => (activeSection = 'collections')}>Collections</button>
-		<button type="button" class:active={activeSection === 'exhibitions'} onclick={() => (activeSection = 'exhibitions')}>Exhibitions</button>
+	<!-- Sticky Quick Nav -->
+	<nav class="quick-nav" aria-label="Section navigation">
+		<a href="#hero" class="quick-nav-link">Hero</a>
+		<a href="#slides" class="quick-nav-link">Slides</a>
+		<a href="#about" class="quick-nav-link">About</a>
+		<a href="#news" class="quick-nav-link">News</a>
+		<a href="#testimonials" class="quick-nav-link">Testimonials</a>
+		<a href="#process" class="quick-nav-link">Process</a>
+		<a href="#collections" class="quick-nav-link">Collections</a>
+		<a href="#exhibitions" class="quick-nav-link">Exhibitions</a>
 	</nav>
 
-	<!-- HERO SECTION -->
-	{#if activeSection === 'hero'}
-		<div class="section-content">
+	<div class="sections-scroll">
+
+		<!-- HERO SECTION -->
+		<section id="hero" class="page-section">
 			<div class="card">
 				<h2>Hero Content</h2>
 				<form onsubmit={(e) => { e.preventDefault(); saveHero(); }}>
@@ -341,10 +342,6 @@
 					</LanguageTabs>
 
 					<h3>Announcement</h3>
-					<div class="form-group">
-						<label>Announcement Link (URL)</label>
-						<input type="text" bind:value={hero.announcement_link} placeholder="https://... or /path" />
-					</div>
 					<LanguageTabs>
 						{#snippet children(lang)}
 							<div class="form-row">
@@ -363,7 +360,10 @@
 					<button type="submit" class="btn-save" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Hero'}</button>
 				</form>
 			</div>
+		</section>
 
+		<!-- SLIDES SECTION -->
+		<section id="slides" class="page-section">
 			<div class="card">
 				<div class="card-header">
 					<h2>Hero Slides</h2>
@@ -388,12 +388,10 @@
 					{/each}
 				</div>
 			</div>
-		</div>
-	{/if}
+		</section>
 
-	<!-- ABOUT SECTION -->
-	{#if activeSection === 'about'}
-		<div class="section-content">
+		<!-- ABOUT SECTION -->
+		<section id="about" class="page-section">
 			<div class="card">
 				<h2>About Preview Section</h2>
 				<form onsubmit={(e) => { e.preventDefault(); saveAbout(); }}>
@@ -440,12 +438,10 @@
 					<button type="submit" class="btn-save" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save About'}</button>
 				</form>
 			</div>
-		</div>
-	{/if}
+		</section>
 
-	<!-- NEWS SECTION -->
-	{#if activeSection === 'news'}
-		<div class="section-content">
+		<!-- NEWS SECTION -->
+		<section id="news" class="page-section">
 			<div class="card">
 				<div class="card-header">
 					<h2>News Grid</h2>
@@ -472,12 +468,10 @@
 					{/each}
 				</div>
 			</div>
-		</div>
-	{/if}
+		</section>
 
-	<!-- TESTIMONIALS SECTION -->
-	{#if activeSection === 'testimonials'}
-		<div class="section-content">
+		<!-- TESTIMONIALS SECTION -->
+		<section id="testimonials" class="page-section">
 			<div class="card">
 				<div class="card-header">
 					<h2>Testimonials</h2>
@@ -504,12 +498,10 @@
 					{/each}
 				</div>
 			</div>
-		</div>
-	{/if}
+		</section>
 
-	<!-- PROCESS SECTION -->
-	{#if activeSection === 'process'}
-		<div class="section-content">
+		<!-- PROCESS SECTION -->
+		<section id="process" class="page-section">
 			<div class="card">
 				<div class="card-header">
 					<h2>Creative Process Steps</h2>
@@ -534,97 +526,94 @@
 					{/each}
 				</div>
 			</div>
-		</div>
-	{/if}
+		</section>
 
-	<!-- FEATURED COLLECTIONS SECTION -->
-	{#if activeSection === 'collections'}
-	<div class="section-content">
-		<div class="card">
-			<div class="card-header">
-				<h2>Featured Collections</h2>
-				<button type="button" class="btn-primary" onclick={() => openCollectionModal()}>+ Add Collection</button>
-			</div>
-			<p class="section-hint">Select series to feature on the homepage. Override title/description if needed.</p>
-
-			<div class="items-list">
-				{#each collections as item}
-					<div class="list-item">
-						{#if item.cover_image}
-							<img src={item.cover_image.url} alt="" class="item-thumb" />
-						{/if}
-						<div class="item-info">
-							<strong>{item.title_override_en || item.series?.name_en || '(no series)'}</strong>
-							<span class="meta">Series: {item.series?.name_en || item.series_id || '—'} · Order: {item.order_index}</span>
-						</div>
-						<div class="item-actions">
-							<button type="button" class="btn-edit" onclick={() => openCollectionModal(item)}>Edit</button>
-							<button type="button" class="btn-delete" onclick={() => deleteCollection(item.id)}>Delete</button>
-						</div>
-					</div>
-				{:else}
-					<p class="empty">No featured collections yet.</p>
-				{/each}
-			</div>
-		</div>
-	</div>
-	{/if}
-
-	<!-- EXHIBITIONS SECTION -->
-	{#if activeSection === 'exhibitions'}
-	<div class="section-content">
-		<div class="card">
-			<h2>Exhibitions Preview</h2>
-			<p class="section-hint">Select one exhibition to feature on the homepage and set the section title.</p>
-
-			<form onsubmit={(e) => { e.preventDefault(); saveExhibitionsConfig(); }}>
-				<h3>Section Title &amp; Subtitle</h3>
-				<LanguageTabs>
-					{#snippet children(lang)}
-						<div class="form-row">
-							<div class="form-group">
-								<label>Title ({lang.toUpperCase()})</label>
-								<input type="text" bind:value={exhibitionsSection[`title_${lang}`]} placeholder="Current Exhibitions" />
-							</div>
-							<div class="form-group">
-								<label>Subtitle ({lang.toUpperCase()})</label>
-								<input type="text" bind:value={exhibitionsSection[`subtitle_${lang}`]} placeholder="Curated presentations..." />
-							</div>
-						</div>
-					{/snippet}
-				</LanguageTabs>
-
-				<h3>Featured Exhibition</h3>
-				<div class="form-group">
-					<label>Select exhibition to show on homepage</label>
-					<select bind:value={selectedExhibitionId}>
-						<option value={null}>— None (fallback to JSON) —</option>
-						{#each allExhibitions as ex}
-							<option value={ex.id}>{ex.title_en}{ex.year ? ` (${ex.year})` : ''}</option>
-						{/each}
-					</select>
+		<!-- FEATURED COLLECTIONS SECTION -->
+		<section id="collections" class="page-section">
+			<div class="card">
+				<div class="card-header">
+					<h2>Featured Collections</h2>
+					<button type="button" class="btn-primary" onclick={() => openCollectionModal()}>+ Add Collection</button>
 				</div>
+				<p class="section-hint">Select series to feature on the homepage. Override title/description if needed.</p>
 
-				{#if selectedExhibitionId}
-					{@const selected = allExhibitions.find((e: any) => e.id === selectedExhibitionId)}
-					{#if selected}
-						<div class="selected-exhibition">
-							{#if selected.cover_image}
-								<img src={selected.cover_image.url} alt="" class="exhibition-preview-img" />
+				<div class="items-list">
+					{#each collections as item}
+						<div class="list-item">
+							{#if item.cover_image}
+								<img src={item.cover_image.url} alt="" class="item-thumb" />
 							{/if}
-							<div>
-								<strong>{selected.title_en}</strong>
-								<p class="meta">{selected.description_en || ''}</p>
+							<div class="item-info">
+								<strong>{item.title_override_en || item.series?.name_en || '(no series)'}</strong>
+								<span class="meta">Series: {item.series?.name_en || item.series_id || '—'} · Order: {item.order_index}</span>
+							</div>
+							<div class="item-actions">
+								<button type="button" class="btn-edit" onclick={() => openCollectionModal(item)}>Edit</button>
+								<button type="button" class="btn-delete" onclick={() => deleteCollection(item.id)}>Delete</button>
 							</div>
 						</div>
-					{/if}
-				{/if}
+					{:else}
+						<p class="empty">No featured collections yet.</p>
+					{/each}
+				</div>
+			</div>
+		</section>
 
-				<button type="submit" class="btn-save" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Exhibitions Config'}</button>
-			</form>
-		</div>
+		<!-- EXHIBITIONS SECTION -->
+		<section id="exhibitions" class="page-section">
+			<div class="card">
+				<h2>Exhibitions Preview</h2>
+				<p class="section-hint">Select one exhibition to feature on the homepage and set the section title.</p>
+
+				<form onsubmit={(e) => { e.preventDefault(); saveExhibitionsConfig(); }}>
+					<h3>Section Title &amp; Subtitle</h3>
+					<LanguageTabs>
+						{#snippet children(lang)}
+							<div class="form-row">
+								<div class="form-group">
+									<label>Title ({lang.toUpperCase()})</label>
+									<input type="text" bind:value={exhibitionsSection[`title_${lang}`]} placeholder="Current Exhibitions" />
+								</div>
+								<div class="form-group">
+									<label>Subtitle ({lang.toUpperCase()})</label>
+									<input type="text" bind:value={exhibitionsSection[`subtitle_${lang}`]} placeholder="Curated presentations..." />
+								</div>
+							</div>
+						{/snippet}
+					</LanguageTabs>
+
+					<h3>Featured Exhibition</h3>
+					<div class="form-group">
+						<label>Select exhibition to show on homepage</label>
+						<select bind:value={selectedExhibitionId}>
+							<option value={null}>— None (fallback to JSON) —</option>
+							{#each allExhibitions as ex}
+								<option value={ex.id}>{ex.title_en}{ex.year ? ` (${ex.year})` : ''}</option>
+							{/each}
+						</select>
+					</div>
+
+					{#if selectedExhibitionId}
+						{@const selected = allExhibitions.find((e: any) => e.id === selectedExhibitionId)}
+						{#if selected}
+							<div class="selected-exhibition">
+								{#if selected.cover_image}
+									<img src={selected.cover_image.url} alt="" class="exhibition-preview-img" />
+								{/if}
+								<div>
+									<strong>{selected.title_en}</strong>
+									<p class="meta">{selected.description_en || ''}</p>
+								</div>
+							</div>
+						{/if}
+					{/if}
+
+					<button type="submit" class="btn-save" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Exhibitions Config'}</button>
+				</form>
+			</div>
+		</section>
+
 	</div>
-	{/if}
 </div>
 
 <!-- NEWS MODAL -->
@@ -835,23 +824,59 @@
 
 <style>
 	.homepage-admin { padding: 2rem; }
-	.page-header { margin-bottom: 2rem; }
+	.page-header { margin-bottom: 1.5rem; }
+
+	.selected-exhibition {
+		display: flex; gap: 1rem; padding: 1rem; background: #f9f9f9;
+		border-radius: 8px; margin: 0.5rem 0 1.5rem; align-items: flex-start;
+	}
+	.exhibition-preview-img { width: 80px; height: 60px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
 	.page-header h1 { margin: 0; font-size: 1.75rem; }
 	.subtitle { color: var(--color-text-secondary, #666); margin: 0.25rem 0 0; }
 
-	.section-tabs {
-		display: flex; gap: 0.5rem; margin-bottom: 1.5rem;
-		border-bottom: 1px solid var(--color-border, #ddd); padding-bottom: 0.5rem;
+	/* Sticky Quick Nav */
+	.quick-nav {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		display: flex;
+		gap: 0.375rem;
 		flex-wrap: wrap;
+		padding: 0.75rem 2rem;
+		margin: 0 -2rem 1.5rem;
+		background: var(--color-bg, #f9fafb);
+		border-bottom: 1px solid var(--color-border, #e5e7eb);
 	}
-	.section-tabs button {
-		padding: 0.75rem 1.5rem; background: none; border: none;
-		cursor: pointer; font-weight: 500; color: var(--color-text-secondary, #666);
-		border-radius: 4px 4px 0 0;
-	}
-	.section-tabs button.active { background: var(--color-primary, #333); color: white; }
 
-	.section-content { display: flex; flex-direction: column; gap: 1.5rem; }
+	.quick-nav-link {
+		padding: 0.375rem 0.875rem;
+		background: white;
+		border: 1px solid var(--color-border, #e5e7eb);
+		border-radius: 999px;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		color: var(--color-text-secondary, #555);
+		text-decoration: none;
+		transition: all 0.15s;
+		white-space: nowrap;
+	}
+
+	.quick-nav-link:hover {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-color: transparent;
+		color: white;
+	}
+
+	/* Sections */
+	.sections-scroll {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.page-section {
+		scroll-margin-top: 3.5rem;
+	}
 
 	.card {
 		background: white; border: 1px solid var(--color-border, #ddd);
@@ -923,19 +948,6 @@
 
 	.empty { text-align: center; padding: 2rem; color: var(--color-text-secondary, #666); }
 
-	.section-hint { color: var(--color-text-secondary, #666); font-size: 0.875rem; margin: 0 0 1rem; }
-
-	.form-group select {
-		width: 100%; padding: 0.75rem; border: 1px solid var(--color-border, #ddd);
-		border-radius: 4px; font-size: 1rem; font-family: inherit; background: white;
-	}
-
-	.selected-exhibition {
-		display: flex; gap: 1rem; padding: 1rem; background: #f9f9f9;
-		border-radius: 8px; margin: 0.5rem 0 1.5rem; align-items: flex-start;
-	}
-	.exhibition-preview-img { width: 80px; height: 60px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
-
 	/* Modal */
 	.modal-overlay {
 		position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -966,11 +978,18 @@
 	:global(.dark) .page-header h1 { color: #f9fafb; }
 	:global(.dark) .subtitle { color: #9ca3af; }
 
-	:global(.dark) .section-tabs { border-color: #374151; }
-	:global(.dark) .section-tabs button { color: #9ca3af; }
-	:global(.dark) .section-tabs button:hover { color: #e5e7eb; }
-	:global(.dark) .section-tabs button.active {
+	:global(.dark) .quick-nav {
+		background: #111827;
+		border-color: #374151;
+	}
+	:global(.dark) .quick-nav-link {
+		background: #1f2937;
+		border-color: #374151;
+		color: #9ca3af;
+	}
+	:global(.dark) .quick-nav-link:hover {
 		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-color: transparent;
 		color: white;
 	}
 
@@ -1020,9 +1039,6 @@
 	}
 
 	:global(.dark) .empty { color: #9ca3af; }
-	:global(.dark) .section-hint { color: #9ca3af; }
-	:global(.dark) .form-group select { background: #374151; border-color: #4b5563; color: #f9fafb; }
-	:global(.dark) .selected-exhibition { background: #374151; }
 
 	:global(.dark) .modal-content { background: #1f2937; }
 	:global(.dark) .modal-header { border-color: #374151; }
