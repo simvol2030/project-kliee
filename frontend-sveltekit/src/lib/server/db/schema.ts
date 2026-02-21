@@ -901,6 +901,58 @@ export const chatbotMessages = sqliteTable('chatbot_messages', {
 });
 
 // ============================================
+// BLOG MODULE
+// ============================================
+
+/**
+ * Blog Posts - полноценная система блога
+ */
+export const blogPosts = sqliteTable('blog_posts', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	slug: text('slug').notNull().unique(),
+	author_id: integer('author_id').references(() => admins.id),
+
+	// Content (4 languages)
+	title_en: text('title_en').notNull().default(''),
+	title_ru: text('title_ru').default(''),
+	title_es: text('title_es').default(''),
+	title_zh: text('title_zh').default(''),
+
+	excerpt_en: text('excerpt_en').default(''),
+	excerpt_ru: text('excerpt_ru').default(''),
+	excerpt_es: text('excerpt_es').default(''),
+	excerpt_zh: text('excerpt_zh').default(''),
+
+	content_en: text('content_en').default(''),
+	content_ru: text('content_ru').default(''),
+	content_es: text('content_es').default(''),
+	content_zh: text('content_zh').default(''),
+
+	// Media & metadata
+	cover_image_id: integer('cover_image_id').references(() => media.id),
+	tags: text('tags').default('[]'),
+
+	// Publishing
+	is_published: integer('is_published').default(0),
+	is_featured: integer('is_featured').default(0),
+	published_at: text('published_at'),
+
+	// SEO
+	seo_title_en: text('seo_title_en').default(''),
+	seo_title_ru: text('seo_title_ru').default(''),
+	seo_title_es: text('seo_title_es').default(''),
+	seo_title_zh: text('seo_title_zh').default(''),
+	seo_description_en: text('seo_description_en').default(''),
+	seo_description_ru: text('seo_description_ru').default(''),
+	seo_description_es: text('seo_description_es').default(''),
+	seo_description_zh: text('seo_description_zh').default(''),
+
+	// Timestamps
+	created_at: text('created_at').default(sql`(datetime('now'))`),
+	updated_at: text('updated_at').default(sql`(datetime('now'))`)
+});
+
+// ============================================
 // TypeScript Types
 // ============================================
 
@@ -1027,3 +1079,7 @@ export type ChatbotSession = typeof chatbotSessions.$inferSelect;
 export type NewChatbotSession = typeof chatbotSessions.$inferInsert;
 export type ChatbotMessage = typeof chatbotMessages.$inferSelect;
 export type NewChatbotMessage = typeof chatbotMessages.$inferInsert;
+
+// Blog
+export type BlogPost = typeof blogPosts.$inferSelect;
+export type NewBlogPost = typeof blogPosts.$inferInsert;
