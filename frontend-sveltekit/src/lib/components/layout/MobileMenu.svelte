@@ -6,11 +6,11 @@
   import { currentTranslations } from '$lib/i18n';
 
   // Language options
-  const languages: { code: LanguageCode; name: string; flag: string }[] = [
-    { code: 'en', name: 'English', flag: '🇬🇧' },
-    { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'zh', name: '中文', flag: '🇨🇳' }
+  const languages: { code: LanguageCode; name: string }[] = [
+    { code: 'en', name: 'English' },
+    { code: 'ru', name: 'Русский' },
+    { code: 'es', name: 'Español' },
+    { code: 'zh', name: '中文' }
   ];
 
   // Menu item interface (from DB)
@@ -180,7 +180,7 @@
             onclick={() => selectLanguage(lang.code)}
             aria-label={`Switch to ${lang.name}`}
           >
-            <span class="lang-flag">{lang.flag}</span>
+            <span class="lang-badge-text">{lang.code.toUpperCase()}</span>
             <span class="lang-code">{lang.code.toUpperCase()}</span>
           </button>
         {/each}
@@ -375,9 +375,16 @@
     background: rgba(212, 175, 55, 0.15);
   }
 
-  .lang-btn-compact .lang-flag {
-    font-size: 20px;
-    line-height: 1;
+  .lang-btn-compact .lang-badge-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    background: light-dark(rgba(0,0,0,0.08), rgba(255,255,255,0.12));
+    color: light-dark(var(--black, #000), #fff);
+    min-width: 28px;
+    text-align: center;
   }
 
   .lang-btn-compact .lang-code {

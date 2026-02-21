@@ -18,7 +18,7 @@ export const users = sqliteTable('users', {
 /**
  * Posts table - посты блога
  */
-export const posts = sqliteTable('posts', {
+export const posts = sqliteTable('blog_posts', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
 	user_id: integer('user_id')
 		.notNull()
