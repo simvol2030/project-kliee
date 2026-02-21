@@ -44,16 +44,16 @@ export const POST: RequestHandler = async ({ request }) => {
 		const body = await request.json();
 		const { featured_exhibition_id, title_en, title_ru, title_es, title_zh, subtitle_en, subtitle_ru, subtitle_es, subtitle_zh } = body;
 
-		// Clear existing homepage-featured flag for all exhibitions
-		await db.update(exhibitions).set({ is_homepage_featured: false });
-
-		// Set new homepage-featured exhibition (if provided)
-		if (featured_exhibition_id) {
-			const id = parseInt(String(featured_exhibition_id));
-			if (!isNaN(id)) {
-				await db.update(exhibitions).set({ is_homepage_featured: true }).where(eq(exhibitions.id, id));
+		// Clear + set featured exhibition atomically
+		await db.transaction(async (tx) => {
+			await tx.update(exhibitions).set({ is_homepage_featured: false });
+			if (featured_exhibition_id) {
+				const id = parseInt(String(featured_exhibition_id));
+				if (!isNaN(id)) {
+					await tx.update(exhibitions).set({ is_homepage_featured: true }).where(eq(exhibitions.id, id));
+				}
 			}
-		}
+		});
 
 		// Upsert section config in homepage_sections
 		const [existing] = await db

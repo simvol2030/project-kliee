@@ -38,8 +38,12 @@
 		zh: `${baseUrl}/zh`
 	});
 
-	// OG Image (first hero slide)
-	const ogImage = $derived(`${baseUrl}${sections.hero.slides[0].image}`);
+	// OG Image (first hero slide, with fallback)
+	const ogImage = $derived(
+		sections.hero.slides.length > 0
+			? `${baseUrl}${sections.hero.slides[0].image}`
+			: `${baseUrl}/images/og-default.jpg`
+	);
 </script>
 
 <svelte:head>

@@ -35,7 +35,11 @@ import { eq, asc, and } from 'drizzle-orm';
 function getHomepageJson(): HomepageData {
 	const jsonPath = join(process.cwd(), 'static', 'data', 'homepage.json');
 	const jsonContent = readFileSync(jsonPath, 'utf-8');
-	return JSON.parse(jsonContent) as HomepageData;
+	const data = JSON.parse(jsonContent) as HomepageData;
+	if (!data.pageType || !data.meta || !data.sections) {
+		throw new Error('Invalid homepage.json: missing required fields (pageType, meta, sections)');
+	}
+	return data;
 }
 
 // ============================================
@@ -88,14 +92,12 @@ export async function getHomepageDataFromDb(): Promise<HomepageData> {
 
 	let heroData = json.sections.hero;
 	if (heroRow) {
-		const slideRows = heroRow
-			? await db
-					.select({ slide: heroSlides, media: media })
-					.from(heroSlides)
-					.leftJoin(media, eq(heroSlides.media_id, media.id))
-					.where(and(eq(heroSlides.hero_id, heroRow.id), eq(heroSlides.is_visible, true)))
-					.orderBy(asc(heroSlides.order_index))
-			: [];
+		const slideRows = await db
+			.select({ slide: heroSlides, media: media })
+			.from(heroSlides)
+			.leftJoin(media, eq(heroSlides.media_id, media.id))
+			.where(and(eq(heroSlides.hero_id, heroRow.id), eq(heroSlides.is_visible, true)))
+			.orderBy(asc(heroSlides.order_index));
 
 		const slides =
 			slideRows.length > 0
@@ -132,7 +134,7 @@ export async function getHomepageDataFromDb(): Promise<HomepageData> {
 				zh: heroRow.quote_zh || ''
 			},
 			announcement:
-				heroRow.announcement_text_en || heroRow.announcement_highlight_en
+				heroRow.announcement_text_en != null || heroRow.announcement_highlight_en != null
 					? {
 							highlight: {
 								en: heroRow.announcement_highlight_en || '',
@@ -333,7 +335,7 @@ export async function getHomepageDataFromDb(): Promise<HomepageData> {
 			coverImage: media
 		})
 		.from(homepageFeaturedCollections)
-		.leftJoin(series, eq(homepageFeaturedCollections.series_id, series.id))
+		.leftJoin(series, and(eq(homepageFeaturedCollections.series_id, series.id), eq(series.is_visible, true)))
 		.leftJoin(media, eq(homepageFeaturedCollections.cover_image_id, media.id))
 		.where(eq(homepageFeaturedCollections.is_visible, true))
 		.orderBy(asc(homepageFeaturedCollections.order_index));
@@ -462,9 +464,18 @@ export async function getHomepageDataFromDb(): Promise<HomepageData> {
 						start: exhibitionRow.exhibition.start_date || '',
 						end: exhibitionRow.exhibition.end_date || null
 					},
-					status: (exhibitionRow.exhibition.is_current
-						? 'current'
-						: 'past') as 'current' | 'past' | 'upcoming',
+					status: (() => {
+						const now = new Date();
+						const start = exhibitionRow.exhibition.start_date
+							? new Date(exhibitionRow.exhibition.start_date)
+							: null;
+						const end = exhibitionRow.exhibition.end_date
+							? new Date(exhibitionRow.exhibition.end_date)
+							: null;
+						if (start && start > now) return 'upcoming' as const;
+						if (end && end < now) return 'past' as const;
+						return 'current' as const;
+					})(),
 					coverImage: exhibitionRow.coverImage
 						? mediaUrl(exhibitionRow.coverImage)
 						: '',

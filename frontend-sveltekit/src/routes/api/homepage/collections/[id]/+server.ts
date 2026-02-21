@@ -11,39 +11,31 @@ export const PATCH: RequestHandler = async ({ params, request }) => {
 
 	try {
 		const body = await request.json();
-		const {
-			series_id,
-			title_override_en,
-			title_override_ru,
-			title_override_es,
-			title_override_zh,
-			description_override_en,
-			description_override_ru,
-			description_override_es,
-			description_override_zh,
-			cover_image_id,
-			link,
-			order_index,
-			is_visible
-		} = body;
+
+		// Build updates only for fields explicitly present in the body.
+		// Using 'in' operator (not ??) so callers can clear nullable fields by sending null.
+		const updates: Record<string, unknown> = {};
+		if ('series_id' in body) updates.series_id = body.series_id;
+		if ('title_override_en' in body) updates.title_override_en = body.title_override_en;
+		if ('title_override_ru' in body) updates.title_override_ru = body.title_override_ru;
+		if ('title_override_es' in body) updates.title_override_es = body.title_override_es;
+		if ('title_override_zh' in body) updates.title_override_zh = body.title_override_zh;
+		if ('description_override_en' in body) updates.description_override_en = body.description_override_en;
+		if ('description_override_ru' in body) updates.description_override_ru = body.description_override_ru;
+		if ('description_override_es' in body) updates.description_override_es = body.description_override_es;
+		if ('description_override_zh' in body) updates.description_override_zh = body.description_override_zh;
+		if ('cover_image_id' in body) updates.cover_image_id = body.cover_image_id;
+		if ('link' in body) updates.link = body.link;
+		if ('order_index' in body) updates.order_index = body.order_index;
+		if ('is_visible' in body) updates.is_visible = body.is_visible;
+
+		if (Object.keys(updates).length === 0) {
+			throw error(400, 'No fields to update');
+		}
 
 		const [updated] = await db
 			.update(homepageFeaturedCollections)
-			.set({
-				series_id: series_id ?? undefined,
-				title_override_en: title_override_en ?? undefined,
-				title_override_ru: title_override_ru ?? undefined,
-				title_override_es: title_override_es ?? undefined,
-				title_override_zh: title_override_zh ?? undefined,
-				description_override_en: description_override_en ?? undefined,
-				description_override_ru: description_override_ru ?? undefined,
-				description_override_es: description_override_es ?? undefined,
-				description_override_zh: description_override_zh ?? undefined,
-				cover_image_id: cover_image_id ?? undefined,
-				link: link ?? undefined,
-				order_index: order_index ?? undefined,
-				is_visible: is_visible ?? undefined
-			})
+			.set(updates)
 			.where(eq(homepageFeaturedCollections.id, id))
 			.returning();
 
