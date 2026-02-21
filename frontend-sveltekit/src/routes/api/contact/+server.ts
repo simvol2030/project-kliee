@@ -8,6 +8,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { sendContactFormEmail, sendContactAutoReply } from '$lib/server/notifications/email';
+import { sendTelegramContactNotification } from '$lib/server/notifications/telegram';
 import { db } from '$lib/server/db/client';
 import { settings } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
@@ -139,7 +140,20 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
 			autoReplySent = await sendContactAutoReply(sanitizedData);
 		}
 
-		console.log('[Contact Form] Email status:', { adminEmailSent, autoReplySent });
+		// Send Telegram notification if enabled
+		let telegramSent = false;
+		const telegramEnabled = await getContactSetting('contact_telegram_enabled');
+		if (telegramEnabled === 'true') {
+			const botToken = await getContactSetting('contact_telegram_bot_token');
+			const chatId = await getContactSetting('contact_telegram_chat_id');
+			telegramSent = await sendTelegramContactNotification(
+				sanitizedData,
+				botToken || undefined,
+				chatId || undefined
+			);
+		}
+
+		console.log('[Contact Form] Notification status:', { adminEmailSent, autoReplySent, telegramSent });
 
 		return json({
 			success: true,

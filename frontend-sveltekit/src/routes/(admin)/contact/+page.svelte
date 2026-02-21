@@ -28,7 +28,10 @@
 	let settingsForm = $state({
 		contact_recipient_email: data.contactSettings?.contact_recipient_email || '',
 		contact_form_enabled: data.contactSettings?.contact_form_enabled !== 'false',
-		contact_auto_reply_enabled: data.contactSettings?.contact_auto_reply_enabled !== 'false'
+		contact_auto_reply_enabled: data.contactSettings?.contact_auto_reply_enabled !== 'false',
+		contact_telegram_enabled: data.contactSettings?.contact_telegram_enabled === 'true',
+		contact_telegram_bot_token: data.contactSettings?.contact_telegram_bot_token || '',
+		contact_telegram_chat_id: data.contactSettings?.contact_telegram_chat_id || ''
 	});
 
 	// Social modal
@@ -46,6 +49,10 @@
 	let testEmailSending = $state(false);
 	let testEmailMessage = $state('');
 
+	// Test telegram state
+	let testTelegramSending = $state(false);
+	let testTelegramMessage = $state('');
+
 	async function saveSettings() {
 		isSaving = true;
 		saveMessage = '';
@@ -56,7 +63,10 @@
 				body: JSON.stringify({
 					contact_recipient_email: settingsForm.contact_recipient_email,
 					contact_form_enabled: String(settingsForm.contact_form_enabled),
-					contact_auto_reply_enabled: String(settingsForm.contact_auto_reply_enabled)
+					contact_auto_reply_enabled: String(settingsForm.contact_auto_reply_enabled),
+					contact_telegram_enabled: String(settingsForm.contact_telegram_enabled),
+					contact_telegram_bot_token: settingsForm.contact_telegram_bot_token,
+					contact_telegram_chat_id: settingsForm.contact_telegram_chat_id
 				})
 			});
 			if (res.ok) {
@@ -90,6 +100,30 @@
 		} finally {
 			testEmailSending = false;
 			setTimeout(() => { testEmailMessage = ''; }, 5000);
+		}
+	}
+
+	async function sendTestTelegram() {
+		testTelegramSending = true;
+		testTelegramMessage = '';
+		try {
+			const res = await fetch('/api/contact/test-telegram', {
+				method: 'POST',
+				headers: csrfHeaders(),
+				body: JSON.stringify({
+					bot_token: settingsForm.contact_telegram_bot_token,
+					chat_id: settingsForm.contact_telegram_chat_id
+				})
+			});
+			const result = await res.json();
+			testTelegramMessage = result.success
+				? 'Test message sent to Telegram'
+				: `Failed: ${result.error || result.message}`;
+		} catch {
+			testTelegramMessage = 'Error sending test message';
+		} finally {
+			testTelegramSending = false;
+			setTimeout(() => { testTelegramMessage = ''; }, 5000);
 		}
 	}
 
@@ -198,6 +232,60 @@
 					</label>
 					<p class="help-text">Send automatic confirmation email to the submitter</p>
 				</div>
+
+				<hr class="section-divider" />
+
+				<h3>Telegram Notifications</h3>
+				<p class="section-description">Receive contact form submissions in Telegram</p>
+
+				<div class="form-group checkbox-group">
+					<label>
+						<input type="checkbox" bind:checked={settingsForm.contact_telegram_enabled} />
+						Telegram notifications enabled
+					</label>
+					<p class="help-text">Send contact form submissions to Telegram</p>
+				</div>
+
+				<div class="form-group">
+					<label for="telegram_bot_token">Bot Token</label>
+					<input
+						type="text"
+						id="telegram_bot_token"
+						bind:value={settingsForm.contact_telegram_bot_token}
+						placeholder="123456789:ABCdefGHI..."
+						autocomplete="off"
+					/>
+					<p class="help-text">Get from @BotFather in Telegram</p>
+				</div>
+
+				<div class="form-group">
+					<label for="telegram_chat_id">Chat ID</label>
+					<input
+						type="text"
+						id="telegram_chat_id"
+						bind:value={settingsForm.contact_telegram_chat_id}
+						placeholder="-1001234567890"
+						autocomplete="off"
+					/>
+					<p class="help-text">Your chat, group, or channel ID</p>
+				</div>
+
+				<div class="form-actions">
+					<button
+						type="button"
+						class="btn-secondary"
+						disabled={testTelegramSending || !settingsForm.contact_telegram_bot_token || !settingsForm.contact_telegram_chat_id}
+						onclick={sendTestTelegram}
+					>
+						{testTelegramSending ? 'Sending...' : 'Test Telegram'}
+					</button>
+				</div>
+
+				{#if testTelegramMessage}
+					<p class="status-message">{testTelegramMessage}</p>
+				{/if}
+
+				<hr class="section-divider" />
 
 				<div class="form-actions">
 					<button type="submit" class="btn-save" disabled={isSaving}>
@@ -403,6 +491,23 @@
 		border-radius: 4px;
 		font-size: 1rem;
 		font-family: inherit;
+	}
+
+	.section-divider {
+		border: none;
+		border-top: 1px solid var(--color-border, #ddd);
+		margin: 1.5rem 0;
+	}
+
+	h3 {
+		margin: 0 0 0.25rem;
+		font-size: 1.1rem;
+	}
+
+	.section-description {
+		margin: 0 0 1rem;
+		font-size: 0.875rem;
+		color: var(--color-text-secondary, #666);
 	}
 
 	.help-text {
@@ -653,6 +758,18 @@
 	:global(.dark) .form-group input::placeholder,
 	:global(.dark) .form-group textarea::placeholder {
 		color: #9ca3af;
+	}
+
+	:global(.dark) h3 {
+		color: #f9fafb;
+	}
+
+	:global(.dark) .section-description {
+		color: #9ca3af;
+	}
+
+	:global(.dark) .section-divider {
+		border-color: #374151;
 	}
 
 	:global(.dark) .help-text {

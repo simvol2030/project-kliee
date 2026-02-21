@@ -7,7 +7,10 @@ import { eq } from 'drizzle-orm';
 const CONTACT_KEYS = [
 	'contact_recipient_email',
 	'contact_form_enabled',
-	'contact_auto_reply_enabled'
+	'contact_auto_reply_enabled',
+	'contact_telegram_enabled',
+	'contact_telegram_bot_token',
+	'contact_telegram_chat_id'
 ] as const;
 
 // GET contact settings

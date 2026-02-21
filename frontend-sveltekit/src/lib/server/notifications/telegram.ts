@@ -1,6 +1,6 @@
 /**
- * Telegram notification service for order alerts
- * Uses environment variables for configuration
+ * Telegram notification service for order and contact alerts
+ * Uses environment variables for configuration, with optional DB overrides
  *
  * Required env vars:
  * - TELEGRAM_BOT_TOKEN
@@ -27,23 +27,32 @@ interface OrderNotificationData {
 	note?: string | null;
 }
 
+interface ContactNotificationData {
+	name: string;
+	email: string;
+	subject: string;
+	message: string;
+}
+
 /**
  * Send message to Telegram
+ * Accepts optional botToken override (from DB settings), falls back to env var
  */
 async function sendTelegramMessage(
 	chatId: string,
 	text: string,
-	parseMode: 'HTML' | 'Markdown' = 'HTML'
+	parseMode: 'HTML' | 'Markdown' = 'HTML',
+	botToken?: string
 ): Promise<boolean> {
-	const { TELEGRAM_BOT_TOKEN } = env;
+	const token = botToken || env.TELEGRAM_BOT_TOKEN;
 
-	if (!TELEGRAM_BOT_TOKEN) {
+	if (!token) {
 		console.log('TELEGRAM_BOT_TOKEN not configured, skipping Telegram notification');
 		return false;
 	}
 
 	try {
-		const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+		const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -150,7 +159,7 @@ export async function sendTelegramOrderNotification(
 }
 
 /**
- * Send test message to verify Telegram configuration
+ * Send test message to verify Telegram configuration (orders)
  */
 export async function sendTelegramTestMessage(): Promise<boolean> {
 	const { TELEGRAM_CHAT_ID } = env;
@@ -169,4 +178,74 @@ Your Telegram notifications are configured correctly!
 	`.trim();
 
 	return sendTelegramMessage(TELEGRAM_CHAT_ID, message, 'HTML');
+}
+
+/**
+ * Format contact form notification message for Telegram
+ */
+function formatContactMessage(data: ContactNotificationData): string {
+	const truncatedMessage = data.message.length > 800
+		? data.message.slice(0, 800) + '...'
+		: data.message;
+
+	return `
+📩 <b>NEW CONTACT MESSAGE</b>
+
+<b>From:</b> ${escapeHtml(data.name)}
+📧 ${escapeHtml(data.email)}
+
+<b>Subject:</b> ${escapeHtml(data.subject)}
+
+<b>Message:</b>
+<i>${escapeHtml(truncatedMessage)}</i>
+
+⏰ ${new Date().toLocaleString('en-GB', { timeZone: 'Europe/Madrid' })}
+	`.trim();
+}
+
+/**
+ * Send contact form notification to admin via Telegram
+ * Uses DB settings (botToken, chatId) with fallback to env vars
+ */
+export async function sendTelegramContactNotification(
+	data: ContactNotificationData,
+	botToken?: string,
+	chatId?: string
+): Promise<boolean> {
+	const resolvedChatId = chatId || env.TELEGRAM_CHAT_ID;
+
+	if (!resolvedChatId) {
+		console.log('Telegram chat ID not configured, skipping contact notification');
+		return false;
+	}
+
+	const message = formatContactMessage(data);
+	return sendTelegramMessage(resolvedChatId, message, 'HTML', botToken);
+}
+
+/**
+ * Send test message to verify contact Telegram configuration
+ * Uses provided botToken/chatId (from admin settings)
+ */
+export async function sendTelegramContactTestMessage(
+	botToken?: string,
+	chatId?: string
+): Promise<boolean> {
+	const resolvedChatId = chatId || env.TELEGRAM_CHAT_ID;
+	const resolvedToken = botToken || env.TELEGRAM_BOT_TOKEN;
+
+	if (!resolvedChatId || !resolvedToken) {
+		console.log('Telegram bot token or chat ID not configured');
+		return false;
+	}
+
+	const message = `
+✅ <b>K-LIÉE Contact Notification Test</b>
+
+Your contact form Telegram notifications are configured correctly!
+
+<i>This is a test message from the contact settings.</i>
+	`.trim();
+
+	return sendTelegramMessage(resolvedChatId, message, 'HTML', resolvedToken);
 }
