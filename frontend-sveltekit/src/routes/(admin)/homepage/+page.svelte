@@ -200,7 +200,7 @@
 		editingProcess = item ? { ...item } : {
 			title_en: '', title_ru: '', title_es: '', title_zh: '',
 			description_en: '', description_ru: '', description_es: '', description_zh: '',
-			icon: '', step_number: processSteps.length + 1, order_index: processSteps.length, is_visible: true
+			icon: '', image_id: null, image: null, step_number: processSteps.length + 1, order_index: processSteps.length, is_visible: true
 		};
 		processModalOpen = true;
 	}
@@ -729,7 +729,7 @@
 						<input type="number" bind:value={editingProcess.step_number} min="1" />
 					</div>
 					<div class="form-group">
-						<label>Icon</label>
+						<label>Icon (fallback if no image)</label>
 						<input type="text" bind:value={editingProcess.icon} placeholder="palette" />
 					</div>
 				</div>
@@ -746,6 +746,13 @@
 						</div>
 					{/snippet}
 				</LanguageTabs>
+
+				<MediaPicker
+					label="Step Image"
+					value={editingProcess.image}
+					onselect={(e) => { editingProcess.image_id = e.detail.id; editingProcess.image = e.detail; }}
+					onclear={() => { editingProcess.image_id = null; editingProcess.image = null; }}
+				/>
 
 				<div class="modal-footer">
 					<button type="submit" class="btn-save" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save'}</button>
